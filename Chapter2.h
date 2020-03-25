@@ -13,6 +13,7 @@
 #include "City.h"
 #include "functions.h"
 #include "Blacksmith.h"
+#include "AlchemyShop.h"
 
 using namespace std;
 
@@ -24,11 +25,13 @@ public:
 	void run(); // begins chapter 2's execution
 
 	// location setup functions. return true if setup was successful.
+	bool setupCurrentCottage(string name);
 	bool setupCurrentTown(string name);
 	bool setupBlacksmithFoundry(string name);
+	bool setupAlchemyShop(string name);
 	bool setupCurrentForestPath(string name);
 	bool setupCurrentRuins(string name);
-	bool setupPastRuins(string name);
+	bool setupPastRuins(string name, bool Enemy);
 	bool setupPastCottage(string name);
 	//bool setupForestPath(string name);
 	bool setupPastForestPath(string name);
@@ -36,16 +39,18 @@ public:
 	bool setupPastCity(string name);
 
 	// location execution functions.
+	void runCurrentCottage();
 	void runCurrentTown();
 	void runBlacksmithFoundry();
+	void runAlchemyShop();
 	void runCurrentForestPath();
 	void runCurrentRuins();
-	void runPastRuins();
-	void runPastForestPath();
-	void runPastCottage();
+	void runPastRuins(bool CharacterCheck);
+	void runPastForestPath(bool CharacterCheck);
+	void runPastCottage(bool CharacterCheck);
 	//void runForestPath();
 	//void runCity();
-	void runPastCity();
+	void runPastCity(bool CharacterCheck);
 
 	void flashback1();
 
@@ -59,15 +64,16 @@ public:
 	Blacksmith BlacksmithFoundry;
 	ForestPath currentForestPath, pastForestPath;
 	City currentCity, pastCity;
-
+	AlchemyShop Alchemy;
 
 
 	// character inventories for this chapter (to be moved to a universal story class)
-	vector<string> arlanInv;
+	//vector<string> playerInv;
 	vector<string> mathiasInv;
+	vector<string> archieInv;
 
 	// conditionals relevant to this chapter.
-	bool inCurrentRuins;
+	//bool inCurrentRuins;
 	vector<bool> checks;
 
 	// parser string for this chapter.
