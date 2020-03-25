@@ -14,6 +14,18 @@
 #include "functions.h"
 #include "Blacksmith.h"
 #include "AlchemyShop.h"
+#include "Courtyard.h"
+#include "CastleBedroom.h"
+#include "CastleCrossroads.h"
+#include "Port.h"
+#include "GreatHall.h"
+#include "Library.h"
+#include "Camp.h"
+#include "Dungeon.h"
+#include "Hallway.h"
+#include "DiningRoom.h"
+#include "Storage.h"
+
 
 using namespace std;
 
@@ -30,13 +42,24 @@ public:
 	bool setupBlacksmithFoundry(string name);
 	bool setupAlchemyShop(string name);
 	bool setupCurrentForestPath(string name);
+	bool setupForestPath2(string name);
 	bool setupCurrentRuins(string name);
 	bool setupPastRuins(string name, bool Enemy);
 	bool setupPastCottage(string name);
-	//bool setupForestPath(string name);
 	bool setupPastForestPath(string name);
-	//bool setupCity(string name);
 	bool setupPastCity(string name);
+	bool setupCourtyard(string name);
+	bool setupCastleBedroom(string name);
+	bool setupCastleCrossroads(string name);
+	bool setupPort(string name);
+	bool setupGreatHall(string name);
+	bool setupLibrary(string name);
+	bool setupCamp(string name);
+	bool setupDungeon(string name);
+	bool setupLeftHallway(string name);
+	bool setupRightHallway(string name);
+	bool setupDiningRoom(string name);
+	bool setupStorage(string name);
 
 	// location execution functions.
 	void runCurrentCottage();
@@ -48,8 +71,6 @@ public:
 	void runPastRuins(bool CharacterCheck);
 	void runPastForestPath(bool CharacterCheck);
 	void runPastCottage(bool CharacterCheck);
-	//void runForestPath();
-	//void runCity();
 	void runPastCity(bool CharacterCheck);
 
 	void flashback1();
@@ -62,9 +83,22 @@ public:
 	Ruins currentRuins, pastRuins;
 	Cottage currentCottage, pastCottage;
 	Blacksmith BlacksmithFoundry;
-	ForestPath currentForestPath, pastForestPath;
+	ForestPath currentForestPath, pastForestPath, ForestPath2;
 	City currentCity, pastCity;
 	AlchemyShop Alchemy;
+	Courtyard CurrentCourtyard;
+	CastleBedroom CurrentCastleBedroom;
+	CastleCrossroads CurrentCastleCrossroads;
+	Port CurrentPort;
+	GreatHall CurrentGreatHall;
+	Library CurrentLibrary;
+	Camp CurrentCamp;
+	Dungeon CurrentPrison;
+	Hallway LeftHallway, RightHallway;
+	DiningRoom CurrentDiningRoom;
+	Storage CurrentStorage;
+
+
 
 
 	// character inventories for this chapter (to be moved to a universal story class)

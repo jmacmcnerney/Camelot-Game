@@ -247,3 +247,11 @@ void functions::SetupDialogText(string message, string responseKey1, string resp
 		Action("SetDialog(" + message + " [" + responseKey1 + " | " + response1 + "])", true);
 	}
 }
+
+void functions::RemoveItem(string itemname, vector<string> &inventory) {
+	for (size_t i = 0; i < inventory.size(); i++) {
+		if (inventory[i] == itemname) {
+			inventory.erase(inventory.begin() + i);
+		}
+	}
+}

@@ -61,4 +61,7 @@ public:
 	//Dialog Text Setup
 	void SetupDialogText(string message, string responseKey1, string response1, string responseKey2 = "nothing", string response2 = "nothing", string responseKey3 = "nothing", string response3 = "nothing");
 
+	//Removing An Item
+	void RemoveItem(string itemname, vector<string> &inventory);
+
 };

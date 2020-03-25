@@ -14,16 +14,17 @@ using namespace std;
 vector<string> playerInv;
 
 //location booleans
-bool inCurrentTown = false;
+string currentLocation = "ArlanCottage";
+/*bool inCurrentTown = false;
 bool inCurrentForestPath = false;
-bool inCurrentRuins = false;
-bool inPastCottage = true;
-bool inPastCity = false;
-bool inPastForestPath = false;
-bool inPastRuins = false;
-bool inBlacksmithFoundry = false;
-bool inAlchemyShop = false;
-bool inCurrentCottage = true;
+bool inCurrentRuins = false;*/
+//bool inPastCottage = true;
+//bool inPastCity = false;
+//bool inPastForestPath = false;
+//bool inPastRuins = false;
+//bool inBlacksmithFoundry = false;
+//bool inAlchemyShop = false;
+//bool inCurrentCottage = true;
 
 //event booleans
 bool item_placed = false;
@@ -58,6 +59,18 @@ bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if
 	setupPastForestPath("PastForestPath");
 	setupPastCity("PastCity");
 	setupAlchemyShop("AlchemyShop");
+	setupCourtyard("Courtyard");
+	setupCastleBedroom("CastleBedroom");
+	setupCastleCrossroads("CastleCrossroads");
+	setupPort("Port");
+	setupGreatHall("GreatHall");
+	setupLibrary("Library");
+	setupCamp("Camp");
+	setupDungeon("Prison");
+	setupLeftHallway("LeftHallway");
+	setupRightHallway("RightHallway");
+	setupDiningRoom("DiningRoom");
+	setupStorage("Storage");
 	function.Action("ShowMenu()", true);
 
 	return true;
@@ -121,7 +134,6 @@ bool Chapter2::setupCurrentTown(string name) {
 	currentCity = City(name);
 
 	//character setup
-	//function.SetupCharacter("Arlan", "B", "LightArmour", "Long", "Black", "CurrentTown.Fountain");
 	function.SetupCharacter("Apple Merchant", "C", "Merchant", "Long", "Blonde", "CurrentTown.Horse");
 	function.SetupCharacter("Town Elder", "H", "Noble", "Musketeer_Full", "Gray", "CurrentTown.Plant");
 
@@ -130,8 +142,6 @@ bool Chapter2::setupCurrentTown(string name) {
 	function.Action("CreateItem(Apple Money, Coin)", true);
 	function.Action("CreateItem(Elder Apple, Apple)", true);
 	function.Action("CreateItem(Broken Lock, Lock)", true);
-	//function.Action("CreateItem(Storybook, BlueBook)", true);
-	//playerInv.push_back("Storybook");
 
 	//icons
 	//Talk To Town Elder
@@ -297,9 +307,166 @@ bool Chapter2::setupPastRuins(string name, bool Enemy) {
 	return true;
 }
 
+bool Chapter2::setupForestPath2(string name) {
+	ForestPath2 = ForestPath(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupCourtyard(string name) {
+	CurrentCourtyard = Courtyard(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupCastleBedroom(string name) {
+	CurrentCastleBedroom = CastleBedroom(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupPort(string name) {
+	CurrentPort = Port(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupGreatHall(string name) {
+	CurrentGreatHall = GreatHall(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupCastleCrossroads(string name) {
+	CurrentCastleCrossroads = CastleCrossroads(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupLibrary(string name) {
+	CurrentLibrary = Library(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupCamp(string name) {
+	CurrentCamp = Camp(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupDungeon(string name) {
+	CurrentPrison = Dungeon(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupLeftHallway(string name) {
+	LeftHallway = Hallway(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupRightHallway(string name) {
+	RightHallway = Hallway(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupDiningRoom(string name) {
+	CurrentDiningRoom = DiningRoom(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+bool Chapter2::setupStorage(string name) {
+	CurrentStorage = Storage(name);
+
+	//character setup
+
+	//items
+
+	//icons
+
+	return true;
+}
+
+
 // location execution functions.
 void Chapter2::runCurrentCottage() {
-	while (inCurrentCottage) {
+	while (currentLocation == "ArlanCottage") {
 		string i;
 		getline(cin, i);
 
@@ -314,11 +481,9 @@ void Chapter2::runCurrentCottage() {
 				function.Action("ClearDialog()", true);
 				if (!hasStorybook) {
 					function.SetupDialogText("Arlan! Take this book of stories and ask the Town Elder to tell you about them.", "takeBook", "Sure thing Dad!");
-					//function.Action("SetDialog(Arlan! Take this book of stories and ask the Town Elder to tell you about them [takeBook | Sure thing Dad!])", true);
 				}
 				else {
 					function.SetupDialogText("Go talk to the Town Elder about the stroybook.", "end", "Will do!");
-					//function.Action("SetDialog(Go talk to the Town Elder about the stroybook.[end | Will do!])", true);
 				}
 			}
 			else if (modified_I == "Selected") {
@@ -335,8 +500,7 @@ void Chapter2::runCurrentCottage() {
 			else if (modified_I == "Open_Door") {
 				if (hasStorybook) {
 					function.Transition("Arlan", "ArlanCottage.Door", "CurrentTown.BlueHouseDoor");
-					inCurrentTown = true;
-					inCurrentCottage = false;
+					currentLocation = "CurrentTown";
 					runCurrentTown();
 				}
 				else {
@@ -346,7 +510,6 @@ void Chapter2::runCurrentCottage() {
 					function.Action("SetRight(Dad)", true);
 					function.Action("ClearDialog()", true);
 					function.SetupDialogText("Arlan! Come over here. I have something for you.", "end", "Ok");
-					//function.Action("SetDialog(Arlan! Come over here.I have something for you.[end| Ok])", true);
 				}
 			}
 		}
@@ -354,7 +517,7 @@ void Chapter2::runCurrentCottage() {
 }
 
 void Chapter2::runCurrentTown() {
-	while (inCurrentTown) {
+	while (currentLocation == "CurrentTown") {
 		string i;
 		getline(cin, i);
 
@@ -383,17 +546,19 @@ void Chapter2::runCurrentTown() {
 					else if (hasElderApple || hasFixedLock) {
 						if (visitedFortuneteller) {
 							if (hasElderApple) {
-								for (int i = 0; i < playerInv.size(); i++) {
+								/*for (int i = 0; i < playerInv.size(); i++) {
 									if (playerInv[i] == "Storybook") {
 										playerInv.erase(playerInv.begin() + i);
 									}
-								}
+								}*/
+								function.RemoveItem("Storybook", playerInv);
 								hasStorybook = false;
-								for (int i = 0; i < playerInv.size(); i++) {
+								/*for (int i = 0; i < playerInv.size(); i++) {
 									if (playerInv[i] == "Elder Apple") {
 										playerInv.erase(playerInv.begin() + i);
 									}
-								}
+								}*/
+								function.RemoveItem("Elder Apple", playerInv);
 								hasElderApple = false;
 
 								completedErrand = true;
@@ -403,17 +568,19 @@ void Chapter2::runCurrentTown() {
 								function.SetupDialogText("You retrieved my apple! Thank you Arlan! Now lets read that book!", "readBook", "Great! What does it say?");
 							}
 							else if (hasFixedLock) {
-								for (int i = 0; i < playerInv.size(); i++) {
+								/*for (int i = 0; i < playerInv.size(); i++) {
 									if (playerInv[i] == "Storybook") {
 										playerInv.erase(playerInv.begin() + i);
 									}
-								}
+								}*/
+								function.RemoveItem("Storybook", playerInv);
 								hasStorybook = false;
-								for (int i = 0; i < playerInv.size(); i++) {
+								/*for (int i = 0; i < playerInv.size(); i++) {
 									if (playerInv[i] == "Fixed Lock") {
 										playerInv.erase(playerInv.begin() + i);
 									}
-								}
+								}*/
+								function.RemoveItem("Fixed Lock", playerInv);
 								hasFixedLock = false;
 
 								completedErrand = true;
@@ -473,11 +640,12 @@ void Chapter2::runCurrentTown() {
 				else if (modified_I == "takeApple") {
 					function.Action("SetNarration(Apple Money Removed From Inventory)", true);
 					function.Action("ShowNarration()", true);
-					for (int i = 0; i < playerInv.size(); i++) {
+					/*for (int i = 0; i < playerInv.size(); i++) {
 						if (playerInv[i] == "Apple Money") {
 							playerInv.erase(playerInv.begin() + i);
 						}
-					}
+					}*/
+					function.RemoveItem("Apple Money", playerInv);
 					hasAppleMoney = false;
 					function.SetupDialogText("Here you go!", "receiveApple", "Thanks!");
 				}
@@ -511,8 +679,7 @@ void Chapter2::runCurrentTown() {
 				function.WalkToPlace("Arlan", "CurrentTown.BrownHouseDoor");
 				if (visitedTownElder) {
 					function.Transition("Arlan", "CurrentTown.BrownHouseDoor", "AlchemyShop.Door");
-					inAlchemyShop = true;
-					inCurrentTown = false;
+					currentLocation = "AlchemyShop";
 					runAlchemyShop();
 				}
 				else {
@@ -533,8 +700,9 @@ void Chapter2::runCurrentTown() {
 		if (i == "input arrived Arlan position CurrentTown.EastEnd") {
 			if (completedErrand) {
 				function.Transition("Arlan", "CurrentTown.EastEnd", "CurrentForestPath.WestEnd");
-				inCurrentTown = false;
-				inCurrentForestPath = true;
+				//inCurrentTown = false;
+				//inCurrentForestPath = true;
+				currentLocation = "CurrentForestPath";
 				runCurrentForestPath();
 			}
 			else {
@@ -547,8 +715,9 @@ void Chapter2::runCurrentTown() {
 			function.WalkToPlace("Arlan", "CurrentTown.RedHouseDoor");
 			if (visitedTownElder) {
 				function.Transition("Arlan", "CurrentTown.RedHouseDoor", "BlacksmithFoundry.Door");
-				inCurrentTown = false;
-				inBlacksmithFoundry = true;
+				//inCurrentTown = false;
+				//inBlacksmithFoundry = true;
+				currentLocation = "BlacksmithFoundry";
 				runBlacksmithFoundry();
 			}
 			else {
@@ -581,7 +750,7 @@ void Chapter2::runCurrentTown() {
 }
 
 void Chapter2::runBlacksmithFoundry() {
-	while (inBlacksmithFoundry) {
+	while (currentLocation == "BlacksmithFoundry") {
 		string i;
 		getline(cin, i);
 
@@ -615,11 +784,12 @@ void Chapter2::runBlacksmithFoundry() {
 				if (modified_I == "fixTheLock") {
 					function.Action("SetNarration(Broken Lock Removed From Inventory)", true);
 					function.Action("ShowNarration()", true);
-					for (int i = 0; i < playerInv.size(); i++) {
+					/*for (int i = 0; i < playerInv.size(); i++) {
 						if (playerInv[i] == "Broken Lock") {
 							playerInv.erase(playerInv.begin() + i);
 						}
-					}
+					}*/
+					function.RemoveItem("Broken Lock", playerInv);
 					hasBrokenLock = false;
 					function.SetupDialogText("Here you go!", "receiveFixedLock", "Thanks!");
 				}
@@ -636,8 +806,9 @@ void Chapter2::runBlacksmithFoundry() {
 
 		if (i == "input Exit Blacksmith Foundry BlacksmithFoundry.Door") {
 			function.Transition("Arlan", "BlacksmithFoundry.Door", "CurrentTown.RedHouseDoor");
-			inBlacksmithFoundry = false;
-			inCurrentTown = true;
+			//inBlacksmithFoundry = false;
+			//inCurrentTown = true;
+			currentLocation = "CurrentTown";
 			runCurrentTown();
 		}
 
@@ -657,7 +828,7 @@ void Chapter2::runBlacksmithFoundry() {
 }
 
 void Chapter2::runAlchemyShop() {
-	while (inAlchemyShop) {
+	while (currentLocation == "AlchemyShop") {
 		string i;
 		getline(cin, i);
 
@@ -703,8 +874,9 @@ void Chapter2::runAlchemyShop() {
 			}
 			else if (modified_I == "Exit_Shop") {
 				function.Transition("Arlan", "AlchemyShop.Door", "CurrentTown.BrownHouseDoor");
-				inCurrentTown = true;
-				inAlchemyShop = false;
+				//inCurrentTown = true;
+				//inAlchemyShop = false;
+				currentLocation = "CurrentTown";
 				runCurrentTown();
 			}
 		}
@@ -712,7 +884,7 @@ void Chapter2::runAlchemyShop() {
 }
 
 void Chapter2::runCurrentForestPath() {
-	while (inCurrentForestPath) {
+	while (currentLocation == "CurrentForestPath") {
 		string i;
 		getline(cin, i);
 
@@ -730,15 +902,17 @@ void Chapter2::runCurrentForestPath() {
 
 		if (i == "input arrived Arlan position CurrentForestPath.WestEnd") {
 			function.Transition("Arlan", "CurrentForestPath.WestEnd", "CurrentTown.EastEnd");
-			inCurrentTown = true;
-			inCurrentForestPath = false;
+			//inCurrentTown = true;
+			//inCurrentForestPath = false;
+			currentLocation = "CurrentTown";
 			runCurrentTown();
 		}
 
 		else if (i == "input arrived Arlan position CurrentForestPath.EastEnd") {
 			function.Transition("Arlan", "CurrentForestPath.EastEnd", "CurrentRuins.Exit");
-			inCurrentForestPath = false;
-			inCurrentRuins = true;
+			//inCurrentForestPath = false;
+			//inCurrentRuins = true;
+			currentLocation = "CurrentRuins";
 			runCurrentRuins();
 		}
 
@@ -770,7 +944,7 @@ void Chapter2::runCurrentForestPath() {
 }
 
 void Chapter2::runCurrentRuins() {
-	while (inCurrentRuins) {
+	while (currentLocation == "CurrentRuins") {
 		string i;
 		getline(cin, i);
 
@@ -785,7 +959,7 @@ void Chapter2::runCurrentRuins() {
 				modified_I = function.splitInput(i, 0, true);
 			}
 			//if the player is in the CurrentRuins
-			else if (inCurrentRuins) {
+			else if (currentLocation == "CurrentRuins") {
 				if (modified_I == "Take") {
 					function.Action("Take(Arlan, LeaderFlashPotion)", true);
 					flashback1();
@@ -795,8 +969,9 @@ void Chapter2::runCurrentRuins() {
 
 		if (i == "input arrived Arlan position CurrentRuins.Exit") {
 			function.Transition("Arlan", "CurrentRuins.Exit", "CurrentForestPath.EastEnd");
-			inCurrentForestPath = true;
-			inCurrentRuins = false;
+			//inCurrentForestPath = true;
+			//inCurrentRuins = false;
+			currentLocation = "CurrentForestPath";
 			runCurrentForestPath();
 		}
 
@@ -822,11 +997,12 @@ void Chapter2::runCurrentRuins() {
 		else if (i == "input Selected placeMathiasSword") {
 			function.Action("HideDialog()", true);
 			if (sword_taken) {
-				for (int i = 0; i < playerInv.size(); i++) {
+				/*for (int i = 0; i < playerInv.size(); i++) {
 					if (playerInv[i] == "MathiasSword") {
 						playerInv.erase(playerInv.begin() + i);
 					}
-				}
+				}*/
+				function.RemoveItem("MathiasSword", playerInv);
 				function.Action("SetPosition(MathiasSword, CurrentRuins.Altar.Top)", true);
 				ArchieEnemy = true;
 				item_placed = true;
@@ -845,11 +1021,12 @@ void Chapter2::runCurrentRuins() {
 		else if (i == "input Selected placeArchieSpellbook") {
 			function.Action("HideDialog()", true);
 			if (spellbook_taken) {
-				for (int i = 0; i < playerInv.size(); i++) {
+				/*for (int i = 0; i < playerInv.size(); i++) {
 					if (playerInv[i] == "ArchieSpellbook") {
 						playerInv.erase(playerInv.begin() + i);
 					}
-				}
+				}*/
+				function.RemoveItem("ArchieSpellbook", playerInv);
 				function.Action("SetPosition(ArchieSpellbook, CurrentRuins.Altar.Top)", true);
 				ArchieEnemy = false;
 				item_placed = true;
@@ -886,6 +1063,7 @@ void Chapter2::runCurrentRuins() {
 
 //Chractercheck is sword_taken
 void Chapter2::runPastCottage(bool CharacterCheck) {
+	currentLocation = "PastCottage";
 	bool LetterCheck = false;
 	bool inputWasCommon;
 	string CharacterName = "";
@@ -903,7 +1081,7 @@ void Chapter2::runPastCottage(bool CharacterCheck) {
 	function.Action("SetCameraFocus(" + CharacterName + ")", true);
 	function.Action("FadeIn()", true);
 	function.Action("EnableInput()", true);
-	while (inPastCottage) {
+	while (currentLocation == "PastCottage") {
 		string i;
 		getline(cin, i);
 
@@ -940,8 +1118,9 @@ void Chapter2::runPastCottage(bool CharacterCheck) {
 			if (modified_I == "Open") {
 				if (LetterCheck) {
 					function.Transition(CharacterName, "PastCottage.Door", "PastCity.GreenHouseDoor");
-					inPastCottage = false;
-					inPastCity = true;
+					//inPastCottage = false;
+					//inPastCity = true;
+					currentLocation = "PastCity";
 					runPastCity(CharacterCheck);
 				}
 				else {
@@ -968,7 +1147,7 @@ void Chapter2::runPastForestPath(bool CharacterCheck) {
 		CharacterName = "Archie";
 	}
 
-	while (inPastForestPath) {
+	while (currentLocation == "PastForestPath") {
 		string i;
 		getline(cin, i);
 
@@ -991,15 +1170,17 @@ void Chapter2::runPastForestPath(bool CharacterCheck) {
 
 		if (i == "input arrived " + CharacterName + " position PastForestPath.WestEnd") {
 			function.Transition(CharacterName, "PastForestPath.WestEnd", "PastCity.EastEnd");
-			inPastCity = true;
-			inPastForestPath = false;
+			//inPastCity = true;
+			//inPastForestPath = false;
+			currentLocation = "PastCity";
 			runPastCity(CharacterCheck);
 		}
 
 		else if (i == "input arrived " + CharacterName + " position PastForestPath.EastEnd") {
 			function.Transition(CharacterName, "PastForestPath.EastEnd", "PastRuins.Exit");
-			inPastForestPath = false;
-			inPastRuins = true;
+			//inPastForestPath = false;
+			//inPastRuins = true;
+			currentLocation = "PastRuins";
 			runPastRuins(CharacterCheck);
 		}
 	}
@@ -1017,7 +1198,7 @@ void Chapter2::runPastCity(bool CharacterCheck) {
 		CharacterName = "Archie";
 	}
 
-	while (inPastCity) {
+	while (currentLocation == "PastCity") {
 		string i;
 		getline(cin, i);
 
@@ -1040,15 +1221,17 @@ void Chapter2::runPastCity(bool CharacterCheck) {
 
 		if (i == "input arrived " + CharacterName + " position PastCity.EastEnd") {
 			function.Transition(CharacterName, "PastCity.EastEnd", "PastForestPath.WestEnd");
-			inPastCity = false;
-			inPastForestPath = true;
+			//inPastCity = false;
+			//inPastForestPath = true;
+			currentLocation = "PastForestPath";
 			runPastForestPath(CharacterCheck);
 		}
 
 		if (modified_I == "Open") {
 			function.Transition(CharacterName, "PastCity.GreenHouseDoor", "PastCottage.Door");
-			inPastCottage = true;
-			inPastCity = false;
+			//inPastCottage = true;
+			//inPastCity = false;
+			currentLocation = "PastCottage";
 			runPastCity(CharacterCheck);
 		}
 
@@ -1125,7 +1308,7 @@ void Chapter2::runPastRuins(bool CharacterCheck) {
 					function.Action("SetPosition(" + Enemy + ")", true);
 					function.Action("WalkTo(" + CharacterName + ", PastRuins.Altar)", true);
 					function.Action("FadeOut()", true);
-
+					currentLocation = "CurrentRuins";
 					function.Action("SetPosition(Arlan, CurrentRuins.Altar)", true);
 					function.Action("Kneel(Arlan)", true);
 					function.Action("SetCameraFocus(Arlan)", true);

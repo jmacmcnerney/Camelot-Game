@@ -125,25 +125,47 @@
   <ItemGroup>
     <ClCompile Include="AlchemyShop.cpp" />
     <ClCompile Include="Blacksmith.cpp" />
+    <ClCompile Include="Camp.cpp" />
+    <ClCompile Include="CastleBedroom.cpp" />
+    <ClCompile Include="CastleCrossroads.cpp" />
     <ClCompile Include="Chapter2.cpp" />
     <ClCompile Include="City.cpp" />
     <ClCompile Include="Cottage.cpp" />
+    <ClCompile Include="Courtyard.cpp" />
+    <ClCompile Include="DiningRoom.cpp" />
+    <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="em.cpp" />
     <ClCompile Include="ForestPath.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="GreatHall.cpp" />
+    <ClCompile Include="Hallway.cpp" />
     <ClCompile Include="Icon.cpp" />
+    <ClCompile Include="Library.cpp" />
+    <ClCompile Include="Port.cpp" />
     <ClCompile Include="Ruins.cpp" />
+    <ClCompile Include="Storage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlchemyShop.h" />
     <ClInclude Include="Blacksmith.h" />
+    <ClInclude Include="Camp.h" />
+    <ClInclude Include="CastleBedroom.h" />
+    <ClInclude Include="CastleCrossroads.h" />
     <ClInclude Include="Chapter2.h" />
     <ClInclude Include="City.h" />
     <ClInclude Include="Cottage.h" />
+    <ClInclude Include="Courtyard.h" />
+    <ClInclude Include="DiningRoom.h" />
+    <ClInclude Include="Dungeon.h" />
     <ClInclude Include="ForestPath.h" />
     <ClInclude Include="functions.h" />
+    <ClInclude Include="GreatHall.h" />
+    <ClInclude Include="Hallway.h" />
     <ClInclude Include="Icon.h" />
+    <ClInclude Include="Library.h" />
+    <ClInclude Include="Port.h" />
     <ClInclude Include="Ruins.h" />
+    <ClInclude Include="Storage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
