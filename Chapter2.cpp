@@ -77,12 +77,38 @@ bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if
 }
 
 void Chapter2::run() { // begins chapter 2's execution
-	//runPastCottage();
-	//runCurrentTown();
-	//runCurrentForestPath();
-	//runCurrentRuins();
-	//runPastCottage(false);
-	runCurrentCottage();
+	while (true) {
+		if (currentLocation == "ArlanCottage") {
+			runCurrentCottage();
+		}
+		else if (currentLocation == "CurrentTown"){
+			runCurrentTown();
+		}
+		else if (currentLocation == "BlacksmithFoundry") {
+			runBlacksmithFoundry();
+		}
+		else if (currentLocation == "AlchemyShop") {
+			runAlchemyShop();
+		}
+		else if (currentLocation == "CurrentForestPath") {
+			runCurrentForestPath();
+		}
+		else if (currentLocation == "CurrentRuins") {
+			runCurrentRuins();
+		}
+		else if (currentLocation == "PastRuins") {
+			runPastRuins(ArchieEnemy);
+		}
+		else if (currentLocation == "PastForestPath") {
+			runPastForestPath(ArchieEnemy);
+		}
+		else if (currentLocation == "PastCottage") {
+			runPastCottage(ArchieEnemy);
+		}
+		else if (currentLocation == "PastCity") {
+			runPastCity(ArchieEnemy);
+		}
+	}
 }
 
 //Flashback execution function
@@ -108,7 +134,8 @@ void Chapter2::flashback1() {
 	function.Action("SetCameraMode(Follow)", true);
 	function.Action("Die(Arlan)", true);
 	function.Action("FadeOut()", true);
-	runPastCottage(ArchieEnemy);
+	currentLocation = "PastCottage";
+	//runPastCottage(ArchieEnemy);
 	//
 }
 
@@ -205,8 +232,6 @@ bool Chapter2::setupCurrentForestPath(string name) {
 	currentForestPath.icons.push_back(Icon("Take_ArchieSpellbook", "Hand", "ArchieSpellbook", "Take the spellbook", "true"));
 	function.SetupIcons(currentForestPath.icons);
 
-	//function.Action("ShowMenu()", true);
-
 	return true;
 }
 
@@ -224,7 +249,6 @@ bool Chapter2::setupCurrentRuins(string name) {
 	currentRuins.icons.push_back(Icon("Take", "Hand", "LeaderFlashPotion", "Take the Potion", "true"));
 	function.SetupIcons(currentRuins.icons);
 
-	//function.Action("ShowMenu()", true);
 
 	return true;
 }
@@ -243,7 +267,6 @@ bool Chapter2::setupPastCottage(string name) {
 	pastCottage.icons.push_back(Icon("Read", "Research", "Letter", "Read the Letter", "true"));
 	function.SetupIcons(pastCottage.icons);
 
-	//function.Action("ShowMenu()", true);
 
 	return true;
 }
@@ -256,7 +279,6 @@ bool Chapter2::setupPastForestPath(string name) {
 
 	//icons
 
-	//function.Action("ShowMenu()", true);
 
 	return true;
 }
@@ -270,7 +292,6 @@ bool Chapter2::setupPastCity(string name) {
 	//icons
 	pastCottage.icons.push_back(Icon("Open", "Exit", "PastCity.GreenHouseDoor", "Go Inside", "true"));
 	function.SetupIcons(pastCity.icons);
-	//function.Action("ShowMenu()", true);
 
 	return true;
 }
@@ -302,7 +323,6 @@ bool Chapter2::setupPastRuins(string name, bool Enemy) {
 	function.Action("SetPosition(MysteriousSkull, " + name + ".Altar)", true);
 	function.Action("Face(" + EnemyName + ", MysteriousSkull)", true);
 	function.Action("Kneel(" + EnemyName + ")", true);
-	//function.Action("ShowMenu()", true);
 
 	return true;
 }
@@ -501,7 +521,6 @@ void Chapter2::runCurrentCottage() {
 				if (hasStorybook) {
 					function.Transition("Arlan", "ArlanCottage.Door", "CurrentTown.BlueHouseDoor");
 					currentLocation = "CurrentTown";
-					runCurrentTown();
 				}
 				else {
 					function.WalkToPlace("Arlan", "ArlanCottage.Door");
@@ -680,7 +699,6 @@ void Chapter2::runCurrentTown() {
 				if (visitedTownElder) {
 					function.Transition("Arlan", "CurrentTown.BrownHouseDoor", "AlchemyShop.Door");
 					currentLocation = "AlchemyShop";
-					runAlchemyShop();
 				}
 				else {
 					function.Action("SetNarration(The door is locked. This store must be closed.)", true);
@@ -703,7 +721,6 @@ void Chapter2::runCurrentTown() {
 				//inCurrentTown = false;
 				//inCurrentForestPath = true;
 				currentLocation = "CurrentForestPath";
-				runCurrentForestPath();
 			}
 			else {
 				function.Action("SetNarration(A thick mist blocks your path. You can make out a forest path just beyond the fog. Maybe you should return later.)", true);
@@ -718,7 +735,6 @@ void Chapter2::runCurrentTown() {
 				//inCurrentTown = false;
 				//inBlacksmithFoundry = true;
 				currentLocation = "BlacksmithFoundry";
-				runBlacksmithFoundry();
 			}
 			else {
 				function.Action("SetNarration(The door is locked. This store must be closed.)", true);
@@ -806,10 +822,7 @@ void Chapter2::runBlacksmithFoundry() {
 
 		if (i == "input Exit Blacksmith Foundry BlacksmithFoundry.Door") {
 			function.Transition("Arlan", "BlacksmithFoundry.Door", "CurrentTown.RedHouseDoor");
-			//inBlacksmithFoundry = false;
-			//inCurrentTown = true;
 			currentLocation = "CurrentTown";
-			runCurrentTown();
 		}
 
 		else if (i == "input Key Inventory") {
@@ -874,10 +887,7 @@ void Chapter2::runAlchemyShop() {
 			}
 			else if (modified_I == "Exit_Shop") {
 				function.Transition("Arlan", "AlchemyShop.Door", "CurrentTown.BrownHouseDoor");
-				//inCurrentTown = true;
-				//inAlchemyShop = false;
 				currentLocation = "CurrentTown";
-				runCurrentTown();
 			}
 		}
 	}
@@ -902,18 +912,12 @@ void Chapter2::runCurrentForestPath() {
 
 		if (i == "input arrived Arlan position CurrentForestPath.WestEnd") {
 			function.Transition("Arlan", "CurrentForestPath.WestEnd", "CurrentTown.EastEnd");
-			//inCurrentTown = true;
-			//inCurrentForestPath = false;
 			currentLocation = "CurrentTown";
-			runCurrentTown();
 		}
 
 		else if (i == "input arrived Arlan position CurrentForestPath.EastEnd") {
 			function.Transition("Arlan", "CurrentForestPath.EastEnd", "CurrentRuins.Exit");
-			//inCurrentForestPath = false;
-			//inCurrentRuins = true;
 			currentLocation = "CurrentRuins";
-			runCurrentRuins();
 		}
 
 		else if (i == "input Selected end") {
@@ -969,10 +973,7 @@ void Chapter2::runCurrentRuins() {
 
 		if (i == "input arrived Arlan position CurrentRuins.Exit") {
 			function.Transition("Arlan", "CurrentRuins.Exit", "CurrentForestPath.EastEnd");
-			//inCurrentForestPath = true;
-			//inCurrentRuins = false;
 			currentLocation = "CurrentForestPath";
-			runCurrentForestPath();
 		}
 
 		else if (i == "input arrived Arlan position CurrentRuins.Altar") {
@@ -1118,10 +1119,8 @@ void Chapter2::runPastCottage(bool CharacterCheck) {
 			if (modified_I == "Open") {
 				if (LetterCheck) {
 					function.Transition(CharacterName, "PastCottage.Door", "PastCity.GreenHouseDoor");
-					//inPastCottage = false;
-					//inPastCity = true;
 					currentLocation = "PastCity";
-					runPastCity(CharacterCheck);
+					//runPastCity(CharacterCheck);
 				}
 				else {
 					function.WalkToPlace(CharacterName, "PastCottage.Door");
@@ -1170,10 +1169,8 @@ void Chapter2::runPastForestPath(bool CharacterCheck) {
 
 		if (i == "input arrived " + CharacterName + " position PastForestPath.WestEnd") {
 			function.Transition(CharacterName, "PastForestPath.WestEnd", "PastCity.EastEnd");
-			//inPastCity = true;
-			//inPastForestPath = false;
 			currentLocation = "PastCity";
-			runPastCity(CharacterCheck);
+			//runPastCity(CharacterCheck);
 		}
 
 		else if (i == "input arrived " + CharacterName + " position PastForestPath.EastEnd") {
@@ -1221,18 +1218,14 @@ void Chapter2::runPastCity(bool CharacterCheck) {
 
 		if (i == "input arrived " + CharacterName + " position PastCity.EastEnd") {
 			function.Transition(CharacterName, "PastCity.EastEnd", "PastForestPath.WestEnd");
-			//inPastCity = false;
-			//inPastForestPath = true;
 			currentLocation = "PastForestPath";
-			runPastForestPath(CharacterCheck);
+			//runPastForestPath(CharacterCheck);
 		}
 
 		if (modified_I == "Open") {
 			function.Transition(CharacterName, "PastCity.GreenHouseDoor", "PastCottage.Door");
-			//inPastCottage = true;
-			//inPastCity = false;
 			currentLocation = "PastCottage";
-			runPastCity(CharacterCheck);
+			//runPastCity(CharacterCheck);
 		}
 
 	}
@@ -1254,7 +1247,7 @@ void Chapter2::runPastRuins(bool CharacterCheck) {
 		Enemy = "Mathias";
 	}
 
-	while (true) {
+	while (currentLocation == "PastRuins") {
 		string i;
 		getline(cin, i);
 
