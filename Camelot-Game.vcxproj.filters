@@ -13,24 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Places">
+      <UniqueIdentifier>{f8976aa1-7d5e-4bac-875b-33ae664638fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Places">
+      <UniqueIdentifier>{ec885ef1-d19a-417d-9f2b-cb37d5992549}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Blacksmith.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cottage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Chapter2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="City.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="em.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ForestPath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="functions.cpp">
@@ -39,60 +33,60 @@
     <ClCompile Include="Icon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ruins.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AlchemyShop.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Places</Filter>
     </ClCompile>
-    <ClCompile Include="Courtyard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CastleBedroom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Port.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GreatHall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CastleCrossroads.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Library.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Blacksmith.cpp">
+      <Filter>Source Files\Places</Filter>
     </ClCompile>
     <ClCompile Include="Camp.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Places</Filter>
     </ClCompile>
-    <ClCompile Include="Dungeon.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="CastleBedroom.cpp">
+      <Filter>Source Files\Places</Filter>
     </ClCompile>
-    <ClCompile Include="Hallway.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="CastleCrossroads.cpp">
+      <Filter>Source Files\Places</Filter>
+    </ClCompile>
+    <ClCompile Include="City.cpp">
+      <Filter>Source Files\Places</Filter>
+    </ClCompile>
+    <ClCompile Include="Cottage.cpp">
+      <Filter>Source Files\Places</Filter>
+    </ClCompile>
+    <ClCompile Include="Courtyard.cpp">
+      <Filter>Source Files\Places</Filter>
     </ClCompile>
     <ClCompile Include="DiningRoom.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Places</Filter>
+    </ClCompile>
+    <ClCompile Include="Dungeon.cpp">
+      <Filter>Source Files\Places</Filter>
+    </ClCompile>
+    <ClCompile Include="ForestPath.cpp">
+      <Filter>Source Files\Places</Filter>
+    </ClCompile>
+    <ClCompile Include="GreatHall.cpp">
+      <Filter>Source Files\Places</Filter>
+    </ClCompile>
+    <ClCompile Include="Hallway.cpp">
+      <Filter>Source Files\Places</Filter>
+    </ClCompile>
+    <ClCompile Include="Library.cpp">
+      <Filter>Source Files\Places</Filter>
+    </ClCompile>
+    <ClCompile Include="Port.cpp">
+      <Filter>Source Files\Places</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruins.cpp">
+      <Filter>Source Files\Places</Filter>
     </ClCompile>
     <ClCompile Include="Storage.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Places</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Blacksmith.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Chapter2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="City.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cottage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ForestPath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="functions.h">
@@ -101,44 +95,56 @@
     <ClInclude Include="Icon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ruins.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AlchemyShop.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Places</Filter>
     </ClInclude>
-    <ClInclude Include="Courtyard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CastleBedroom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Port.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GreatHall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CastleCrossroads.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Library.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Blacksmith.h">
+      <Filter>Header Files\Places</Filter>
     </ClInclude>
     <ClInclude Include="Camp.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Places</Filter>
     </ClInclude>
-    <ClInclude Include="Dungeon.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="CastleBedroom.h">
+      <Filter>Header Files\Places</Filter>
     </ClInclude>
-    <ClInclude Include="Hallway.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="CastleCrossroads.h">
+      <Filter>Header Files\Places</Filter>
+    </ClInclude>
+    <ClInclude Include="City.h">
+      <Filter>Header Files\Places</Filter>
+    </ClInclude>
+    <ClInclude Include="Cottage.h">
+      <Filter>Header Files\Places</Filter>
+    </ClInclude>
+    <ClInclude Include="Courtyard.h">
+      <Filter>Header Files\Places</Filter>
     </ClInclude>
     <ClInclude Include="DiningRoom.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Places</Filter>
+    </ClInclude>
+    <ClInclude Include="Dungeon.h">
+      <Filter>Header Files\Places</Filter>
+    </ClInclude>
+    <ClInclude Include="ForestPath.h">
+      <Filter>Header Files\Places</Filter>
+    </ClInclude>
+    <ClInclude Include="GreatHall.h">
+      <Filter>Header Files\Places</Filter>
+    </ClInclude>
+    <ClInclude Include="Hallway.h">
+      <Filter>Header Files\Places</Filter>
+    </ClInclude>
+    <ClInclude Include="Library.h">
+      <Filter>Header Files\Places</Filter>
+    </ClInclude>
+    <ClInclude Include="Port.h">
+      <Filter>Header Files\Places</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruins.h">
+      <Filter>Header Files\Places</Filter>
     </ClInclude>
     <ClInclude Include="Storage.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Places</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
