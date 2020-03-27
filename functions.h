@@ -1,12 +1,10 @@
-#pragma once
-/* Project: CS395 Alpha Milestone
--- Project Description: An experimental experience manager for the Camelot Virtual Environment.
--- Authors: Jake Hayden, John Colfer, Mac McNerney, Zac Foster
--- File: functions.cpp
--- File Description:
---		A number of functions that simplify important and commonly-used processes in Camelot.
+/* Project: Camelot Narrative Story + Experience Manager
+-- Project Description: An experience manager for the Camelot Virtual Environment.
+-- Authors: John (Mac) McNerney, Zac Foster, John Colfer, Jake Hayden
+-- File: functions.h
+-- File Description: A number of functions that simplify important and commonly-used processes in Camelot.
 */
-
+#pragma once
 #include <iostream>
 #include <string>
 #include <vector>

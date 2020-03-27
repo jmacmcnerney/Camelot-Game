@@ -1,7 +1,7 @@
 #pragma once
-/* Project: CS395
--- Project Description: An experimental experience manager for the Camelot Virtual Environment.
--- Authors: Jake Hayden, John Colfer, Mac McNerney, Zac Foster
+/* Project: Camelot Narrative Story + Experience Manager
+-- Project Description: An experience manager for the Camelot Virtual Environment.
+-- Authors: John (Mac) McNerney, Zac Foster, John Colfer, Jake Hayden
 -- File: AlchemyShop.h
 -- File Description:
 --		A file that describes a class representing the ruins location in the game. Coincides with the

@@ -1,8 +1,8 @@
-/* Project: CS395 Alpha Milestone
--- Project Description: An experimental experience manager for the Camelot Virtual Environment.
--- Authors: Jake Hayden, John Colfer, Mac McNerney, Zac Foster
+/* Project: Camelot Narrative Story + Experience Manager
+-- Project Description: An experience manager for the Camelot Virtual Environment.
+-- Authors: John (Mac) McNerney, Zac Foster, John Colfer, Jake Hayden
 -- File: Chapter2.h
--- File Description: A file that describes the data and code that is relevant to chapter 2.
+-- File Description: Manages all functions and location files for chapter2.cpp.
 */
 #pragma once
 #include <vector>

@@ -1,6 +1,6 @@
-/* Project: CS395 Alpha Milestone
--- Project Description: An experimental experience manager for the Camelot Virtual Environment.
--- Authors: Jake Hayden, John Colfer, Mac McNerney, Zac Foster
+/* Project: Camelot Narrative Story + Experience Manager
+-- Project Description: An experience manager for the Camelot Virtual Environment.
+-- Authors: John (Mac) McNerney, Zac Foster, John Colfer, Jake Hayden
 -- File: Icon.h
 -- File Description: A file that describes a class representing an interaction within Camelot.
 */
