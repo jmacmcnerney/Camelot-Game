@@ -72,6 +72,18 @@ public:
 	void runPastForestPath(bool CharacterCheck);
 	void runPastCottage(bool CharacterCheck);
 	void runPastCity(bool CharacterCheck);
+	void runForestPath2();
+	void runCurrentCastleCrossroads();
+	void runCurrentGreatHall();
+	void runCurrentPort();
+	void runCurrentLibrary();
+	void runCurrentPrison();
+	void runCurrentStorage();
+	void runLeftHallway();
+	void runRightHallway();
+	void runCurrentDiningRoom();
+	void runCurrentCourtyard();
+	void runCurrentCastleBedroom();
 
 	void flashback1();
 

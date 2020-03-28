@@ -31,9 +31,6 @@ public:
 	void enableRightLog(bool enabled);
 	void enableHorse(bool enabled);
 
-
-
-
 	// name of the ruins place for Camelot's use
 	string name;
 

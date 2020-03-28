@@ -29,6 +29,14 @@ bool visitedFortuneteller = false;
 bool visitedTownElder = false;
 bool completedErrand = false;
 bool ArchieEnemy = false;
+bool hasGreenPotion = false;
+bool hasGreenBook = false;
+bool hasBluePotion = false;
+bool hasBlueBook = false;
+bool hasRedPotion = false;
+bool hasRedBook = false;
+bool hasPurplePotion = false;
+bool hasPurpleBook = false;
 
 Chapter2::Chapter2() {
 	runSetup();
@@ -44,23 +52,24 @@ bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if
 	setupCurrentTown("CurrentTown");
 	setupBlacksmithFoundry("BlacksmithFoundry");
 	setupCurrentForestPath("CurrentForestPath");
+	setupForestPath2("ForestPath2");
 	setupCurrentRuins("CurrentRuins");
 	setupPastCottage("PastCottage");
 	setupPastForestPath("PastForestPath");
 	setupPastCity("PastCity");
 	setupAlchemyShop("AlchemyShop");
-	setupCourtyard("Courtyard");
-	setupCastleBedroom("CastleBedroom");
-	setupCastleCrossroads("CastleCrossroads");
-	setupPort("Port");
-	setupGreatHall("GreatHall");
-	setupLibrary("Library");
-	setupCamp("Camp");
-	setupDungeon("Prison");
+	setupCourtyard("CurrentCourtyard");
+	setupCastleBedroom("CurrentCastleBedroom");
+	setupCastleCrossroads("CurrentCastleCrossroads");
+	setupPort("CurrentPort");
+	setupGreatHall("CurrentGreatHall");
+	setupLibrary("CurrentLibrary");
+	setupCamp("CurrentCamp");
+	setupDungeon("CurrentPrison");
 	setupLeftHallway("LeftHallway");
 	setupRightHallway("RightHallway");
-	setupDiningRoom("DiningRoom");
-	setupStorage("Storage");
+	setupDiningRoom("CurrentDiningRoom");
+	setupStorage("CurrentStorage");
 	function.Action("ShowMenu()", true);
 
 	return true;
@@ -97,6 +106,42 @@ void Chapter2::run() { // begins chapter 2's execution
 		}
 		else if (currentLocation == "PastCity") {
 			runPastCity(ArchieEnemy);
+		}
+		else if (currentLocation == "ForestPath2") {
+			runForestPath2();
+		}
+		else if (currentLocation == "CurrentCastleCrossroads") {
+			runCurrentCastleCrossroads();
+		}
+		else if (currentLocation == "CurrentPort") {
+			runCurrentPort();
+		}
+		else if (currentLocation == "CurrentGreatHall") {
+			runCurrentGreatHall();
+		}
+		else if (currentLocation == "CurrentStorage") {
+			runCurrentStorage();
+		}
+		else if (currentLocation == "RightHallway") {
+			runRightHallway();
+		}
+		else if (currentLocation == "CurrentLibrary") {
+			runCurrentLibrary();
+		}
+		else if (currentLocation == "CurrentCastleBedroom") {
+			runCurrentCastleBedroom();
+		}
+		else if (currentLocation == "LeftHallway") {
+			runLeftHallway();
+		}
+		else if (currentLocation == "CurrentDiningRoom") {
+			runCurrentDiningRoom();
+		}
+		else if (currentLocation == "CurrentPrison") {
+			runCurrentPrison();
+		}
+		else if (currentLocation == "CurrentCourtyard") {
+			runCurrentCourtyard();
 		}
 	}
 }
@@ -671,7 +716,17 @@ void Chapter2::runCurrentTown() {
 			}
 		}
 
-		if (i == "input Enter Blacksmith Foundry CurrentTown.RedHouseDoor") {
+		else if (i == "input arrived Arlan position CurrentTown.NorthEnd") {
+			function.Transition("Arlan", "CurrenTown.NorthEnd", "CurrentCourtyard.Exit");
+			currentLocation = "CurrentCourtyard";
+		}
+
+		else if (i == "input arrived Arlan position CurrentTown.WestEnd") {
+			function.Transition("Arlan", "CurrentTown.WestEnd", "ForestPath2.EastEnd");
+			currentLocation = "ForestPath2";
+		}
+
+		else if (i == "input Enter Blacksmith Foundry CurrentTown.RedHouseDoor") {
 			function.WalkToPlace("Arlan", "CurrentTown.RedHouseDoor");
 			if (visitedTownElder) {
 				function.Transition("Arlan", "CurrentTown.RedHouseDoor", "BlacksmithFoundry.Door");
@@ -1226,6 +1281,309 @@ void Chapter2::runPastRuins(bool CharacterCheck) {
 					function.Action("ShowNarration()", true);
 				}
 			}
+		}
+	}
+}
+
+void Chapter2::runForestPath2() {
+	while (currentLocation == "ForestPath2") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+			
+		}
+
+		if (i == "input arrived Arlan position ForestPath2.WestEnd") {
+			function.Transition("Arlan", "ForestPath2.WestEnd", "CurrentCastleCrossroads.EastEnd");
+			currentLocation = "CurrentCastleCrossroads";
+		}
+
+		else if (i == "input arrived Arlan position ForestPath2.EastEnd") {
+			function.Transition("Arlan", "ForestPath2.EastEnd", "CurrentTown.WestEnd");
+			currentLocation = "CurrentTown";
+		}
+	}
+}
+
+void Chapter2::runCurrentCastleCrossroads() {
+	while (currentLocation == "CurrentCastleCrossroads") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//CurrentPort
+		if (i == "input arrived Arlan position CurrentCastleCrossroads.WestEnd") {
+			function.Transition("Arlan", "CurrentCastleCrossroads.WestEnd", "CurrentPort.Exit");
+			currentLocation = "CurrentPort";
+		}
+		//ForestPath2
+		else if (i == "input arrived Arlan position CurrentCastleCrossroads.EastEnd") {
+			function.Transition("Arlan", "CurrentCastleCrossroads.EastEnd", "ForestPath2.WestEnd");
+			currentLocation = "ForestPath2";
+		}
+		//CurrentGreatHall
+		else if (i == "input arrived Arlan position CurrentCastleCrossroads.Gate") {
+			function.Transition("Arlan", "CurrentCastleCrossroads.Gate", "CurrentGreatHall.Gate");
+			currentLocation = "CurrentGreatHall";
+		}
+	}
+}
+
+void Chapter2::runCurrentGreatHall() {
+	while (currentLocation == "CurrentGreatHall") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//CurrentCastleCrossroads
+		if (i == "input arrived Arlan position CurrentGreatHall.Gate") {
+			function.Transition("Arlan", "CurrentCastleCrossroads.WestEnd", "CurrentCastleCrossroads.Gate");
+			currentLocation = "CurrentCastleCrossroads";
+		}
+		//LeftHallway
+		else if (i == "input arrived Arlan position CurrentGreatHall.LeftDoor") {
+			function.Transition("Arlan", "CurrentGreatHall.LeftDoor", "LeftHallway.Door");
+			currentLocation = "LeftHallway";
+		}
+		//RightHallway
+		else if (i == "input arrived Arlan position CurrentGreatHall.RightDoor") {
+			function.Transition("Arlan", "CurrentGreatHall.RightDoor", "RightHallway.Door");
+			currentLocation = "RightHallway";
+		}
+		//CurrentStorage
+		else if (i == "input arrived Arlan position CurrentGreatHall.BasementDoor") {
+			function.Transition("Arlan", "CurrentGreatHall.BasementDoor", "CurrentStorage.Door");
+			currentLocation = "CurrentStorage";
+		}
+	}
+}
+
+void Chapter2::runCurrentPort() {
+	while (currentLocation == "CurrentPort") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//CurrentCastleCrossroads
+		if (i == "input arrived Arlan position CurrentPort.Exit") {
+			function.Transition("Arlan", "CurrentPort.Exit", "CurrentCastleCrossroads.WestEnd");
+			currentLocation = "CurrentCastleCrossroads";
+		}
+	}
+}
+
+void Chapter2::runCurrentLibrary() {
+	while (currentLocation == "CurrentLibrary") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//RightHallway
+		if (i == "input arrived Arlan position CurrentLibrary.Door") {
+			function.Transition("Arlan", "CurrentLibrary.Door", "RightHallway.Stairs");
+			currentLocation = "RightHallway";
+		}
+	}
+}
+
+void Chapter2::runCurrentStorage() {
+	while (currentLocation == "CurrentStorage") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//CurrentGreatHall
+		if (i == "input arrived Arlan position CurrentStorage.Door") {
+			function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
+			currentLocation = "CurrentGreatHall";
+		}
+	}
+}
+
+void Chapter2::runCurrentPrison() {
+	while (currentLocation == "CurrentPrison") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//LeftHallway
+		if (i == "input arrived Arlan position CurrentPrison.Door") {
+			function.Transition("Arlan", "CurrentPrison.Door", "LeftHallway.BackDoor");
+			currentLocation = "LeftHallway";
+		}
+	}
+}
+
+void Chapter2::runLeftHallway() {
+	while (currentLocation == "LeftHallway") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//CurrentPrison
+		if (i == "input arrived Arlan position LeftHallway.BackDoor") {
+			function.Transition("Arlan", "LeftHallway.BackDoor", "CurrentPrison.Door");
+			currentLocation = "CurrentPrison";
+		}
+		//CurrentDiningRoom
+		else if (i == "input arrived Arlan position LeftHallway.Stairs") {
+			function.Transition("Arlan", "LeftHallway.Stairs", "CurrentDiningRoom.Door");
+			currentLocation = "CurrentDiningRoom";
+		}
+	}
+}
+
+void Chapter2::runRightHallway() {
+	while (currentLocation == "RightHallway") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//CurrentCastleBedroom
+		if (i == "input arrived Arlan position RightHallway.BackDoor") {
+			function.Transition("Arlan", "RightHallway.BackDoor", "CastleBedroom.Door");
+			currentLocation = "CurrentCastleBedroom";
+		}
+		//CurrentLibrary
+		else if (i == "input arrived Arlan position RightHallway.Stairs") {
+			function.Transition("Arlan", "RightHallway.Stairs", "CurrentLibrary.Door");
+			currentLocation = "CurrentLibrary";
+		}
+	}
+}
+
+void Chapter2::runCurrentDiningRoom() {
+	while (currentLocation == "CurrentDiningRoom") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//LeftHallway
+		if (i == "input arrived Arlan position CurrentDiningRoom.Door") {
+			function.Transition("Arlan", "CurrentDiningRoom.Door", "LeftHallway.BackDoor");
+			currentLocation = "LeftHallway";
+		}
+	}
+}
+
+void Chapter2::runCurrentCourtyard() {
+	while (currentLocation == "CurrentCourtyard") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//CurrentTown
+		if (i == "input arrived Arlan position CurrentCourtyard.Exit") {
+			function.Transition("Arlan", "CurrentCourtyard.Exit", "CurrentTown.NorthEnd");
+			currentLocation = "CurrentTown";
+		}
+	}
+}
+
+void Chapter2::runCurrentCastleBedroom() {
+	while (currentLocation == "CurrentCastleBedroom") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//CurrentCastleBedroom
+		if (i == "input arrived Arlan position CurrentCastleBedroom.Door") {
+			function.Transition("Arlan", "CurrentCastleBedroom.Door", "RightHallway.BackDoor");
+			currentLocation = "RightHallway";
 		}
 	}
 }
