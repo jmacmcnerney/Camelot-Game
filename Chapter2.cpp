@@ -409,6 +409,11 @@ bool Chapter2::setupGreatHall(string name) {
 	//items
 
 	//icons
+	CurrentGreatHall.icons.push_back(Icon("Enter Right Door", "Hand", "CurrentGreatHall.RightDoor", "Enter", "true"));
+	CurrentGreatHall.icons.push_back(Icon("Enter Left Door", "Hand", "CurrentGreatHall.LeftDoor", "Enter", "true"));
+	CurrentGreatHall.icons.push_back(Icon("Enter Basement Door", "Hand", "CurrentGreatHall.BasementDoor", "Enter", "true"));
+	CurrentGreatHall.icons.push_back(Icon("Enter Gate", "Hand", "CurrentGreatHall.Gate", "Enter", "true"));
+	function.SetupIcons(CurrentGreatHall.icons);
 
 	return true;
 }
@@ -431,8 +436,19 @@ bool Chapter2::setupLibrary(string name) {
 	//character setup
 
 	//items
+	function.Action("CreateItem(Book Of Incantations, GreenBook)", true);
+	function.Action("CreateItem(Library GoldCup, GoldCup)", true);
+	function.Action("SetPosition(Library GoldCup, CurrentLibrary.AlchemistTable.Right)", true);
+	function.Action("CreateItem(Library GreenKey, GreenKey)", true);
+	function.Action("SetPosition(Library GreenKey, CurrentLibrary.AlchemistTable.Center)", true);
+	function.Action("CreateItem(Library Apple, Apple)", true);
+	function.Action("SetPosition(Library Apple, CurrentLibrary.Table)", true);
 
 	//icons
+	CurrentLibrary.icons.push_back(Icon("Library Alchemist Table", "Hand", "CurrentLibrary.AlchemistTable", "Interact With Alchemist Table", "true"));
+	CurrentLibrary.icons.push_back(Icon("Library Table", "Hand", "CurrentLibrary.Table", "Interact With Table", "true"));
+	CurrentLibrary.icons.push_back(Icon("Library Spellbook", "Hand", "CurrentLibrary.SpellBook", "Read Spellbook", "true"));
+	function.SetupIcons(CurrentLibrary.icons);
 
 	return true;
 }
@@ -545,8 +561,11 @@ void Chapter2::runCurrentCottage() {
 			}
 			else if (modified_I == "Open_Door") {
 				if (hasStorybook) {
+					//test
 					function.Transition("Arlan", "ArlanCottage.Door", "CurrentTown.BlueHouseDoor");
 					currentLocation = "CurrentTown";
+					/*function.Transition("Arlan", "ArlanCottage.Door", "CurrentGreatHall.Gate");
+					currentLocation = "CurrentGreatHall";*/
 				}
 				else {
 					function.WalkToPlace("Arlan", "ArlanCottage.Door");
@@ -1358,22 +1377,22 @@ void Chapter2::runCurrentGreatHall() {
 		}
 
 		//CurrentCastleCrossroads
-		if (i == "input arrived Arlan position CurrentGreatHall.Gate") {
-			function.Transition("Arlan", "CurrentCastleCrossroads.WestEnd", "CurrentCastleCrossroads.Gate");
+		if (i == "input Enter Gate CurrentGreatHall.Gate") {
+			function.Transition("Arlan", "CurrentGreatHall.Gate", "CurrentCastleCrossroads.Gate");
 			currentLocation = "CurrentCastleCrossroads";
 		}
 		//LeftHallway
-		else if (i == "input arrived Arlan position CurrentGreatHall.LeftDoor") {
+		else if (i == "input Enter Left Door CurrentGreatHall.LeftDoor") {
 			function.Transition("Arlan", "CurrentGreatHall.LeftDoor", "LeftHallway.Door");
 			currentLocation = "LeftHallway";
 		}
 		//RightHallway
-		else if (i == "input arrived Arlan position CurrentGreatHall.RightDoor") {
+		else if (i == "input Enter Right Door CurrentGreatHall.RightDoor") {
 			function.Transition("Arlan", "CurrentGreatHall.RightDoor", "RightHallway.Door");
 			currentLocation = "RightHallway";
 		}
 		//CurrentStorage
-		else if (i == "input arrived Arlan position CurrentGreatHall.BasementDoor") {
+		else if (i == "input Enter Basement Door CurrentGreatHall.BasementDoor") {
 			function.Transition("Arlan", "CurrentGreatHall.BasementDoor", "CurrentStorage.Door");
 			currentLocation = "CurrentStorage";
 		}
