@@ -37,9 +37,6 @@ bool hasLibraryGreenKey = false;
 bool libraryApplePositionCorrect = false;
 bool libraryGoldCupPositionCorrect = false;
 bool libraryGreenKeyPositionCorrect = false;
-//bool libraryLeftOccupied = false;
-//bool libraryCenterOccupied = true;
-//bool libraryRightOccupied = true;
 bool libraryPuzzleSolved = false;
 bool hasBluePotion = false;
 bool hasBlueBook = false;
@@ -574,7 +571,7 @@ void Chapter2::runCurrentCottage() {
 				}
 			}
 			else if (modified_I == "Open_Door") {
-				int test = 0;
+				int test = 1;
 				if (hasStorybook) {
 					//testing
 					if (test == 0) {
@@ -1441,6 +1438,9 @@ void Chapter2::runCurrentPort() {
 }
 
 void Chapter2::runCurrentLibrary() {
+	bool libraryLeftOccupied = true;
+	bool libraryCenterOccupied = true;
+	bool libraryRightOccupied = true;
 	while (currentLocation == "CurrentLibrary") {
 		string i;
 		getline(cin, i);
