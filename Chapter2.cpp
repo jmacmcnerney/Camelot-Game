@@ -571,7 +571,7 @@ void Chapter2::runCurrentCottage() {
 				}
 			}
 			else if (modified_I == "Open_Door") {
-				int test = 1;
+				int test = 0;
 				if (hasStorybook) {
 					//testing
 					if (test == 0) {
