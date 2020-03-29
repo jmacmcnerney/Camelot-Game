@@ -63,6 +63,6 @@ public:
 	void RemoveItem(string itemname, vector<string> &inventory);
 
 	//Library Item Handler
-	void LibraryItem(string action, string itemname, string position, bool hasItem, vector<string>& inventory);
+	void LibraryItem(string action, string itemname, string position, bool &positionOccupied, bool &hasItem, bool &correctPosition, vector<string> &inventory);
 
 };

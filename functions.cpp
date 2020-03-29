@@ -256,15 +256,25 @@ void functions::RemoveItem(string itemname, vector<string> &inventory) {
 	}
 }
 
-void functions::LibraryItem(string action, string itemname, string position, bool hasItem, vector<string> &inventory) {
+void functions::LibraryItem(string action, string itemname, string position, bool &positionOccupied, bool &hasItem, bool &correctPosition, vector<string> &inventory) {
 	Action("HideDialog()", true);
 	//Action("ShowNarration()", true);
 	if (action == "place") {
 		if (hasItem) {
-			Action("SetNarration(" + itemname + " Removed From Inventory)", true);
-			RemoveItem(itemname, inventory);
-			Action("SetPosition(" + itemname + ", CurrentLibrary.AlchemistTable." + position + ")", true);
-			//return;
+			if (!positionOccupied) {
+				Action("SetNarration(" + itemname + " Removed From Inventory)", true);
+				RemoveItem(itemname, inventory);
+				Action("SetPosition(" + itemname + ", CurrentLibrary.AlchemistTable." + position + ")", true);
+				positionOccupied = true;
+				hasItem = false;
+				if ((itemname == "Library Apple" && position == "Left") || (itemname == "Library GoldCup" && position == "Center") || (itemname == "Library GreenKey" && position == "Right")) {
+					correctPosition = true;
+				}
+				//return;
+			}
+			else {
+				Action("SetNarration(There is already an item in that position.)", true);
+			}
 		}
 		else if (!hasItem) {
 			Action("SetNarration(You do not have that item in your inventory.)", true);
@@ -272,14 +282,17 @@ void functions::LibraryItem(string action, string itemname, string position, boo
 		}
 	}
 	else if (action == "take") {
+		positionOccupied = false;
+		correctPosition = false;
 		if (hasItem) {
-			Action("SetNarration(You already have that item in your inventory.)", true);
+			Action("SetNarration(" + itemname + " is already in your inventory.)", true);
 			//return;
 		}
 		else if (!hasItem) {
 			Action("SetPosition(" + itemname + ")", true);
 			inventory.push_back(itemname);
-			Action("SetNarration(" + itemname + " Added To Inventory)", true);
+			Action("SetNarration(" + itemname + " Added To Inventory.)", true);
+			hasItem = true;
 			//return;
 		}
 	}
