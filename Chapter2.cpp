@@ -571,7 +571,7 @@ void Chapter2::runCurrentCottage() {
 				}
 			}
 			else if (modified_I == "Open_Door") {
-				int test = 1;
+				int test = 0;
 				if (hasStorybook) {
 					//testing
 					if (test == 0) {
@@ -1478,6 +1478,9 @@ void Chapter2::runCurrentLibrary() {
 			function.RemoveItem("Library Apple", playerInv);
 			function.RemoveItem("Library GoldCup", playerInv);
 			function.RemoveItem("Library GreenKey", playerInv);
+			function.Action("SetPosition(Library GoldCup)", true);
+			function.Action("SetPosition(Library GreenKey)", true);
+			function.Action("SetPosition(Library Apple)", true);
 			function.Action("SetPosition(Library GoldCup, CurrentLibrary.AlchemistTable.Right)", true);
 			function.Action("SetPosition(Library GreenKey, CurrentLibrary.AlchemistTable.Left)", true);
 			function.Action("SetPosition(Library Apple, CurrentLibrary.AlchemistTable.Center)", true);
@@ -1508,7 +1511,18 @@ void Chapter2::runCurrentLibrary() {
 				function.Action("SetPosition(Book Of Incantations)", true);
 				playerInv.push_back("Book Of Incantations");
 				hasGreenBook = true;
+				function.SetupDialogText("The Book Of Incantations pulls you away.", "leaveLibrary", "Oh...?");
+				function.Action("ShowDialog()", true);
 			}
+		}
+
+		else if (i == "input Selected leaveLibrary") {
+			function.Action("HideDialog()", true);
+			function.Action("FadeOut()", true);
+			function.Action("SetPosition(Arlan, RightHallway.Stairs)", true);
+			this_thread::sleep_for(chrono::milliseconds(3000));
+			function.Action("FadeIn()", true);
+			currentLocation = "RightHallway";
 		}
 
 		else if (i == "input Library Spellbook CurrentLibrary.SpellBook") {
@@ -1601,11 +1615,11 @@ void Chapter2::runCurrentLibrary() {
 
 		else if (i == "input Selected pickUpLibraryItem") {
 			function.LibraryItem("take", "Library Apple", "onObject", libraryLeftOccupied, hasLibraryApple, libraryApplePositionCorrect, playerInv);
-			this_thread::sleep_for(chrono::milliseconds(2000));
+			this_thread::sleep_for(chrono::milliseconds(1000));
 			//libraryApplePositionCorrect = false;
 			//hasLibraryApple = true;
 			function.LibraryItem("take", "Library GoldCup", "onObject", libraryCenterOccupied, hasLibraryGoldCup, libraryGoldCupPositionCorrect, playerInv);
-			this_thread::sleep_for(chrono::milliseconds(2000));
+			this_thread::sleep_for(chrono::milliseconds(1000));
 			//libraryGoldCupPositionCorrect = false;
 			//hasLibraryGoldCup = true;
 			function.LibraryItem("take", "Library GreenKey", "onObject", libraryRightOccupied, hasLibraryGreenKey, libraryGreenKeyPositionCorrect, playerInv);
@@ -1743,8 +1757,23 @@ void Chapter2::runRightHallway() {
 		}
 		//CurrentLibrary
 		else if (i == "input arrived Arlan position RightHallway.Stairs") {
-			function.Transition("Arlan", "RightHallway.Stairs", "CurrentLibrary.Door");
-			currentLocation = "CurrentLibrary";
+			if (!hasGreenBook /* && mathiasBranch */) {
+				function.Transition("Arlan", "RightHallway.Stairs", "CurrentLibrary.Door");
+				currentLocation = "CurrentLibrary";
+			}
+			else if (hasGreenBook || hasBlueBook || hasBluePotion) {
+				if (hasGreenBook) {
+					function.Action("SetNarration(You have already reaped the rewards of this room. Your Book Of Incantations urges you to adventure elsewhere.)", true);
+				}
+				else if (hasBlueBook || hasBluePotion) {
+					function.Action("SetNarration(Your blue artifact repels you from this room.)", true);
+				}
+				function.Action("ShowNarration()", true);
+			}
+			/*else if (!mathiasBranch) {
+					function.Action("SetNarration(An ominous force repels you from this room.)", true);
+					function.Action("ShowNarration()", true);
+			}*/
 		}
 
 		else if (i == "input Selected end") {
