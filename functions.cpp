@@ -255,3 +255,33 @@ void functions::RemoveItem(string itemname, vector<string> &inventory) {
 		}
 	}
 }
+
+void functions::LibraryItem(string action, string itemname, string position, bool hasItem, vector<string> &inventory) {
+	Action("HideDialog()", true);
+	//Action("ShowNarration()", true);
+	if (action == "place") {
+		if (hasItem) {
+			Action("SetNarration(" + itemname + " Removed From Inventory)", true);
+			RemoveItem(itemname, inventory);
+			Action("SetPosition(" + itemname + ", CurrentLibrary.AlchemistTable." + position + ")", true);
+			//return;
+		}
+		else if (!hasItem) {
+			Action("SetNarration(You do not have that item in your inventory.)", true);
+			//return;
+		}
+	}
+	else if (action == "take") {
+		if (hasItem) {
+			Action("SetNarration(You already have that item in your inventory.)", true);
+			//return;
+		}
+		else if (!hasItem) {
+			Action("SetPosition(" + itemname + ")", true);
+			inventory.push_back(itemname);
+			Action("SetNarration(" + itemname + " Added To Inventory)", true);
+			//return;
+		}
+	}
+	Action("ShowNarration()", true);
+}

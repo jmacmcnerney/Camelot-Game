@@ -31,6 +31,16 @@ bool completedErrand = false;
 bool ArchieEnemy = false;
 bool hasGreenPotion = false;
 bool hasGreenBook = false;
+bool hasLibraryGoldCup = false;
+bool hasLibraryApple = false;
+bool hasLibraryGreenKey = false;
+bool libraryApplePositionCorrect = false;
+bool libraryGoldCupPositionCorrect = false;
+bool libraryGreenKeyPositionCorrect = false;
+//bool libraryLeftOccupied = false;
+//bool libraryCenterOccupied = true;
+//bool libraryRightOccupied = true;
+bool libraryPuzzleSolved = false;
 bool hasBluePotion = false;
 bool hasBlueBook = false;
 bool hasRedPotion = false;
@@ -440,15 +450,19 @@ bool Chapter2::setupLibrary(string name) {
 	function.Action("CreateItem(Library GoldCup, GoldCup)", true);
 	function.Action("SetPosition(Library GoldCup, CurrentLibrary.AlchemistTable.Right)", true);
 	function.Action("CreateItem(Library GreenKey, GreenKey)", true);
-	function.Action("SetPosition(Library GreenKey, CurrentLibrary.AlchemistTable.Center)", true);
+	function.Action("SetPosition(Library GreenKey, CurrentLibrary.AlchemistTable.Left)", true);
 	function.Action("CreateItem(Library Apple, Apple)", true);
-	function.Action("SetPosition(Library Apple, CurrentLibrary.Table)", true);
+	function.Action("SetPosition(Library Apple, CurrentLibrary.AlchemistTable.Center)", true);
 
 	//icons
 	CurrentLibrary.icons.push_back(Icon("Library Alchemist Table", "Hand", "CurrentLibrary.AlchemistTable", "Interact With Alchemist Table", "true"));
 	CurrentLibrary.icons.push_back(Icon("Library Table", "Hand", "CurrentLibrary.Table", "Interact With Table", "true"));
 	CurrentLibrary.icons.push_back(Icon("Library Spellbook", "Hand", "CurrentLibrary.SpellBook", "Read Spellbook", "true"));
+	//CurrentLibrary.icons.push_back(Icon("Library Chair", "Hand", "CurrentLibrary.Chair", "Rest", "true"));
 	function.SetupIcons(CurrentLibrary.icons);
+
+	//furniture
+	function.Action("HideFurniture(CurrentLibrary.Chair)", true);
 
 	return true;
 }
@@ -560,12 +574,17 @@ void Chapter2::runCurrentCottage() {
 				}
 			}
 			else if (modified_I == "Open_Door") {
+				int test = 0;
 				if (hasStorybook) {
-					//test
-					function.Transition("Arlan", "ArlanCottage.Door", "CurrentTown.BlueHouseDoor");
-					currentLocation = "CurrentTown";
-					/*function.Transition("Arlan", "ArlanCottage.Door", "CurrentGreatHall.Gate");
-					currentLocation = "CurrentGreatHall";*/
+					//testing
+					if (test == 0) {
+						function.Transition("Arlan", "ArlanCottage.Door", "CurrentTown.BlueHouseDoor");
+						currentLocation = "CurrentTown";
+					}
+					else if (test == 1) {
+						function.Transition("Arlan", "ArlanCottage.Door", "CurrentLibrary.Door");
+						currentLocation = "CurrentLibrary";
+					}
 				}
 				else {
 					function.WalkToPlace("Arlan", "ArlanCottage.Door");
@@ -1425,6 +1444,7 @@ void Chapter2::runCurrentLibrary() {
 	while (currentLocation == "CurrentLibrary") {
 		string i;
 		getline(cin, i);
+		//function.Action("SetLeft(Arlan)", true);
 
 		//Gets the first word that isn't "input"
 		modified_I = function.splitInput(i, 6, false);
@@ -1435,10 +1455,173 @@ void Chapter2::runCurrentLibrary() {
 
 		}
 
+		if (libraryApplePositionCorrect && libraryGoldCupPositionCorrect && libraryGreenKeyPositionCorrect && !hasGreenBook) {
+			libraryPuzzleSolved = true;
+			function.Action("SetPosition(Book Of Incantations, CurrentLibrary.Table)", true);
+			function.Action("CreateEffect(Book Of Incantations, Resurrection)", true);
+			function.Action("EnableEffect(Book Of Incantations, Resurrection)", true);
+		}
+
+		/*
+		CurrentLibrary.icons.push_back(Icon("Library Alchemist Table", "Hand", "CurrentLibrary.AlchemistTable", "Interact With Alchemist Table", "true"));
+		CurrentLibrary.icons.push_back(Icon("Library Table", "Hand", "CurrentLibrary.Table", "Interact With Table", "true"));
+		CurrentLibrary.icons.push_back(Icon("Library Spellbook", "Hand", "CurrentLibrary.SpellBook", "Read Spellbook", "true"));
+		CurrentLibrary.icons.push_back(Icon("Library Chair", "Hand", "CurrentLibrary.Chair", "Rest", "true"));
+		*/
+
 		//RightHallway
 		if (i == "input arrived Arlan position CurrentLibrary.Door") {
 			function.Transition("Arlan", "CurrentLibrary.Door", "RightHallway.Stairs");
 			currentLocation = "RightHallway";
+		}
+
+		else if (i == "input Library Table CurrentLibrary.Table") {
+			function.WalkToPlace("Arlan", "CurrentLibrary.Table");
+			if (libraryPuzzleSolved && hasGreenBook) {
+				function.Action("SetNarration(You already won.)", true);
+				function.Action("ShowNarration()", true);
+			}
+
+			else if (!libraryPuzzleSolved && !hasGreenBook) {
+				function.SetupDialogText("Restore the order.", "end", "**Walk Away**");
+				function.Action("ShowDialog()", true);
+			}
+
+			else if (libraryPuzzleSolved && !hasGreenBook) {
+				function.Action("SetNarration(Book Of Incantations Added To Inventory)", true);
+				function.Action("ShowNarration()", true);
+				//function.Action("DisableEffect(Book Of Incantations, Resurrection)", true);
+				function.Action("SetPosition(Book Of Incantations)", true);
+				playerInv.push_back("Book Of Incantations");
+				hasGreenBook = true;
+			}
+		}
+
+		else if (i == "input Library Spellbook CurrentLibrary.SpellBook") {
+			function.WalkToPlace("Arlan", "CurrentLibrary.SpellBook");
+			function.SetupDialogText("Restore the order to reveal an Incantation.", "end", "Hmm...");
+			function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Library Alchemist Table CurrentLibrary.AlchemistTable") {
+			function.WalkToPlace("Arlan", "CurrentLibrary.AlchemistTable");
+			function.Action("ShowDialog()", true);
+			if (libraryPuzzleSolved) {
+				function.SetupDialogText("The order has been restored.", "end", "**Walk Away**");
+			}
+
+			else {
+				function.SetupDialogText("What would you like to do?", "placeLibraryItem", "Place Item.", "pickUpLibraryItem", "Take Item.");
+			}
+		}
+
+		else if (i == "input Selected placeLibraryItem") {
+			function.SetupDialogText("Which item would you like to place?", "placeLibraryApple", "Apple", "placeLibraryGreenKey", "Green Key", "placeLibraryGoldCup", "Gold Cup");
+		}
+
+		else if (i == "input Selected placeLibraryApple") {
+			function.SetupDialogText("Where would you like to place the apple?", "placeLibraryAppleLeft", "Left", "placeLibraryAppleCenter", "Center", "placeLibraryAppleRight", "Right");
+		}
+
+		else if (i == "input Selected placeLibraryGoldCup") {
+			function.SetupDialogText("Where would you like to place the gold cup?", "placeLibraryGoldCupLeft", "Left", "placeLibraryGoldCupCenter", "Center", "placeLibraryGoldCupRight", "Right");
+		}
+
+		else if (i == "input Selected placeLibraryGreenKey") {
+			function.SetupDialogText("Where would you like to place the green key?", "placeLibraryGreenKeyLeft", "Left", "placeLibraryGreenKeyCenter", "Center", "placeLibraryGreenKeyRight", "Right");
+		}
+
+		else if (i == "input Selected placeLibraryAppleLeft") {
+			function.LibraryItem("place", "Library Apple", "Left", hasLibraryApple, playerInv);
+			libraryApplePositionCorrect = true;
+			hasLibraryApple = false;
+		}
+
+		else if (i == "input Selected placeLibraryAppleCenter") {
+			function.LibraryItem("place", "Library Apple", "Center", hasLibraryApple, playerInv);
+			libraryApplePositionCorrect = false;
+			hasLibraryApple = false;
+		}
+
+		else if (i == "input Selected placeLibraryAppleRight") {
+			function.LibraryItem("place", "Library Apple", "Right", hasLibraryApple, playerInv);
+			libraryApplePositionCorrect = false;
+			hasLibraryApple = false;
+		}
+
+		else if (i == "input Selected placeLibraryGoldCupLeft") {
+			function.LibraryItem("place", "Library GoldCup", "Left", hasLibraryGoldCup, playerInv);
+			libraryGoldCupPositionCorrect = false;
+			hasLibraryGoldCup = false;
+		}
+
+		else if (i == "input Selected placeLibraryGoldCupCenter") {
+			function.LibraryItem("place", "Library GoldCup", "Center", hasLibraryGoldCup, playerInv);
+			libraryGoldCupPositionCorrect = true;
+			hasLibraryGoldCup = false;
+		}
+
+		else if (i == "input Selected placeLibraryGoldCupRight") {
+			function.LibraryItem("place", "Library GoldCup", "Right", hasLibraryGoldCup, playerInv);
+			libraryGoldCupPositionCorrect = false;
+			hasLibraryGoldCup = false;
+		}
+
+		else if (i == "input Selected placeLibraryGreenKeyLeft") {
+			function.LibraryItem("place", "Library GreenKey", "Left", hasLibraryGreenKey, playerInv);
+			libraryGreenKeyPositionCorrect = false;
+			hasLibraryGreenKey = false;
+		}
+
+		else if (i == "input Selected placeLibraryGreenKeyCenter") {
+			function.LibraryItem("place", "Library GreenKey", "Center", hasLibraryGreenKey, playerInv);
+			libraryGreenKeyPositionCorrect = false;
+			hasLibraryGreenKey = false;
+		}
+
+		else if (i == "input Selected placeLibraryGreenKeyRight") {
+			function.LibraryItem("place", "Library GreenKey", "Right", hasLibraryGreenKey, playerInv);
+			libraryGreenKeyPositionCorrect = true;
+			hasLibraryGreenKey = false;
+		}
+
+		else if (i == "input Selected pickUpLibraryItem") {
+			function.SetupDialogText("Which item would you like to take?", "pickUpLibraryApple", "Apple", "pickUpLibraryGreenKey", "Green Key", "pickUpLibraryGoldCup", "Gold Cup");
+		}
+
+		else if (i == "input Selected pickUpLibraryApple") {
+			function.LibraryItem("take", "Library Apple", "onObject", hasLibraryApple, playerInv);
+			libraryApplePositionCorrect = false;
+			hasLibraryApple = true;
+		}
+
+		else if (i == "input Selected pickUpLibraryGoldCup") {
+			function.LibraryItem("take", "Library GoldCup", "onObject", hasLibraryGoldCup, playerInv);
+			libraryGoldCupPositionCorrect = false;
+			hasLibraryGoldCup = true;
+		}
+
+		else if (i == "input Selected pickUpLibraryGreenKey") {
+			function.LibraryItem("take", "Library GreenKey", "onObject", hasLibraryGreenKey, playerInv);
+			libraryGreenKeyPositionCorrect = false;
+			hasLibraryGreenKey = true;
+		}
+
+		else if (i == "input Selected end") {
+			function.Action("HideDialog()", true);
+		}
+
+		else if (i == "input Key Inventory") {
+			function.Action("ClearList()", true);
+			for (string item : playerInv) {
+				function.Action("AddToList(" + item + ")", true);
+			}
+			function.Action("ShowList(Arlan)", true);
+		}
+
+		else if (i == "input Close List") {
+			function.Action("HideList()", true);
+			function.Action("EnableInput()", true);
 		}
 	}
 }
