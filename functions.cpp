@@ -298,3 +298,41 @@ void functions::LibraryItem(string action, string itemname, string position, boo
 	}
 	Action("ShowNarration()", true);
 }
+
+void functions::PuzzleItem(string action, string itemname, string position, bool& positionOccupied, bool& hasItem, bool& correctPosition, vector<string>& inventory) {
+	Action("HideDialog()", true);
+	if (action == "place") {
+		if (hasItem) {
+			if (!positionOccupied) {
+				Action("SetNarration(" + itemname + " Removed From Inventory)", true);
+				RemoveItem(itemname, inventory);
+				Action("SetPosition(" + itemname + ", CurrentLibrary.AlchemistTable." + position + ")", true);
+				positionOccupied = true;
+				hasItem = false;
+				if ((itemname == "Library Apple" && position == "Left") || (itemname == "Library GoldCup" && position == "Center") || (itemname == "Library GreenKey" && position == "Right")) {
+					correctPosition = true;
+				}
+			}
+			else {
+				Action("SetNarration(There is already an item in that position.)", true);
+			}
+		}
+		else if (!hasItem) {
+			Action("SetNarration(You do not have that item in your inventory.)", true);
+		}
+	}
+	else if (action == "take") {
+		positionOccupied = false;
+		correctPosition = false;
+		if (hasItem) {
+			Action("SetNarration(" + itemname + " is already in your inventory.)", true);
+		}
+		else if (!hasItem) {
+			Action("SetPosition(" + itemname + ")", true);
+			inventory.push_back(itemname);
+			Action("SetNarration(" + itemname + " Added To Inventory.)", true);
+			hasItem = true;
+		}
+	}
+	Action("ShowNarration()", true);
+}
