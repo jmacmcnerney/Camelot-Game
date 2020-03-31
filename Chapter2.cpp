@@ -40,6 +40,7 @@ bool libraryGreenKeyPositionCorrect = false;
 bool libraryPuzzleSolved = false;
 bool hasBluePotion = false;
 bool hasBlueBook = false;
+bool visitedDiningRoom = false;
 bool hasRedPotion = false;
 bool hasRedBook = false;
 bool hasPurplePotion = false;
@@ -516,11 +517,40 @@ bool Chapter2::setupDiningRoom(string name) {
 	CurrentDiningRoom = DiningRoom(name);
 
 	//character setup
+	function.SetupCharacter("Chef", "D", "Peasant", "Spiky", "Black", "CurrentDiningRoom.BackDoor");
 
 	//items
+	function.Action("CreateItem(DiningChalice, GoldCup)", true);
+	function.Action("CreateItem(DiningApple, Apple)", true);
+	function.Action("CreateItem(DiningBottle, Bottle)", true);
+	function.Action("CreateItem(DiningBread, Bread)", true);
+	function.Action("CreateItem(DiningMeat, ChickenLeg)", true);
+	function.Action("CreateItem(DiningCup, Cup)", true);
+	function.Action("CreateItem(PotionOfPower, BluePotion)", true);
 
 	//icons
-
+	//door interaction
+	CurrentDiningRoom.icons.push_back(Icon("Open", "Hand", "CurrentDiningRoom.BackDoor", "Open the Door", "true"));
+	CurrentDiningRoom.icons.push_back(Icon("Open", "Hand", "CurrentDiningRoom.Door", "Open the Door", "true"));
+	//place items in chairs
+	CurrentDiningRoom.icons.push_back(Icon("PlaceInChair", "Hand", "CurrentDiningRoom.LeftChair", "Place an item", "false"));
+	CurrentDiningRoom.icons.push_back(Icon("PlaceInChair", "Hand", "CurrentDiningRoom.FrontLeftChair", "Place an item", "false"));
+	CurrentDiningRoom.icons.push_back(Icon("PlaceInChair", "Hand", "CurrentDiningRoom.FrontRightChair", "Place an item", "false"));
+	CurrentDiningRoom.icons.push_back(Icon("PlaceInChair", "Hand", "CurrentDiningRoom.RightChair", "Place an item", "false"));
+	CurrentDiningRoom.icons.push_back(Icon("PlaceInChair", "Hand", "CurrentDiningRoom.BackLeftChair", "Place an item", "false"));
+	CurrentDiningRoom.icons.push_back(Icon("PlaceInChair", "Hand", "CurrentDiningRoom.BackRightChair", "Place an item", "false"));
+	//check chair notes
+	CurrentDiningRoom.icons.push_back(Icon("CheckNote", "OpenScroll", "CurrentDiningRoom.LeftChair", "Check the note", "true"));
+	CurrentDiningRoom.icons.push_back(Icon("CheckNote", "OpenScroll", "CurrentDiningRoom.FrontLeftChair", "Check the note", "true"));
+	CurrentDiningRoom.icons.push_back(Icon("CheckNote", "OpenScroll", "CurrentDiningRoom.FrontRightChair", "Check the note", "true"));
+	CurrentDiningRoom.icons.push_back(Icon("CheckNote", "OpenScroll", "CurrentDiningRoom.RightChair", "Check the note", "true"));
+	CurrentDiningRoom.icons.push_back(Icon("CheckNote", "OpenScroll", "CurrentDiningRoom.BackLeftChair", "Check the note", "true"));
+	CurrentDiningRoom.icons.push_back(Icon("CheckNote", "OpenScroll", "CurrentDiningRoom.BackRightChair", "Check the note", "true"));
+	//drink potion
+	CurrentDiningRoom.icons.push_back(Icon("Drink", "Potion", "PotionOfPower", "Drink the potion", "true"));
+	
+	function.SetupIcons(CurrentDiningRoom.icons);
+	
 	return true;
 }
 
@@ -571,7 +601,8 @@ void Chapter2::runCurrentCottage() {
 				}
 			}
 			else if (modified_I == "Open_Door") {
-				int test = 0;
+				//int test = 0;
+				int test = 2;
 				if (hasStorybook) {
 					//testing
 					if (test == 0) {
@@ -581,6 +612,10 @@ void Chapter2::runCurrentCottage() {
 					else if (test == 1) {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentLibrary.Door");
 						currentLocation = "CurrentLibrary";
+					}
+					else if (test == 2) {
+						function.Transition("Arlan", "ArlanCottage.Door", "CurrentDiningRoom.Door");
+						currentLocation = "CurrentDiningRoom";
 					}
 				}
 				else {
@@ -1796,6 +1831,19 @@ void Chapter2::runRightHallway() {
 }
 
 void Chapter2::runCurrentDiningRoom() {
+	if (!visitedDiningRoom) {
+		function.Action("DisableInput()", true);
+		function.Action("Face(Arlan, Chef)", false);
+		function.Action("WalkTo(Chef, Arlan)", true);
+		function.SetupDialog("Arlan", "Chef", false);
+		function.SetupDialogText("You there! Take these items and set the royal table! I am far too busy to be bothered with such petty tasks.", "chefOkay", "Okay...");
+	}
+
+	string currentChair;
+	//string leftItem, frontLeftItem, frontRightItem, rightItem, backLeftItem, backRightItem = "";
+	string appleLocation, bottleLocation, breadLocation, cupLocation, chaliceLocation, meatLocation = "";
+	bool fireDoused = false;
+
 	while (currentLocation == "CurrentDiningRoom") {
 		string i;
 		getline(cin, i);
@@ -1807,13 +1855,194 @@ void Chapter2::runCurrentDiningRoom() {
 
 		if (!inputWasCommon) {
 
+			if (modified_I == "Selected") {
+				modified_I = function.splitInput(i, 0, true);
+
+				if (modified_I == "chefOkay") {
+					function.Action("SetNarration(The chef hands you a number of items.)", true);
+					playerInv.push_back("DiningChalice");
+					playerInv.push_back("DiningApple");
+					playerInv.push_back("DiningBottle");
+					playerInv.push_back("DiningBread");
+					playerInv.push_back("DiningMeat");
+					playerInv.push_back("DiningCup");
+					function.Action("ShowNarration()", true);
+					function.SetupDialogText("Be sure to check the note on each chair--they will tell you what each patron wants. Dont mess up!", "chefEnd", "Sure...");
+				}
+
+				if (modified_I == "chefEnd") {
+					function.Action("Exit(Chef, CurrentDiningRoom.BackDoor, false", false);
+					function.Action("ClearDialog()", true);
+					function.Action("HideDialog()", true);
+					function.Action("EnableInput()", true);
+				}
+			}
+
+			else if (modified_I == "PlaceInChair") {
+				// show "Dining" items in inventory, adjust interactions for each
+				for (string item : playerInv) {
+					if (item.substr(0, 6) == "Dining") {
+						function.Action("AddToList(" + item + ")", true);
+						function.Action("EnableIcon(Place, Hand, " + item + ", Place, true)", true);
+						function.Action("DisableIcon(PickUp, " + item + ")", true);
+					}
+				}
+				function.Action("ShowList(Arlan)", true);
+
+				// set currentChair according to which chair player clicked
+				modified_I = function.splitInput(i, 0, true);
+				if (modified_I == "CurrentDiningRoom.LeftChair") currentChair = "Left";
+				else if (modified_I == "CurrentDiningRoom.FrontLeftChair") currentChair = "FrontLeft";
+				else if (modified_I == "CurrentDiningRoom.FrontRightChair") currentChair = "FrontRight";
+				else if (modified_I == "CurrentDiningRoom.RightChair") currentChair = "Right";
+				else if (modified_I == "CurrentDiningRoom.BackRightChair") currentChair = "BackRight";
+				else if (modified_I == "CurrentDiningRoom.BackLeftChair") currentChair = "BackLeft";
+			}
+			
+			else if (modified_I == "Place") {
+				modified_I = function.splitInput(i, 0, true);
+
+				for (string item : playerInv) {
+					function.Action("DisableIcon(Place, " + item + ")", true);
+				}
+
+				function.Action("HideList()", true);
+				function.Action("ClearList()", true);
+				function.RemoveItem(modified_I, playerInv);
+				function.Action("SetPosition(" + modified_I + ", CurrentDiningRoom.DiningTable." + currentChair + ")", true);
+				function.Action("EnableIcon(PickUp, Hand, " + modified_I + ", Pick up, true)", true);
+				//function.Action("DisableIcon(PlaceInChair, CurrentDiningRoom." + currentChair + "Chair)", true);
+
+				/*if (currentChair == "Left") leftItem = modified_I;
+				else if (currentChair == "FrontLeft") frontLeftItem = modified_I;
+				else if (currentChair == "FrontRight") frontRightItem = modified_I;
+				else if (currentChair == "Right") rightItem = modified_I;
+				else if (currentChair == "BackLeft") backLeftItem = modified_I;
+				else if (currentChair == "BackRight") backRightItem = modified_I;*/
+				if (modified_I == "DiningApple") appleLocation = currentChair;
+				else if (modified_I == "DiningBottle") bottleLocation = currentChair;
+				else if (modified_I == "DiningBread") breadLocation = currentChair;
+				else if (modified_I == "DiningCup") cupLocation = currentChair;
+				else if (modified_I == "DiningChalice") chaliceLocation = currentChair;
+				else if (modified_I == "DiningMeat") meatLocation = currentChair;
+
+				bool placementCorrect = true;
+				if (appleLocation != "BackLeft") placementCorrect = false;
+				if (bottleLocation != "FrontLeft") placementCorrect = false;
+				if (breadLocation != "Left") placementCorrect = false;
+				if (cupLocation != "FrontRight") placementCorrect = false;
+				if (chaliceLocation != "Right") placementCorrect = false;
+				if (meatLocation != "BackRight") placementCorrect = false;
+				if (placementCorrect) {
+					function.Action("PlaySound(SecretDoor, CurrentDiningRoom.Fireplace)", false);
+					function.Action("SetNarration(You hear a shifting noise near the fireplace.)", true);
+					function.Action("ShowNarration()", true);
+
+					function.Action("EnableIcon(Inspect, Hand, CurrentDiningRoom.Fireplace, Inspect the fireplace, true)", true);
+				}
+			}
+
+			else if (modified_I == "PickUp") {
+				modified_I = function.splitInput(i, 0, true);
+
+				function.Action("SetPosition(" + modified_I + ")", true);
+				playerInv.push_back(modified_I);
+				function.Action("DisableIcon(PickUp, " + modified_I + ")", true);
+				function.Action("EnableIcon(Place, Hand, " + modified_I + ", Place, true)", true);
+				//function.Action("EnableIcon(PlaceInChair, Hand, CurrentDiningRoom.LeftChair, Place an item, false)", true);
+			}
+
+			else if (modified_I == "CheckNote") {
+				modified_I = function.splitInput(i, 0, true);
+				if (modified_I == "CurrentDiningRoom.LeftChair") {
+					function.Action("SetNarration(Here shall sit the Queen. She shall only be satisfied by our bakerys finest.)", true);
+					function.Action("ShowNarration()", true);
+				}
+				else if (modified_I == "CurrentDiningRoom.FrontLeftChair") {
+					function.Action("SetNarration(Here shall sit the explorer. He shall need something portable to take on his adventures.)", true);
+					function.Action("ShowNarration()", true);
+				}
+				else if (modified_I == "CurrentDiningRoom.FrontRightChair") {
+					function.Action("SetNarration(Here shall sit the servant. He shall need only a modest container for water.)", true);
+					function.Action("ShowNarration()", true);
+				}
+				else if (modified_I == "CurrentDiningRoom.RightChair") {
+					function.Action("SetNarration(Here shall sit the King. He requires something suitably ornate.)", true);
+					function.Action("ShowNarration()", true);
+				}
+				else if (modified_I == "CurrentDiningRoom.BackRightChair") {
+					function.Action("SetNarration(Here shall sit the huntsman. He shall prefer something that reminds him of the hunt.)", true);
+					function.Action("ShowNarration()", true);
+				}
+				else if (modified_I == "CurrentDiningRoom.BackLeftChair") {
+					function.Action("SetNarration(Here shall sit the sailor. He shall prefer something that will help him ward off scurvy.)", true);
+					function.Action("ShowNarration()", true);
+				}
+			}
+
+			else if (modified_I == "Inspect") {
+				if (fireDoused) {
+					function.Action("SetNarration(You reach back and retrieve a Potion of Power from a hidden compartment in the fireplace.)", true);
+					function.Action("ShowNarration()", true);
+					playerInv.push_back("PotionOfPower");
+				}
+				else {
+					bool hasCup = false;
+					for (string item : playerInv) {
+						if (item == "DiningCup") hasCup = true;
+					}
+					if (hasCup) {
+						function.Action("SetNarration(You pour some water out of the servants cup and onto the flames to cool them off a bit.)", true);
+						function.Action("ShowNarration()", true);
+						fireDoused = true;
+					}
+					else {
+						function.Action("SetNarration(Theres a small opening in the back of the fireplace. You reach for it--but the hot fire burns your hand. If only you had some water to douse it...)", true);
+						function.Action("ShowNarration()", true);
+					}
+				}
+			}
+
+			else if (modified_I == "Drink") {
+				function.Action("HideList()", true);
+				function.Action("ClearList()", true);
+				function.Action("Unpocket(Arlan, PotionOfPower)", true);
+				function.Action("Drink(Arlan)", true);
+				function.Action("SetNarration(You take a sip of the potion. Suddenly, images of a mysterious book adorned with a skull flash before your eyes. You feel stronger as the book calls out to you. You get the feeling should save to the rest of the potion.)", true);
+				function.Action("ShowNarration()", true);
+				function.Action("DisableIcon(Drink, PotionOfPower)", true);
+
+				function.Action("FadeOut()", true);
+				function.Action("SetPosition(Arlan, LeftHallway)", true);
+				function.Action("FadeIn()", true);
+				currentLocation = "LeftHallway";
+			}
 		}
 
 		//LeftHallway
-		if (i == "input arrived Arlan position CurrentDiningRoom.Door") {
+		if (i == "input Open CurrentDiningRoom.Door") {
 			function.Transition("Arlan", "CurrentDiningRoom.Door", "LeftHallway.BackDoor");
 			currentLocation = "LeftHallway";
 		}
+
+		/*if (i == "input Place DiningMeat") {
+			function.Action("HideList()", true);
+			function.Action("ClearList()", true);
+			function.RemoveItem("DiningMeat", playerInv);
+			function.Action("SetPosition(DiningMeat, CurrentDiningRoom.DiningTable." + currentChair + ")", true);
+			function.Action("EnableIcon(Pick Up, Hand, DiningMeat, Pick up the meat, true)", true);
+			function.Action("DisableIcon(Place, DiningMeat)", true);
+			function.Action("DisableIcon(Place, CurrentDiningRoom." + currentChair + "Chair)", true);
+		}
+		*/
+
+		/*if (i == "input Pick Up DiningMeat") {
+			function.Action("SetPosition(DiningMeat)", true);
+			playerInv.push_back("DiningMeat");
+			function.Action("DisableIcon(Pick Up, DiningMeat)", true);
+			function.Action("EnableIcon(Place, Hand, DiningMeat, Place, true)", true);
+			function.Action("EnableIcon(Place, Hand, CurrentDiningRoom.LeftChair, Place an item, false)", true);
+		}*/
 	}
 }
 
