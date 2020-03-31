@@ -570,6 +570,7 @@ void Chapter2::runCurrentCottage() {
 					function.SetupDialogText("Go talk to the Town Elder about the stroybook.", "end", "Will do!");
 				}
 			}
+
 			else if (modified_I == "Selected") {
 				modified_I = function.splitInput(i, 0, true);
 
@@ -581,6 +582,7 @@ void Chapter2::runCurrentCottage() {
 					function.SetupDialogText("Have fun!", "end", "ok!");
 				}
 			}
+
 			else if (modified_I == "Open_Door") {
 				int test = 1;
 				if (hasStorybook) {
