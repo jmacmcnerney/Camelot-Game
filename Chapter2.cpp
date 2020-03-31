@@ -1505,7 +1505,7 @@ void Chapter2::runCurrentLibrary() {
 			}
 
 			else if (libraryPuzzleSolved && !hasGreenBook) {
-				function.Action("SetNarration(Book Of Incantations Added To Inventory)", true);
+				function.Action("SetNarration(This book speaks of a powerful incantation used for removing corrupting spirits from their vessels. Book Of Incantations Added To Inventory.)", true);
 				function.Action("ShowNarration()", true);
 				//function.Action("DisableEffect(Book Of Incantations, Resurrection)", true);
 				function.Action("SetPosition(Book Of Incantations)", true);
