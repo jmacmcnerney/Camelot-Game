@@ -57,7 +57,7 @@ public:
 	void WalkToPlace(string character, string location);
 
 	//Dialog Text Setup
-	void SetupDialogText(string message, string responseKey1, string response1, string responseKey2 = "nothing", string response2 = "nothing", string responseKey3 = "nothing", string response3 = "nothing");
+	void SetupDialogText(string message, string responseKey1, string response1, string responseKey2 = "nothing", string response2 = "nothing", string responseKey3 = "nothing", string response3 = "nothing", string responseKey4 = "nothing", string response4 = "nothing", string responseKey5 = "nothing", string response5 = "nothing");
 
 	//Removing An Item
 	void RemoveItem(string itemname, vector<string> &inventory);
