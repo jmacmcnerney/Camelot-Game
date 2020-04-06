@@ -238,13 +238,17 @@ void functions::WalkToPlace(string character, string location) {
 void functions::SetupDialogText(string message, string responseKey1, string response1, string responseKey2, string response2, string responseKey3, string response3) {
 	Action("ClearDialog()", true);
 	if ((responseKey3 != "nothing") && (response3 != "nothing")) {
-		Action("SetDialog(" + message + " [" + responseKey1 + " | " + response1 + "] [" + responseKey2 + " | " + response2 + "] [" + responseKey3 + " | " + response3 + "])", true);
+		//comments are for 1.1.4
+		//Action("SetDialog(" + message + " [" + responseKey1 + "|" + response1 + "] [" + responseKey2 + "|" + response2 + "] [" + responseKey3 + "|" + response3 + "])", true);
+		Action("SetDialog(" + message + "\\n[" + responseKey1 + "|" + response1 + "]\\n[" + responseKey2 + "|" + response2 + "]\\n[" + responseKey3 + "|" + response3 + "])", true);
 	}
 	else if ((responseKey2 != "nothing") && (response2 != "nothing") && (responseKey3 == "nothing") && (response3 == "nothing")) {
-		Action("SetDialog(" + message + " [" + responseKey1 + " | " + response1 + "] [" + responseKey2 + " | " + response2 + "])", true);
+		//Action("SetDialog(" + message + " [" + responseKey1 + "|" + response1 + "] [" + responseKey2 + "|" + response2 + "])", true);
+		Action("SetDialog(" + message + "\\n[" + responseKey1 + "|" + response1 + "]\\n[" + responseKey2 + "|" + response2 + "])", true);
 	}
 	else {
-		Action("SetDialog(" + message + " [" + responseKey1 + " | " + response1 + "])", true);
+		//Action("SetDialog(" + message + " [" + responseKey1 + "|" + response1 + "])", true);
+		Action("SetDialog(" + message + "\\n[" + responseKey1 + "|" + response1 + "])", true);
 	}
 }
 
