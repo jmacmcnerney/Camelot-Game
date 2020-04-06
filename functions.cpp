@@ -303,17 +303,17 @@ void functions::LibraryItem(string action, string itemname, string position, boo
 	Action("ShowNarration()", true);
 }
 
-void functions::PuzzleItem(string action, string itemname, string position, bool& positionOccupied, bool& hasItem, bool& correctPosition, vector<string>& inventory) {
+void functions::StorageItem(string action, string itemname, string position, bool& positionOccupied, bool& hasItem, bool& correctPosition, vector<string>& inventory) {
 	Action("HideDialog()", true);
 	if (action == "place") {
 		if (hasItem) {
 			if (!positionOccupied) {
 				Action("SetNarration(" + itemname + " Removed From Inventory)", true);
 				RemoveItem(itemname, inventory);
-				Action("SetPosition(" + itemname + ", CurrentLibrary.AlchemistTable." + position + ")", true);
+				Action("SetPosition(" + itemname + ", CurrentStorage.Shelf" + position + ")", true);
 				positionOccupied = true;
 				hasItem = false;
-				if ((itemname == "Library Apple" && position == "Left") || (itemname == "Library GoldCup" && position == "Center") || (itemname == "Library GreenKey" && position == "Right")) {
+				if ((itemname == "Storage Bottle" && position == "Right") || (itemname == "Storage Bread" && position == "Left")) {
 					correctPosition = true;
 				}
 			}
