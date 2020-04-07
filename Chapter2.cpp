@@ -30,6 +30,14 @@ bool visitedTownElder = false;
 bool completedErrand = false;
 bool ArchieEnemy = false;
 bool hasGreenPotion = false;
+bool hasStorageBottle = false;
+bool hasStorageBread = false;
+bool hasStorageHelmet = false;
+bool hasStorageInkAndQuill = false;
+bool hasStorageBag = false;
+bool storageBreadPositionCorrect = false;
+bool storageBottlePositionCorrect = false;
+bool storagePuzzleSolved = false;
 bool hasGreenBook = false;
 bool hasLibraryGoldCup = false;
 bool hasLibraryApple = false;
@@ -456,6 +464,17 @@ bool Chapter2::setupLibrary(string name) {
 	CurrentLibrary.icons.push_back(Icon("Library Alchemist Table", "Hand", "CurrentLibrary.AlchemistTable", "Interact With Alchemist Table", "true"));
 	CurrentLibrary.icons.push_back(Icon("Library Table", "Hand", "CurrentLibrary.Table", "Interact With Table", "true"));
 	CurrentLibrary.icons.push_back(Icon("Library Spellbook", "Hand", "CurrentLibrary.SpellBook", "Read Spellbook", "true"));
+	//Placement icons
+	/*CurrentLibrary.icons.push_back(Icon("Place Library Apple Left", "Hand", "Library Apple", "Place The Apple Left", "false"));
+	CurrentLibrary.icons.push_back(Icon("Place Library Apple Center", "Hand", "Library Apple", "Place The Apple Center", "true"));
+	CurrentLibrary.icons.push_back(Icon("Place Library Apple Right", "Hand", "Library Apple", "Place The Apple Right", "false"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Left", "Hand", "Library GoldCup", "Place The GoldCup Left", "false"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Center", "Hand", "Library GoldCup", "Place The GoldCup Center", "false"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Right", "Hand", "Library GoldCup", "Place The GoldCup Right", "true"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Left", "Hand", "Library GreenKey", "Place The GreenKey Left", "true"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Center", "Hand", "Library GreenKey", "Place The GreenKey Center", "false"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Right", "Hand", "Library GreenKey", "Place The GreenKey Right", "false"));*/
+
 	//CurrentLibrary.icons.push_back(Icon("Library Chair", "Hand", "CurrentLibrary.Chair", "Rest", "true"));
 	function.SetupIcons(CurrentLibrary.icons);
 
@@ -560,8 +579,39 @@ bool Chapter2::setupStorage(string name) {
 	//character setup
 
 	//items
+	function.Action("CreateItem(Potion Of Cleansing, GreenPotion)", true);
+	function.Action("CreateItem(Storage Bottle, Bottle)", true);
+	function.Action("SetPosition(Storage Bottle, CurrentStorage.Chest)", true);
+	function.Action("CreateItem(Storage InkAndQuill, InkAndQuill)", true);
+	function.Action("SetPosition(Storage InkAndQuill, CurrentStorage.Chest)", true);
+	function.Action("CreateItem(Storage Bread, Bread)", true);
+	function.Action("SetPosition(Storage Bread, CurrentStorage.Chest)", true);
+	function.Action("CreateItem(Storage Bag, Bag)", true);
+	function.Action("SetPosition(Storage Bag, CurrentStorage.Chest)", true);
+	function.Action("CreateItem(Storage Helmet, Helmet)", true);
+	function.Action("SetPosition(Storage Helmet, CurrentStorage.Chest)", true);
+	function.Action("CreateItem(Storage OpenScroll, OpenScroll)", true);
+	function.Action("SetPosition(Storage OpenScroll, CurrentStorage.Barrel)", true);
 
 	//icons
+	CurrentStorage.icons.push_back(Icon("Storage Chest", "Hand", "CurrentStorage.Chest", "Take All Storage Items", "true"));
+	CurrentStorage.icons.push_back(Icon("Read Storage OpenScroll", "Hand", "Storage OpenScroll", "Read The Scroll", "true"));
+	CurrentStorage.icons.push_back(Icon("Interact With Potion Of Cleansing", "Hand", "Potion Of Cleansing", "Take The Potion", "true"));
+	CurrentStorage.icons.push_back(Icon("Place Items On Shelf", "Hand", "CurrentStorage.Shelf", "Place An Item On The Shelf", "true"));
+	CurrentStorage.icons.push_back(Icon("Leave Storage", "Hand", "CurrentStorage.Door", "Leave", "true"));
+	//Placement icons
+	/*CurrentLibrary.icons.push_back(Icon("Place Library Apple Left", "Hand", "Library Apple", "Place The Apple Left", "false"));
+	CurrentLibrary.icons.push_back(Icon("Place Library Apple Center", "Hand", "Library Apple", "Place The Apple Center", "true"));
+	CurrentLibrary.icons.push_back(Icon("Place Library Apple Right", "Hand", "Library Apple", "Place The Apple Right", "false"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Left", "Hand", "Library GoldCup", "Place The GoldCup Left", "false"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Center", "Hand", "Library GoldCup", "Place The GoldCup Center", "false"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Right", "Hand", "Library GoldCup", "Place The GoldCup Right", "true"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Left", "Hand", "Library GreenKey", "Place The GreenKey Left", "true"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Center", "Hand", "Library GreenKey", "Place The GreenKey Center", "false"));
+	CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Right", "Hand", "Library GreenKey", "Place The GreenKey Right", "false"));*/
+
+	//CurrentLibrary.icons.push_back(Icon("Library Chair", "Hand", "CurrentLibrary.Chair", "Rest", "true"));
+	function.SetupIcons(CurrentStorage.icons);
 
 	return true;
 }
@@ -589,6 +639,7 @@ void Chapter2::runCurrentCottage() {
 					function.SetupDialogText("Go talk to the Town Elder about the stroybook.", "end", "Will do!");
 				}
 			}
+
 			else if (modified_I == "Selected") {
 				modified_I = function.splitInput(i, 0, true);
 
@@ -600,8 +651,8 @@ void Chapter2::runCurrentCottage() {
 					function.SetupDialogText("Have fun!", "end", "ok!");
 				}
 			}
+
 			else if (modified_I == "Open_Door") {
-				//int test = 0;
 				int test = 2;
 				if (hasStorybook) {
 					//testing
@@ -613,6 +664,11 @@ void Chapter2::runCurrentCottage() {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentLibrary.Door");
 						currentLocation = "CurrentLibrary";
 					}
+					else if (test == 2) {
+						function.Transition("Arlan", "ArlanCottage.Door", "CurrentStorage.Door");
+						currentLocation = "CurrentStorage";
+					}
+				}
 					else if (test == 2) {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentDiningRoom.Door");
 						currentLocation = "CurrentDiningRoom";
@@ -1444,8 +1500,23 @@ void Chapter2::runCurrentGreatHall() {
 		}
 		//CurrentStorage
 		else if (i == "input Enter Basement Door CurrentGreatHall.BasementDoor") {
-			function.Transition("Arlan", "CurrentGreatHall.BasementDoor", "CurrentStorage.Door");
-			currentLocation = "CurrentStorage";
+			if (!hasGreenPotion /* && mathiasBranch */) {
+				function.Transition("Arlan", "CurrentGreatHall.BasementDoor", "CurrentStorage.Door");
+				currentLocation = "CurrentStorage";
+			}
+			else if (hasGreenPotion || hasBlueBook || hasBluePotion) {
+				if (hasGreenPotion) {
+					function.Action("SetNarration(You have already reaped the rewards of this room. Your Potion Of Cleansing urges you to adventure elsewhere.)", true);
+				}
+				else if (hasBlueBook || hasBluePotion) {
+					function.Action("SetNarration(Your blue artifact repels you from this room.)", true);
+				}
+				function.Action("ShowNarration()", true);
+			}
+			/*else if (!mathiasBranch) {
+				function.Action("SetNarration(An ominous force repels you from this room.)", true);
+				function.Action("ShowNarration()", true);
+			}*/
 		}
 	}
 }
@@ -1540,7 +1611,7 @@ void Chapter2::runCurrentLibrary() {
 			}
 
 			else if (libraryPuzzleSolved && !hasGreenBook) {
-				function.Action("SetNarration(Book Of Incantations Added To Inventory)", true);
+				function.Action("SetNarration(This book speaks of a powerful incantation used for removing corrupting spirits from their vessels. Book Of Incantations Added To Inventory.)", true);
 				function.Action("ShowNarration()", true);
 				//function.Action("DisableEffect(Book Of Incantations, Resurrection)", true);
 				function.Action("SetPosition(Book Of Incantations)", true);
@@ -1701,6 +1772,14 @@ void Chapter2::runCurrentLibrary() {
 }
 
 void Chapter2::runCurrentStorage() {
+	bool storageLeftOccupied = false;
+	bool storageRightOccupied = false;
+	bool potionSpawned = false;
+	bool chestOpened = false;
+	storageBreadPositionCorrect = false;
+	storageBottlePositionCorrect = false;
+	string position = "";
+	//string itemName = "";
 	while (currentLocation == "CurrentStorage") {
 		string i;
 		getline(cin, i);
@@ -1714,10 +1793,176 @@ void Chapter2::runCurrentStorage() {
 
 		}
 
+		/*
+		CurrentStorage.icons.push_back(Icon("Storage Chest", "Hand", "CurrentStorage.Chest", "Take All Storage Items", "true"));
+		CurrentStorage.icons.push_back(Icon("Read Storage OpenScroll", "Hand", "Storage OpenScroll", "Read The Scroll", "true"));
+		CurrentStorage.icons.push_back(Icon("Interact With Potion Of Cleansing", "Hand", "Potion Of Cleansing", "Take The Potion", "true"));
+		CurrentStorage.icons.push_back(Icon("Place Items On Shelf", "Hand", "CurrentStorage.Shelf", "Place An Item On The Shelf", "true"));
+		CurrentStorage.icons.push_back(Icon("Leave Storage", "Hand", "CurrentStorage.Door", "Leave", "true"));
+		*/
+
 		//CurrentGreatHall
-		if (i == "input arrived Arlan position CurrentStorage.Door") {
+		if (i == "input Leave Storage CurrentStorage.Door") {
+			function.Action("SetNarration(The puzzle resets...)", true);
+			function.RemoveItem("Storage Bottle", playerInv);
+			function.RemoveItem("Storage Bread", playerInv);
+			function.RemoveItem("Storage Helmet", playerInv);
+			function.RemoveItem("Storage InkAndQuill", playerInv);
+			function.RemoveItem("Storage Bag", playerInv);
+			function.Action("SetPosition(Storage Bottle, CurrentStorage.Chest)", true);
+			function.Action("SetPosition(Storage Bread, CurrentStorage.Chest)", true);
+			function.Action("SetPosition(Storage Helmet, CurrentStorage.Chest)", true);
+			function.Action("SetPosition(Storage InkAndQuill, CurrentStorage.Chest)", true);
+			function.Action("SetPosition(Storage Bag, CurrentStorage.Chest)", true);
+			hasStorageBottle = false;
+			hasStorageBread = false;
+			hasStorageHelmet = false;
+			hasStorageInkAndQuill = false;
+			hasStorageBag = false;
 			function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
+			function.Action("ShowNarration()", true);
 			currentLocation = "CurrentGreatHall";
+		}
+
+		if (storageBreadPositionCorrect && storageBottlePositionCorrect && !hasGreenPotion && !potionSpawned) {
+			storagePuzzleSolved = true;
+			function.Action("SetPosition(Storage OpenScroll)", true);
+			function.Action("SetPosition(Potion Of Cleansing, CurrentStorage.Barrel)", true);
+			function.Action("CreateEffect(Potion Of Cleansing, Resurrection)", true);
+			function.Action("EnableEffect(Potion Of Cleansing, Resurrection)", true);
+			potionSpawned = true;
+		}
+
+		else if (i == "input Interact With Potion Of Cleansing Potion Of Cleansing") {
+			function.Action("SetNarration(This potion can cleanse the evil spirits from the heart of men. Potion Of Cleansing Added To Inventory.)", true);
+			function.Action("ShowNarration()", true);
+			function.Action("SetPosition(Potion Of Cleansing)", true);
+			playerInv.push_back("Potion Of Cleansing");
+			hasGreenPotion = true;
+			function.SetupDialogText("The Potion Of Cleansing pulls you away.", "leaveStorage", "Oh...?");
+			function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Selected leaveStorage") {
+			function.RemoveItem("Storage Helmet", playerInv);
+			function.RemoveItem("Storage InkAndQuill", playerInv);
+			function.RemoveItem("Storage Bag", playerInv);
+			function.Action("HideDialog()", true);
+			function.Action("FadeOut()", true);
+			function.Action("SetPosition(Arlan, CurrentGreatHall.BasementDoor)", true);
+			this_thread::sleep_for(chrono::milliseconds(3000));
+			function.Action("FadeIn()", true);
+			currentLocation = "CurrentGreatHall";
+		}
+
+		else if (i == "input Storage Chest CurrentStorage.Chest") {
+			if (!chestOpened) {
+				function.StorageItem("take", "Storage Bread", "onObject", storageLeftOccupied, hasStorageBread, storageBreadPositionCorrect, playerInv);
+				this_thread::sleep_for(chrono::milliseconds(1000));
+				function.StorageItem("take", "Storage Bottle", "onObject", storageRightOccupied, hasStorageBottle, storageBottlePositionCorrect, playerInv);
+				this_thread::sleep_for(chrono::milliseconds(1000));
+				function.StorageItem("take", "Storage Bag", "onObject", storageLeftOccupied, hasStorageBag, storageBreadPositionCorrect, playerInv);
+				this_thread::sleep_for(chrono::milliseconds(1000));
+				function.StorageItem("take", "Storage Helmet", "onObject", storageLeftOccupied, hasStorageHelmet, storageBreadPositionCorrect, playerInv);
+				this_thread::sleep_for(chrono::milliseconds(1000));
+				function.StorageItem("take", "Storage InkAndQuill", "onObject", storageLeftOccupied, hasStorageInkAndQuill, storageBreadPositionCorrect, playerInv);
+				this_thread::sleep_for(chrono::milliseconds(1000));
+				chestOpened = true;
+			}
+			else if (chestOpened) {
+				function.Action("SetNarration(The chest is empty.)", true);
+				function.Action("ShowNarration()", true);
+			}
+		}
+
+		else if (i == "input Place Items On Shelf CurrentStorage.Shelf") {
+			function.WalkToPlace("Arlan", "CurrentStorage.Shelf");
+			function.Action("ShowDialog()", true);
+			if (storagePuzzleSolved) {
+				function.SetupDialogText("The order has been restored.", "end", "**Walk Away**");
+			}
+
+			else {
+				function.SetupDialogText("Where would you like to place an item?", "placeStorageLeft", "Left", "placeStorageRight", "Right");
+			}
+		}
+
+		else if (i == "input Selected placeStorageLeft") {
+			position = "Left";
+			function.SetupDialogText("What item would you like to place?", "placeStorageBread", "Bread", "placeStorageBottle", "Bottle", "placeStorageBag", "Bag", "placeStorageHelmet", "Helmet", "placeStorageInkAndQuill", "InkAndQuill");
+		}
+
+		else if (i == "input Selected placeStorageRight") {
+			position = "Right";
+			function.SetupDialogText("What item would you like to place?", "placeStorageBread", "Bread", "placeStorageBottle", "Bottle", "placeStorageBag", "Bag", "placeStorageHelmet", "Helmet", "placeStorageInkAndQuill", "InkAndQuill");
+		}
+
+		else if (i == "input Selected placeStorageBread") {
+			if (position == "Left") {
+				function.StorageItem("place", "Storage Bread", position, storageLeftOccupied, hasStorageBread, storageBreadPositionCorrect, playerInv);
+			}
+			else if (position == "Right") {
+				function.StorageItem("place", "Storage Bread", position, storageRightOccupied, hasStorageBread, storageBreadPositionCorrect, playerInv);
+			}
+		}
+
+		else if (i == "input Selected placeStorageBottle") {
+			if (position == "Left") {
+				function.StorageItem("place", "Storage Bottle", position, storageLeftOccupied, hasStorageBottle, storageBottlePositionCorrect, playerInv);
+			}
+			else if (position == "Right") {
+				function.StorageItem("place", "Storage Bottle", position, storageRightOccupied, hasStorageBottle, storageBottlePositionCorrect, playerInv);
+			}
+		}
+
+		else if (i == "input Selected placeStorageBag") {
+			if (position == "Left") {
+				function.StorageItem("place", "Storage Bag", position, storageLeftOccupied, hasStorageBag, storageBreadPositionCorrect, playerInv);
+			}
+			else if (position == "Right") {
+				function.StorageItem("place", "Storage Bag", position, storageRightOccupied, hasStorageBag, storageBreadPositionCorrect, playerInv);
+			}
+		}
+
+		else if (i == "input Selected placeStorageHelmet") {
+			if (position == "Left") {
+				function.StorageItem("place", "Storage Helmet", position, storageLeftOccupied, hasStorageHelmet, storageBreadPositionCorrect, playerInv);
+			}
+			else if (position == "Right") {
+				function.StorageItem("place", "Storage Helmet", position, storageRightOccupied, hasStorageHelmet, storageBreadPositionCorrect, playerInv);
+			}
+		}
+
+		else if (i == "input Selected placeStorageInkAndQuill") {
+			if (position == "Left") {
+				function.StorageItem("place", "Storage InkAndQuill", position, storageLeftOccupied, hasStorageInkAndQuill, storageBreadPositionCorrect, playerInv);
+			}
+			else if (position == "Right") {
+				function.StorageItem("place", "Storage InkAndQuill", position, storageRightOccupied, hasStorageInkAndQuill, storageBreadPositionCorrect, playerInv);
+			}
+		}
+
+		else if (i == "input Read Storage OpenScroll Storage OpenScroll") {
+			//function.WalkToPlace("Arlan", "CurrentStorage.Barrel");
+			function.SetupDialogText("In this storage some items reside in a chest.\\nSome are useless a red herring at its best.\\nSet a meal on the shelf for this particular test.\\nRemember that thirst is quenched from the right of the perspective of the guest.", "end", "**Walk Away**", "end", "reset");
+			function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Selected end") {
+			function.Action("HideDialog()", true);
+		}
+
+		else if (i == "input Key Inventory") {
+			function.Action("ClearList()", true);
+			for (string item : playerInv) {
+				function.Action("AddToList(" + item + ")", true);
+			}
+			function.Action("ShowList(Arlan)", true);
+		}
+
+		else if (i == "input Close List") {
+			function.Action("HideList()", true);
+			function.Action("EnableInput()", true);
 		}
 	}
 }
