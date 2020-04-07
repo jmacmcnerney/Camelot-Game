@@ -49,10 +49,14 @@ bool libraryPuzzleSolved = false;
 bool hasBluePotion = false;
 bool hasBlueBook = false;
 bool visitedDiningRoom = false;
+bool canWorkForBlacksmith = false;
+bool hasCompass = false;
 bool hasRedPotion = false;
 bool hasRedBook = false;
 bool hasPurplePotion = false;
 bool hasPurpleBook = false;
+
+int numCoins = 0;
 
 Chapter2::Chapter2() {
 	runSetup();
@@ -409,10 +413,18 @@ bool Chapter2::setupPort(string name) {
 	CurrentPort = Port(name);
 
 	//character setup
+	function.SetupCharacter("PortMerchant", "H", "Merchant", "Short", "Gray", "CurrentPort.SmallStall");
+	function.SetupCharacter("Sailor", "D", "Peasant", "Musketeer", "Gray", "CurrentPort.BigShip");
 
 	//items
+	function.Action("CreateItem(Compass, Compass)", true);
+	function.Action("CreateItem(BookOfLore, BlueBook)", true);
 
 	//icons
+	CurrentPort.icons.push_back(Icon("Talk to PortMerchant", "Talk", "PortMerchant", "Talk To Port Merchant", "true"));
+	CurrentPort.icons.push_back(Icon("Talk to Sailor", "Talk", "Sailor", "Talk To Sailor", "true"));
+	CurrentPort.icons.push_back(Icon("ReadBookOfLore", "Research", "BookOfLore", "Read the Book", "true"));
+	function.SetupIcons(CurrentPort.icons);
 
 	return true;
 }
@@ -653,7 +665,7 @@ void Chapter2::runCurrentCottage() {
 			}
 
 			else if (modified_I == "Open_Door") {
-				int test = 3;
+				int test = 4;
 				if (hasStorybook) {
 					//testing
 					if (test == 0) {
@@ -671,6 +683,34 @@ void Chapter2::runCurrentCottage() {
 					else if (test == 3) {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentDiningRoom.Door");
 						currentLocation = "CurrentDiningRoom";
+					}
+					else if (test == 4) {
+						function.Transition("Arlan", "ArlanCottage.Door", "CurrentTown.BlueHouseDoor");
+						currentLocation = "CurrentTown";
+
+						//spawn coins in world 
+						function.Action("CreateItem(Coin1, Coin)", true);
+						function.Action("EnableIcon(TakeCoin1, Hand, CurrentTown.Fountain, Inspect the Fountain, true)", true);
+
+						function.Action("CreateItem(Coin2, Coin)", true);
+						canWorkForBlacksmith = true;
+						
+						function.Action("CreateItem(Coin3, Coin)", true);
+						function.Action("EnableIcon(TakeCoin3, Hand, ForestPath2.Well, Inspect the Well, true)", true);
+
+						function.Action("CreateItem(Coin4, Coin)", true);
+						function.Action("EnableIcon(TakeCoin4, Hand, CurrentPort.Barrel, Inspect the Barrel, true)", true);
+
+						function.Action("CreateItem(Coin5, Coin)", true);
+						function.Action("EnableIcon(TakeCoin5, Hand, Coin5, Take the Coin, true", true);
+						function.Action("SetPosition(Coin5, CurrentGreatHall.Table)", true);
+
+						visitedTownElder = true;
+						completedErrand = true;
+
+						playerInv.push_back("Coin2");
+						playerInv.push_back("Coin5");
+						numCoins = 2;
 					}
 				}
 				
@@ -872,6 +912,15 @@ void Chapter2::runCurrentTown() {
 			sword_taken = true;
 		}
 
+		else if (i == "input TakeCoin1 CurrentTown.Fountain") {
+			function.WalkToPlace("Arlan", "CurrentTown.Fountain");
+			function.Action("SetNarration(Theres a gold coin in the fountain! You reach in and take it.)", true);
+			function.Action("ShowNarration()", true);
+			playerInv.push_back("Coin1");
+			numCoins++;
+			function.Action("DisableIcon(TakeCoin1, CurrentTown.Fountain)", true);
+		}
+
 		else if (i == "input Key Inventory") {
 			function.Action("ClearList()", true);
 			for (string item : playerInv) {
@@ -904,7 +953,10 @@ void Chapter2::runBlacksmithFoundry() {
 
 				if (modified_I == "Blacksmith") {
 					function.SetupDialog("Arlan", "Blacksmith", true);
-					if (hasBrokenLock) {
+					if (canWorkForBlacksmith) {
+						function.SetupDialogText("Looking to make some coin? I have a couple tasks around the shop I could use a hand with if youre interested.", "WorkForBlacksmith", "Sure!", "RefuseWork", "No thanks.");
+					}
+					else if (hasBrokenLock) {
 						function.SetupDialogText("Oh! The Town Elder needs his broken lock fixed? No problem! Give me the lock.", "fixTheLock", "Here you go!");
 					}
 					else if (hasFixedLock) {
@@ -919,7 +971,22 @@ void Chapter2::runBlacksmithFoundry() {
 			else if (modified_I == "Selected") {
 				modified_I = function.splitInput(i, 0, true);
 
-				if (modified_I == "fixTheLock") {
+				if (modified_I == "WorkForBlacksmith") {
+					function.Action("HideDialog()", true);
+					function.Action("FadeOut()", true);
+					function.Action("FadeIn()", true);
+					function.Action("ShowDialog()", true);
+					function.SetupDialogText("Great work! Thanks for all your help! Heres a gold coin for your trouble.", "end", "Thanks!");
+					playerInv.push_back("Coin2");
+					numCoins++;
+					canWorkForBlacksmith = false;
+				}
+				
+				else if (modified_I == "RefuseWork") {
+					function.SetupDialogText("Another time then.", "end", "Okay.");
+				}
+
+				else if (modified_I == "fixTheLock") {
 					function.Action("SetNarration(Broken Lock Removed From Inventory)", true);
 					function.Action("ShowNarration()", true);
 					function.RemoveItem("Broken Lock", playerInv);
@@ -1430,6 +1497,15 @@ void Chapter2::runForestPath2() {
 			currentLocation = "CurrentCastleCrossroads";
 		}
 
+		if (i == "input TakeCoin3 ForestPath2.Well") {
+			function.WalkToPlace("Arlan", "ForestPath2.Well");
+			function.Action("SetNarration(Theres a gold coin on the edge of the well! You take it.)", true);
+			function.Action("ShowNarration()", true);
+			playerInv.push_back("Coin3");
+			numCoins++;
+			function.Action("DisableIcon(TakeCoin3, ForestPath2.Well)", true);
+		}
+
 		else if (i == "input arrived Arlan position ForestPath2.EastEnd") {
 			function.Transition("Arlan", "ForestPath2.EastEnd", "CurrentTown.WestEnd");
 			currentLocation = "CurrentTown";
@@ -1518,6 +1594,16 @@ void Chapter2::runCurrentGreatHall() {
 				function.Action("ShowNarration()", true);
 			}*/
 		}
+
+		else if (i == "input TakeCoin5 Coin5") {
+			function.WalkToPlace("Arlan", "CurrentGreatHall.Table");
+			function.Action("SetNarration(You take the gold coin.)", true);
+			function.Action("ShowNarration()", true);
+			playerInv.push_back("Coin5");
+			numCoins++;
+			function.Action("SetPosition(Coin5)", true);
+			function.Action("DisableIcon(TakeCoin5, Coin5)", true);
+		}
 	}
 }
 
@@ -1532,11 +1618,99 @@ void Chapter2::runCurrentPort() {
 		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
 
 		if (!inputWasCommon) {
+			//If it's under the "Talk" keyword
+			if (modified_I == "Talk") {
+				modified_I = function.splitInput(i, 0, true);
 
+				if (modified_I == "PortMerchant") {
+					function.SetupDialog("Arlan", "PortMerchant", true);
+					if (hasCompass) {
+						function.SetupDialogText("That compass was my last item. Sorry!", "end", "Okay!");
+					}
+					else {
+						function.SetupDialogText("High quality ship wares for sale! Our newest item is a top notch compass! Interested? Only five gold pieces!", "buyCompass", "Ill take it!", "end", "No thanks.");
+					}
+				}
+
+				else if (modified_I == "Sailor") {
+					function.SetupDialog("Arlan", "Sailor", true);
+					if (hasCompass) {
+						function.SetupDialogText("Ah! That compass! I cannot sail again until I have one just like that. Would you be willing to trade it for a valuable relic I found at sea?", "giveCompass", "Sure!", "end", "No thanks.");
+					}
+					else {
+						function.SetupDialogText("You there! Care to help an old sailor out? I cant sail again until I have a compass. That merchant over there is selling one but he refuses to take sea shells as payment. Could you get it for me? I'll trade you an artifact I found at sea for it!", "end", "Ill see what I can do.");
+					}
+				}
+			}
+
+			else if (modified_I == "Selected") {
+				modified_I = function.splitInput(i, 0, true);
+
+				if (modified_I == "buyCompass") {
+					if (numCoins >= 5) {
+						function.SetupDialogText("Here you are! Watch out for that sailor over there. He has been eyeballing that compass for a while now.", "endPortMerchant", "Okay. Thanks!");
+					}
+					else if (hasBlueBook) {
+						function.SetupDialogText("Thanks again for your help! Ill be heading out again soon thanks to you!", "end", "No worries!");
+					}
+					else {
+						function.SetupDialogText("Ah. My apologies. It seems you dont quite have enough coin. Im sure you could find some scattered about the kingdom if you looked hard enough.", "end", "Okay!");
+					}
+				}
+
+				else if (modified_I == "endPortMerchant") {
+					function.Action("ClearDialog()", true);
+					function.Action("HideDialog()", true);
+					function.RemoveItem("Coin1", playerInv);
+					function.RemoveItem("Coin2", playerInv);
+					function.RemoveItem("Coin3", playerInv);
+					function.RemoveItem("Coin4", playerInv);
+					function.RemoveItem("Coin5", playerInv);
+					numCoins = 0;
+					playerInv.push_back("Compass");
+					hasCompass = true;
+					function.Action("SetNarration(A compass has been added to your inventory. 5 coins have been removed.)", true);
+					function.Action("ShowNarration()", true);
+				}
+
+				else if (modified_I == "giveCompass") {
+					function.SetupDialogText("Finally! I can sail again! Here. You can have this old book I found at sea. Seems valuable!", "endSailor", "Thanks!");
+					function.RemoveItem("Compass", playerInv);
+					hasCompass = false;
+					hasBlueBook = true;
+				}
+
+				else if (modified_I == "endSailor") {
+					function.Action("ClearDialog()", true);
+					function.Action("HideDialog()", true);
+					function.RemoveItem("Compass", playerInv);
+					hasCompass = false;
+					playerInv.push_back("BookOfLore");
+					hasBlueBook = true;
+					function.Action("SetNarration(The Book of Lore has been added to your inventory. The compass has been removed.)", true);
+					function.Action("ShowNarration()", true);
+				}
+			}
+		}
+
+		if (i == "input TakeCoin4 CurrentPort.Barrel") {
+			function.WalkToPlace("Arlan", "CurrentPort.Barrel");
+			function.Action("SetNarration(Theres a gold coin in the barrel! You take it.)", true);
+			function.Action("ShowNarration()", true);
+			playerInv.push_back("Coin4");
+			numCoins++;
+			function.Action("DisableIcon(TakeCoin4, CurrentPort.Barrel)", true);
+		}
+
+		else if (i == "input ReadBookOfLore BookOfLore") {
+			function.Action("HideList()", true);
+			function.Action("ClearList()", true);
+			function.Action("SetNarration(The book describes an ancient tome that instills its owner with unimaginable power. Those who posess it are said to be destined to rule to world.)", true);
+			function.Action("ShowNarration()", true);
 		}
 
 		//CurrentCastleCrossroads
-		if (i == "input arrived Arlan position CurrentPort.Exit") {
+		else if (i == "input arrived Arlan position CurrentPort.Exit") {
 			function.Transition("Arlan", "CurrentPort.Exit", "CurrentCastleCrossroads.WestEnd");
 			currentLocation = "CurrentCastleCrossroads";
 		}
