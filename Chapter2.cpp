@@ -653,7 +653,7 @@ void Chapter2::runCurrentCottage() {
 			}
 
 			else if (modified_I == "Open_Door") {
-				int test = 2;
+				int test = 3;
 				if (hasStorybook) {
 					//testing
 					if (test == 0) {
@@ -668,12 +668,12 @@ void Chapter2::runCurrentCottage() {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentStorage.Door");
 						currentLocation = "CurrentStorage";
 					}
-				}
-					else if (test == 2) {
+					else if (test == 3) {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentDiningRoom.Door");
 						currentLocation = "CurrentDiningRoom";
 					}
 				}
+				
 				else {
 					function.WalkToPlace("Arlan", "ArlanCottage.Door");
 					function.Action("ShowDialog()", true);
