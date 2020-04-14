@@ -2545,7 +2545,7 @@ void Chapter2::runCurrentCamp() {
 			function.Action("SetPosition(Archie)", true);
 			function.Action("FadeOut()", true);
 			this_thread::sleep_for(chrono::milliseconds(2000));
-			function.Action("SetNarration(The end. Created by Mac McNerney, Zac Foster, Jake Hayden and John Colfer using Steven G Ware's Camelot Virtual Environment.", true);
+			function.Action("SetNarration(\"THE END\\nCreated by Mac McNerney, Zac Foster, Jake Hayden and John Colfer using Steven G Ware's Camelot Virtual Environment\"", true);
 			function.Action("ShowNarration()", true);
 		}
 
