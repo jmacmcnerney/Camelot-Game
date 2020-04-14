@@ -29,7 +29,9 @@ bool visitedFortuneteller = false;
 bool visitedTownElder = false;
 bool completedErrand = false;
 bool ArchieEnemy = false;
-bool hasGreenPotion = false;
+bool MathiasFlashback = false;
+bool ArchieFlashback = false;
+bool hasGreenPotion = true;
 bool hasStorageBottle = false;
 bool hasStorageBread = false;
 bool hasStorageHelmet = false;
@@ -38,7 +40,7 @@ bool hasStorageBag = false;
 bool storageBreadPositionCorrect = false;
 bool storageBottlePositionCorrect = false;
 bool storagePuzzleSolved = false;
-bool hasGreenBook = false;
+bool hasGreenBook = true;
 bool hasLibraryGoldCup = false;
 bool hasLibraryApple = false;
 bool hasLibraryGreenKey = false;
@@ -52,6 +54,8 @@ bool hasRedPotion = false;
 bool hasRedBook = false;
 bool hasPurplePotion = false;
 bool hasPurpleBook = false;
+
+bool camptest = true;
 
 Chapter2::Chapter2() {
 	runSetup();
@@ -69,6 +73,8 @@ bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if
 	setupCurrentForestPath("CurrentForestPath");
 	setupForestPath2("ForestPath2");
 	setupCurrentRuins("CurrentRuins");
+	//delete this
+	setupPastRuins("PastRuins", ArchieEnemy);
 	setupPastCottage("PastCottage");
 	setupPastForestPath("PastForestPath");
 	setupPastCity("PastCity");
@@ -157,6 +163,9 @@ void Chapter2::run() { // begins chapter 2's execution
 		}
 		else if (currentLocation == "CurrentCourtyard") {
 			runCurrentCourtyard();
+		}
+		else if (currentLocation == "CurrentCamp") {
+			runCurrentCamp();
 		}
 	}
 }
@@ -343,6 +352,12 @@ bool Chapter2::setupPastRuins(string name, bool Enemy) {
 	pastRuins = Ruins(name);
 
 	string EnemyName = "";
+
+	if (camptest) {
+		function.SetupCharacter("Archie", "D", "Warlock", "Mage_Full", "Red", name + ".Altar");
+		function.SetupCharacter("Mathias", "F", "HeavyArmour", "Short_Full", "Brown", name + ".Altar");
+		return true;
+	}
 
 	//character setup
 	if (Enemy) {
@@ -623,7 +638,7 @@ void Chapter2::runCurrentCottage() {
 			}
 
 			else if (modified_I == "Open_Door") {
-				int test = 2;
+				int test = 3;
 				if (hasStorybook) {
 					//testing
 					if (test == 0) {
@@ -637,6 +652,10 @@ void Chapter2::runCurrentCottage() {
 					else if (test == 2) {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentStorage.Door");
 						currentLocation = "CurrentStorage";
+					}
+					else if (test == 3) {
+						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCamp.Exit");
+						currentLocation = "CurrentCamp";
 					}
 				}
 				else {
@@ -808,7 +827,7 @@ void Chapter2::runCurrentTown() {
 		}
 
 		else if (i == "input arrived Arlan position CurrentTown.NorthEnd") {
-			function.Transition("Arlan", "CurrenTown.NorthEnd", "CurrentCourtyard.Exit");
+			function.Transition("Arlan", "CurrentTown.NorthEnd", "CurrentCourtyard.Exit");
 			currentLocation = "CurrentCourtyard";
 		}
 
@@ -1078,6 +1097,7 @@ void Chapter2::runCurrentRuins() {
 		}
 
 		else if (i == "input Selected placeMathiasSword") {
+			MathiasFlashback = true;
 			function.Action("HideDialog()", true);
 			if (sword_taken) {
 				function.RemoveItem("MathiasSword", playerInv);
@@ -1097,6 +1117,7 @@ void Chapter2::runCurrentRuins() {
 		}
 
 		else if (i == "input Selected placeArchieSpellbook") {
+			ArchieFlashback = true;
 			function.Action("HideDialog()", true);
 			if (spellbook_taken) {
 				function.RemoveItem("ArchieSpellbook", playerInv);
@@ -2081,6 +2102,30 @@ void Chapter2::runCurrentCourtyard() {
 			function.Transition("Arlan", "CurrentCourtyard.Exit", "CurrentTown.NorthEnd");
 			currentLocation = "CurrentTown";
 		}
+
+		if (i == "input arrived Arlan position CurrentCourtyard.Gate") {
+			if ((hasBlueBook && hasBluePotion) || (hasGreenBook && hasGreenPotion) || (hasRedBook && hasRedPotion) || (hasPurpleBook && hasPurplePotion)) {
+				function.Transition("Arlan", "CurrentCourtyard.Gate", "CurrentCamp.Exit");
+				currentLocation = "CurrentCamp";
+			}
+		}
+
+		else if (i == "input Selected end") {
+			function.Action("HideDialog()", true);
+		}
+
+		else if (i == "input Key Inventory") {
+			function.Action("ClearList()", true);
+			for (string item : playerInv) {
+				function.Action("AddToList(" + item + ")", true);
+			}
+			function.Action("ShowList(Arlan)", true);
+		}
+
+		else if (i == "input Close List") {
+			function.Action("HideList()", true);
+			function.Action("EnableInput()", true);
+		}
 	}
 }
 
@@ -2102,6 +2147,61 @@ void Chapter2::runCurrentCastleBedroom() {
 		if (i == "input arrived Arlan position CurrentCastleBedroom.Door") {
 			function.Transition("Arlan", "CurrentCastleBedroom.Door", "RightHallway.BackDoor");
 			currentLocation = "RightHallway";
+		}
+	}
+}
+
+void Chapter2::runCurrentCamp() {
+	function.Action("SetPosition(Archie, CurrentCamp.Horse)", true);
+	//function.WalkToPlace("Arlan", "Archie");
+	function.SetupDialog("Arlan", "Archie", true);
+	function.SetupDialogText("Ah... you've found me. The power stemming from my relic told me there would be some to try to come take it from me. No matter. You will be slain just like Mathias", "mathiasEnters", "Please dont do thi--");
+	function.Action("ShowDialog()", true);
+	while (currentLocation == "CurrentCamp") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//CurrentCastleBedroom
+		if (i == "input arrived Arlan position CurrentCamp.Exit") {
+			function.Transition("Arlan", "CurrentCamp.Exit", "CurrentCourtyard.Gate");
+			currentLocation = "CurrentCourtyard";
+		}
+
+		else if (i == "input Selected mathiasEnters") {
+			function.Action("SetPosition(Mathias, CurrentCamp.RightLog", true);
+			function.Action("WalkTo(Mathias, Archie)", true);
+			this_thread::sleep_for(chrono::milliseconds(3000));
+			function.SetupDialogText("Use the book to remove the corrupting power!", "reciteIncantation", "**Recite the incantation**");
+		}
+
+		else if (i == "input Selected reciteIncantation") {
+			function.SetupDialogText("Test end", "end", "Done Test");
+		}
+
+		else if (i == "input Selected end") {
+			function.Action("HideDialog()", true);
+		}
+
+		else if (i == "input Key Inventory") {
+			function.Action("ClearList()", true);
+			for (string item : playerInv) {
+				function.Action("AddToList(" + item + ")", true);
+			}
+			function.Action("ShowList(Arlan)", true);
+		}
+
+		else if (i == "input Close List") {
+			function.Action("HideList()", true);
+			function.Action("EnableInput()", true);
 		}
 	}
 }
