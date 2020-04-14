@@ -2488,13 +2488,65 @@ void Chapter2::runCurrentCamp() {
 			function.Action("WalkTo(Mathias, Archie)", true);
 			//this_thread::sleep_for(chrono::milliseconds(3000));
 			function.Action("SetCameraFocus(Arlan)", true);
-			function.SetupDialogText("Use the book to remove the corrupting power!", "reciteIncantation", "**Recite the incantation**");
+			function.SetupDialogText("Quickly Arlan! Use the book to remove the corrupting power!", "reciteIncantation", "**Recite the incantation**");
 			function.Action("SetRight(Mathias)", true);
 			function.Action("ShowDialog()", true);
 		}
 
 		else if (i == "input Selected reciteIncantation") {
-			function.SetupDialogText("Test end", "end", "Done Test");
+			function.Action("HideDialog()", true);
+			function.Action("Face(Arlan, Archie)", true);
+			function.Action("Draw(Arlan, Book Of Incantations)", true);
+			function.Action("Cast(Arlan, Archie)", true);
+			function.Action("Kneel(Archie)", true);
+			function.Action("DisableEffect(Archie)", true);
+			function.Action("Sheathe(Arlan, Book Of Incantations)", true);
+			function.Action("SetRight(Archie)", true);
+			function.SetupDialogText("Wha.. what is going on..? Where am I..?", "askMathias", "What should we do Mathias?");
+			function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Selected askMathias") {
+			function.Action("SetRight(Mathias)", true);
+			function.SetupDialogText("Use your potion to cleanse the corruption or he will die!", "usePotion", "**Use The Potion**");
+		}
+
+		else if (i == "input Selected usePotion") {
+			function.Action("HideDialog()", true);
+			//function.Action("Draw(Arlan, Potion Of Cleansing)", true);
+			function.Action("Give(Arlan, Potion Of Cleansing, Archie)", true);
+			this_thread::sleep_for(chrono::milliseconds(1000));
+			function.Action("Face(Archie, Arlan)", true);
+			function.Action("SetRight(Archie)", true);
+			function.SetupDialogText("Thank you hero... you have saved me from the corruption that consumed me.", "apologizeToMathias", "Of course.");
+			function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Selected apologizeToMathias") {
+			function.Action("HideDialog()", true);
+			function.Action("Face(Archie, Mathias", true);
+			function.Action("SetLeft(Archie)", true);
+			function.Action("SetRight(Mathias)", true);
+			function.SetupDialogText("Mathias... I am so sorry for everything I have done.", "apologyAccepted", "...");
+			function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Selected apologyAccepted") {
+			function.Action("SetLeft(Mathias)", true);
+			function.Action("SetRight(Archie)", true);
+			function.SetupDialogText("It is ok my friend. Let us return to the kingdom. Arlan... thank you for everything.", "endGame", "...");
+		}
+
+		else if (i == "input Selected endGame") {
+			function.Action("HideDialog()", true);
+			function.Action("WalkTo(Mathias, CurrentCamp.Exit)", true);
+			function.Action("SetPosition(Mathias)", true);
+			function.Action("WalkTo(Archie, CurrentCamp.Exit)", true);
+			function.Action("SetPosition(Archie)", true);
+			function.Action("FadeOut()", true);
+			this_thread::sleep_for(chrono::milliseconds(2000));
+			function.Action("SetNarration(The end. Created by Mac McNerney, Zac Foster, Jake Hayden and John Colfer using Steven G Ware's Camelot Virtual Environment.", true);
+			function.Action("ShowNarration()", true);
 		}
 
 		else if (i == "input Selected end") {
