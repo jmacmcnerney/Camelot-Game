@@ -72,7 +72,7 @@ bool hasSearchedBedroomCloset = false;
 
 Chapter2::Chapter2() {
 	runSetup();
-	function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
+	//function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
 	run();
 }
 
@@ -2444,8 +2444,15 @@ void Chapter2::runCurrentCastleBedroom() {
 
 void Chapter2::runCurrentCamp() {
 	function.Action("SetPosition(Archie, CurrentCamp.Horse)", true);
-	//function.WalkToPlace("Arlan", "Archie");
-	function.SetupDialog("Arlan", "Archie", true);
+	function.Action("Draw(Archie, LeaderFlashPotion)", true);
+	function.Action("EnableEffect(Archie, Force)", true);
+	function.WalkToPlace("Arlan", "Archie");
+	//function.Action("Face(Archie, Arlan)", true);
+	this_thread::sleep_for(chrono::milliseconds(200));
+	function.Action("Face(Arlan, Archie)", true);
+	this_thread::sleep_for(chrono::milliseconds(200));
+	function.Action("SetLeft(Arlan)", true);
+	function.Action("SetRight(Archie)", true);
 	function.SetupDialogText("Ah... you've found me. The power stemming from my relic told me there would be some to try to come take it from me. No matter. You will be slain just like Mathias", "mathiasEnters", "Please dont do thi--");
 	function.Action("ShowDialog()", true);
 	while (currentLocation == "CurrentCamp") {
@@ -2468,10 +2475,22 @@ void Chapter2::runCurrentCamp() {
 		}
 
 		else if (i == "input Selected mathiasEnters") {
-			function.Action("SetPosition(Mathias, CurrentCamp.RightLog", true);
+			function.Action("HideDialog()", true);
+			function.Action("SetPosition(Mathias, CurrentCamp.Exit)", true);
+			function.Action("SetCameraFocus(Mathias)", true);
+			function.Action("SetCameraMode(Focus)", true);
+			this_thread::sleep_for(chrono::milliseconds(500));
+			function.Action("Draw(Mathias, MathiasSword)", true);
+			this_thread::sleep_for(chrono::milliseconds(500));
+			function.Action("SetCameraMode(Follow)", true);
+			function.Action("Face(Archie, Mathias)", true);
+			function.Action("Face(Arlan, Mathias)", true);
 			function.Action("WalkTo(Mathias, Archie)", true);
-			this_thread::sleep_for(chrono::milliseconds(3000));
+			//this_thread::sleep_for(chrono::milliseconds(3000));
+			function.Action("SetCameraFocus(Arlan)", true);
 			function.SetupDialogText("Use the book to remove the corrupting power!", "reciteIncantation", "**Recite the incantation**");
+			function.Action("SetRight(Mathias)", true);
+			function.Action("ShowDialog()", true);
 		}
 
 		else if (i == "input Selected reciteIncantation") {
