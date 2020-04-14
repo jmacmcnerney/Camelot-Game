@@ -84,6 +84,7 @@ public:
 	void runCurrentDiningRoom();
 	void runCurrentCourtyard();
 	void runCurrentCastleBedroom();
+	void runCurrentCamp();
 
 	void flashback1();
 

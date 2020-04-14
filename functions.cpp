@@ -235,9 +235,17 @@ void functions::WalkToPlace(string character, string location) {
 	Action("EnableInput()", true);
 }
 
-void functions::SetupDialogText(string message, string responseKey1, string response1, string responseKey2, string response2, string responseKey3, string response3, string responseKey4, string response4, string responseKey5, string response5) {
+void functions::SetupDialogText(string message, string responseKey1, string response1, string responseKey2, string response2, string responseKey3, string response3, string responseKey4, string response4, string responseKey5, string response5, string responseKey6, string response6, string responseKey7, string response7) {
 	Action("ClearDialog()", true);
-	if ((responseKey5 != "nothing") && (response5 != "nothing")) {
+	if ((responseKey7 != "nothing") && (response7 != "nothing")) {
+		//Action("SetDialog(" + message + " [" + responseKey1 + "|" + response1 + "] [" + responseKey2 + "|" + response2 + "] [" + responseKey3 + "|" + response3 + "] [" + responseKey4 + "|" + response4 + "] [" + responseKey5 + "|" + response5 + "])", true);
+		Action("SetDialog(" + message + "\\n[" + responseKey1 + "|" + response1 + "]\\n[" + responseKey2 + "|" + response2 + "]\\n[" + responseKey3 + "|" + response3 + "]\\n[" + responseKey4 + "|" + response4 + "]\\n[" + responseKey5 + "|" + response5 + "]\\n[" + responseKey6 + "|" + response6 + "]\\n[" + responseKey7 + "|" + response7 + "])", true);
+	}
+	else if ((responseKey6 != "nothing") && (response6 != "nothing")) {
+		//Action("SetDialog(" + message + " [" + responseKey1 + "|" + response1 + "] [" + responseKey2 + "|" + response2 + "] [" + responseKey3 + "|" + response3 + "] [" + responseKey4 + "|" + response4 + "] [" + responseKey5 + "|" + response5 + "])", true);
+		Action("SetDialog(" + message + "\\n[" + responseKey1 + "|" + response1 + "]\\n[" + responseKey2 + "|" + response2 + "]\\n[" + responseKey3 + "|" + response3 + "]\\n[" + responseKey4 + "|" + response4 + "]\\n[" + responseKey5 + "|" + response5 + "]\\n[" + responseKey6 + "|" + response6 + "])", true);
+	}
+	else if ((responseKey5 != "nothing") && (response5 != "nothing")) {
 		//Action("SetDialog(" + message + " [" + responseKey1 + "|" + response1 + "] [" + responseKey2 + "|" + response2 + "] [" + responseKey3 + "|" + response3 + "] [" + responseKey4 + "|" + response4 + "] [" + responseKey5 + "|" + response5 + "])", true);
 		Action("SetDialog(" + message + "\\n[" + responseKey1 + "|" + response1 + "]\\n[" + responseKey2 + "|" + response2 + "]\\n[" + responseKey3 + "|" + response3 + "]\\n[" + responseKey4 + "|" + response4 + "]\\n[" + responseKey5 + "|" + response5 + "])", true);
 	}
@@ -322,6 +330,45 @@ void functions::StorageItem(string action, string itemname, string position, boo
 				positionOccupied = true;
 				hasItem = false;
 				if ((itemname == "Storage Bottle" && position == "Right") || (itemname == "Storage Bread" && position == "Left")) {
+					correctPosition = true;
+				}
+			}
+			else {
+				Action("SetNarration(There is already an item in that position.)", true);
+			}
+		}
+		else if (!hasItem) {
+			Action("SetNarration(You do not have that item in your inventory.)", true);
+		}
+	}
+	else if (action == "take") {
+		positionOccupied = false;
+		correctPosition = false;
+		if (hasItem) {
+			Action("SetNarration(" + itemname + " is already in your inventory.)", true);
+		}
+		else if (!hasItem) {
+			Action("SetPosition(" + itemname + ")", true);
+			inventory.push_back(itemname);
+			Action("SetNarration(" + itemname + " Added To Inventory.)", true);
+			hasItem = true;
+		}
+	}
+	Action("ShowNarration()", true);
+}
+
+//This entire function may be outdated
+void functions::PuzzleItem(string action, string itemname, string position, bool& positionOccupied, bool& hasItem, bool& correctPosition, vector<string>& inventory) {
+	Action("HideDialog()", true);
+	if (action == "place") {
+		if (hasItem) {
+			if (!positionOccupied) {
+				Action("SetNarration(" + itemname + " Removed From Inventory)", true);
+				RemoveItem(itemname, inventory);
+				Action("SetPosition(" + itemname + ", CurrentLibrary.AlchemistTable." + position + ")", true);
+				positionOccupied = true;
+				hasItem = false;
+				if ((itemname == "Library Apple" && position == "Left") || (itemname == "Library GoldCup" && position == "Center") || (itemname == "Library GreenKey" && position == "Right")) {
 					correctPosition = true;
 				}
 			}
