@@ -2500,13 +2500,19 @@ void Story::runCurrentCastleBedroom() {
 
 void Story::runCurrentCamp() {
 	if (currentLocation == "BlueCamp") {
+		while (currentLocation == "BlueCamp") {
 
+		}
 	}
 	if (currentLocation == "RedCamp") {
+		while (currentLocation == "RedCamp") {
 
+		}
 	}
 	if (currentLocation == "PurpleCamp") {
+		while (currentLocation == "PurpleCamp") {
 
+		}
 	}
 	if (currentLocation == "GreenCamp") {
 		//function.Action("SetPosition(Archie, CurrentCamp.Horse)", true);
