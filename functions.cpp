@@ -159,6 +159,10 @@ bool functions::checkCommonKeywords(string input, string modifiedInput, string p
 			Action("EnableInput()", true);
 			Action("EnableInput()", true);
 		}
+		else if (modifiedInput == "Credits") {
+			Action("SetNarration(\"Created by Mac McNerney, Zac Foster, Jake Hayden and John Colfer using Steven G Ware's Camelot Virtual Environment\"", true);
+			Action("ShowNarration()", true);
+		}
 		else if (modifiedInput == "Quit") {
 			Action("Quit()", true);
 		}

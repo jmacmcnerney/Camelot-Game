@@ -17,12 +17,12 @@ vector<string> playerInv;
 string currentLocation = "ArlanCottage";
 
 //event booleans
-bool item_placed = false;
-bool sword_taken = false;
+
 
 //Intro Quest Booleans
-bool spellbook_taken = false;
+//Cottage
 bool hasStorybook = false;
+//City
 bool hasBrokenLock = false;
 bool hasFixedLock = false;
 bool hasAppleMoney = false;
@@ -30,6 +30,10 @@ bool hasElderApple = false;
 bool visitedFortuneteller = false;
 bool visitedTownElder = false;
 bool completedErrand = false;
+//Ruins
+bool sword_taken = false;
+bool spellbook_taken = false;
+bool item_placed = false;
 
 //Flashback Booleans
 bool ArchieEnemy = false;
@@ -37,6 +41,7 @@ bool MathiasFlashback = false;
 bool ArchieFlashback = false;
 
 //Green Puzzle Booleans
+//Potion
 bool hasGreenPotion = true;
 bool hasStorageBottle = false;
 bool hasStorageBread = false;
@@ -46,6 +51,7 @@ bool hasStorageBag = false;
 bool storageBreadPositionCorrect = false;
 bool storageBottlePositionCorrect = false;
 bool storagePuzzleSolved = false;
+//Book
 bool hasGreenBook = true;
 bool hasLibraryGoldCup = false;
 bool hasLibraryApple = false;
@@ -56,15 +62,21 @@ bool libraryGreenKeyPositionCorrect = false;
 bool libraryPuzzleSolved = false;
 
 //Blue Puzzle Booleans
+//Potion
 bool hasBluePotion = false;
+//Book
 bool hasBlueBook = false;
 
 //Red Puzzle Booleans
+//Potion
 bool hasRedPotion = false;
+//Book
 bool hasRedBook = false;
 
 //Purple Puzzle Booleans
+//Potion
 bool hasPurplePotion = false;
+//Book
 bool hasPurpleBook = false;
 
 bool camptest = true;
@@ -99,8 +111,10 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	setupCurrentForestPath("CurrentForestPath");
 	setupForestPath2("ForestPath2");
 	setupCurrentRuins("CurrentRuins");
+
 	//delete this
 	setupPastRuins("PastRuins", ArchieEnemy);
+
 	setupPastCottage("PastCottage");
 	setupPastForestPath("PastForestPath");
 	setupPastCity("PastCity");
@@ -111,7 +125,6 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	setupPort("CurrentPort");
 	setupGreatHall("CurrentGreatHall");
 	setupLibrary("CurrentLibrary");
-	//setupCamp("GreenCamp");
 	setupDungeon("CurrentPrison");
 	setupLeftHallway("LeftHallway");
 	setupRightHallway("RightHallway");
@@ -2617,8 +2630,6 @@ void Story::runCurrentCamp() {
 				function.Action("SetPosition(Archie)", true);
 				function.Action("FadeOut()", true);
 				this_thread::sleep_for(chrono::milliseconds(2000));
-				function.Action("SetNarration(\"THE END\\nCreated by Mac McNerney, Zac Foster, Jake Hayden and John Colfer using Steven G Ware's Camelot Virtual Environment\"", true);
-				function.Action("ShowNarration()", true);
 			}
 
 			else if (i == "input Selected end") {
