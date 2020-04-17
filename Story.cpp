@@ -1,10 +1,10 @@
 /* Project: Camelot Narrative Story + Experience Manager
 -- Project Description: An experience manager for the Camelot Virtual Environment.
 -- Authors: John (Mac) McNerney, Zac Foster, John Colfer, Jake Hayden
--- File: Chapter2.cpp
+-- File: Story.cpp
 -- File Description: Chapter 2 execution.
 */
-#include "Chapter2.h"
+#include "Story.h"
 #include <chrono>
 #include <thread>
 #include <vector>
@@ -82,16 +82,16 @@ bool hasBedroomAnswer = false;
 bool hasReadBedroomNote = false;
 bool hasSearchedBedroomCloset = false;
 
-Chapter2::Chapter2() {
+Story::Story() {
 	runSetup();
 	//function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
 	run();
 }
 
-Chapter2::~Chapter2() {
+Story::~Story() {
 }
 
-bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if setup was successful.
+bool Story::runSetup() { // runs initial setup for chapter 2. returns true if setup was successful.
 	//location setup calls
 	setupCurrentCottage("ArlanCottage");
 	setupCurrentTown("CurrentTown");
@@ -122,7 +122,7 @@ bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if
 	return true;
 }
 
-void Chapter2::run() { // begins chapter 2's execution
+void Story::run() { // begins chapter 2's execution
 	while (true) {
 		if (currentLocation == "ArlanCottage") {
 			runCurrentCottage();
@@ -197,7 +197,7 @@ void Chapter2::run() { // begins chapter 2's execution
 }
 
 //Flashback execution function
-void Chapter2::flashback1() {
+void Story::flashback1() {
 	//flashback transistion
 	function.Action("WalkTo(Arlan, CurrentRuins.Altar)", true);
 	function.Action("SetCameraMode(Focus)", true);
@@ -224,7 +224,7 @@ void Chapter2::flashback1() {
 }
 
 // location setup functions. return true if setup was successful.
-bool Chapter2::setupCurrentCottage(string name) {
+bool Story::setupCurrentCottage(string name) {
 	currentCottage = Cottage(name);
 
 	//character setup
@@ -241,7 +241,7 @@ bool Chapter2::setupCurrentCottage(string name) {
 	return true;
 }
 
-bool Chapter2::setupCurrentTown(string name) {
+bool Story::setupCurrentTown(string name) {
 	currentCity = City(name);
 
 	//character setup
@@ -271,7 +271,7 @@ bool Chapter2::setupCurrentTown(string name) {
 	return true;
 }
 
-bool Chapter2::setupBlacksmithFoundry(string name) {
+bool Story::setupBlacksmithFoundry(string name) {
 	BlacksmithFoundry = Blacksmith(name);
 
 	//character setup
@@ -290,7 +290,7 @@ bool Chapter2::setupBlacksmithFoundry(string name) {
 	return true;
 }
 
-bool Chapter2::setupAlchemyShop(string name) {
+bool Story::setupAlchemyShop(string name) {
 	Alchemy = AlchemyShop(name);
 
 	//character setup
@@ -304,7 +304,7 @@ bool Chapter2::setupAlchemyShop(string name) {
 	return true;
 }
 
-bool Chapter2::setupCurrentForestPath(string name) {
+bool Story::setupCurrentForestPath(string name) {
 	currentForestPath = ForestPath(name);
 
 	//character setup
@@ -319,7 +319,7 @@ bool Chapter2::setupCurrentForestPath(string name) {
 	return true;
 }
 
-bool Chapter2::setupCurrentRuins(string name) {
+bool Story::setupCurrentRuins(string name) {
 	currentRuins = Ruins(name);
 
 	//character setup
@@ -335,7 +335,7 @@ bool Chapter2::setupCurrentRuins(string name) {
 	return true;
 }
 
-bool Chapter2::setupPastCottage(string name) {
+bool Story::setupPastCottage(string name) {
 	pastCottage = Cottage(name);
 
 	function.Action("CreateItem(Letter, OpenScroll)", true);
@@ -352,7 +352,7 @@ bool Chapter2::setupPastCottage(string name) {
 	return true;
 }
 
-bool Chapter2::setupPastForestPath(string name) {
+bool Story::setupPastForestPath(string name) {
 	pastForestPath = ForestPath(name);
 
 	//character setup
@@ -362,7 +362,7 @@ bool Chapter2::setupPastForestPath(string name) {
 	return true;
 }
 
-bool Chapter2::setupPastCity(string name) {
+bool Story::setupPastCity(string name) {
 	pastCity = City(name);
 
 	//character setup
@@ -374,7 +374,7 @@ bool Chapter2::setupPastCity(string name) {
 	return true;
 }
 
-bool Chapter2::setupPastRuins(string name, bool Enemy) {
+bool Story::setupPastRuins(string name, bool Enemy) {
 	pastRuins = Ruins(name);
 
 	string EnemyName = "";
@@ -409,7 +409,7 @@ bool Chapter2::setupPastRuins(string name, bool Enemy) {
 	return true;
 }
 
-bool Chapter2::setupForestPath2(string name) {
+bool Story::setupForestPath2(string name) {
 	ForestPath2 = ForestPath(name);
 
 	//character setup
@@ -421,7 +421,7 @@ bool Chapter2::setupForestPath2(string name) {
 	return true;
 }
 
-bool Chapter2::setupCourtyard(string name) {
+bool Story::setupCourtyard(string name) {
 	CurrentCourtyard = Courtyard(name);
 
 	//character setup
@@ -433,7 +433,7 @@ bool Chapter2::setupCourtyard(string name) {
 	return true;
 }
 
-bool Chapter2::setupCastleBedroom(string name) {
+bool Story::setupCastleBedroom(string name) {
 	CurrentCastleBedroom = CastleBedroom(name);
 
 	//character setup
@@ -491,7 +491,7 @@ bool Chapter2::setupCastleBedroom(string name) {
 	return true;
 }
 
-bool Chapter2::setupPort(string name) {
+bool Story::setupPort(string name) {
 	CurrentPort = Port(name);
 
 	//character setup
@@ -503,7 +503,7 @@ bool Chapter2::setupPort(string name) {
 	return true;
 }
 
-bool Chapter2::setupGreatHall(string name) {
+bool Story::setupGreatHall(string name) {
 	CurrentGreatHall = GreatHall(name);
 
 	//character setup
@@ -520,7 +520,7 @@ bool Chapter2::setupGreatHall(string name) {
 	return true;
 }
 
-bool Chapter2::setupCastleCrossroads(string name) {
+bool Story::setupCastleCrossroads(string name) {
 	CurrentCastleCrossroads = CastleCrossroads(name);
 
 	//character setup
@@ -532,7 +532,7 @@ bool Chapter2::setupCastleCrossroads(string name) {
 	return true;
 }
 
-bool Chapter2::setupLibrary(string name) {
+bool Story::setupLibrary(string name) {
 	CurrentLibrary = Library(name);
 
 	//character setup
@@ -570,7 +570,7 @@ bool Chapter2::setupLibrary(string name) {
 	return true;
 }
 
-bool Chapter2::setupCamp(string name) {
+bool Story::setupCamp(string name) {
 	CurrentCamp = Camp(name);
 
 	if (name == "GreenCamp") {
@@ -608,7 +608,7 @@ bool Chapter2::setupCamp(string name) {
 	return true;
 }
 
-bool Chapter2::setupDungeon(string name) {
+bool Story::setupDungeon(string name) {
 	CurrentPrison = Dungeon(name);
 
 	//character setup
@@ -623,7 +623,7 @@ bool Chapter2::setupDungeon(string name) {
 	return true;
 }
 
-bool Chapter2::setupLeftHallway(string name) {
+bool Story::setupLeftHallway(string name) {
 	LeftHallway = Hallway(name);
 
 	//character setup
@@ -637,7 +637,7 @@ bool Chapter2::setupLeftHallway(string name) {
 	return true;
 }
 
-bool Chapter2::setupRightHallway(string name) {
+bool Story::setupRightHallway(string name) {
 	RightHallway = Hallway(name);
 
 	//character setup
@@ -649,7 +649,7 @@ bool Chapter2::setupRightHallway(string name) {
 	return true;
 }
 
-bool Chapter2::setupDiningRoom(string name) {
+bool Story::setupDiningRoom(string name) {
 	CurrentDiningRoom = DiningRoom(name);
 
 	//character setup
@@ -661,7 +661,7 @@ bool Chapter2::setupDiningRoom(string name) {
 	return true;
 }
 
-bool Chapter2::setupStorage(string name) {
+bool Story::setupStorage(string name) {
 	CurrentStorage = Storage(name);
 
 	//character setup
@@ -708,7 +708,7 @@ bool Chapter2::setupStorage(string name) {
 
 
 // location execution functions.
-void Chapter2::runCurrentCottage() {
+void Story::runCurrentCottage() {
 	while (currentLocation == "ArlanCottage") {
 		string i;
 		getline(cin, i);
@@ -776,7 +776,7 @@ void Chapter2::runCurrentCottage() {
 	}
 }
 
-void Chapter2::runCurrentTown() {
+void Story::runCurrentTown() {
 	while (currentLocation == "CurrentTown") {
 		string i;
 		getline(cin, i);
@@ -976,7 +976,7 @@ void Chapter2::runCurrentTown() {
 	}
 }
 
-void Chapter2::runBlacksmithFoundry() {
+void Story::runBlacksmithFoundry() {
 	while (currentLocation == "BlacksmithFoundry") {
 		string i;
 		getline(cin, i);
@@ -1046,7 +1046,7 @@ void Chapter2::runBlacksmithFoundry() {
 	}
 }
 
-void Chapter2::runAlchemyShop() {
+void Story::runAlchemyShop() {
 	while (currentLocation == "AlchemyShop") {
 		string i;
 		getline(cin, i);
@@ -1099,7 +1099,7 @@ void Chapter2::runAlchemyShop() {
 	}
 }
 
-void Chapter2::runCurrentForestPath() {
+void Story::runCurrentForestPath() {
 	while (currentLocation == "CurrentForestPath") {
 		string i;
 		getline(cin, i);
@@ -1153,7 +1153,7 @@ void Chapter2::runCurrentForestPath() {
 	}
 }
 
-void Chapter2::runCurrentRuins() {
+void Story::runCurrentRuins() {
 	while (currentLocation == "CurrentRuins") {
 		string i;
 		getline(cin, i);
@@ -1261,7 +1261,7 @@ void Chapter2::runCurrentRuins() {
 }
 
 //Chractercheck is sword_taken
-void Chapter2::runPastCottage(bool CharacterCheck) {
+void Story::runPastCottage(bool CharacterCheck) {
 	currentLocation = "PastCottage";
 	bool LetterCheck = false;
 	bool inputWasCommon;
@@ -1330,7 +1330,7 @@ void Chapter2::runPastCottage(bool CharacterCheck) {
 
 	}
 }
-void Chapter2::runPastForestPath(bool CharacterCheck) {
+void Story::runPastForestPath(bool CharacterCheck) {
 	bool inputWasCommon;
 	string CharacterName = "";
 
@@ -1375,7 +1375,7 @@ void Chapter2::runPastForestPath(bool CharacterCheck) {
 	}
 }
 
-void Chapter2::runPastCity(bool CharacterCheck) {
+void Story::runPastCity(bool CharacterCheck) {
 
 	string CharacterName = "";
 	bool inputWasCommon;
@@ -1421,7 +1421,7 @@ void Chapter2::runPastCity(bool CharacterCheck) {
 	}
 }
 
-void Chapter2::runPastRuins(bool CharacterCheck) {
+void Story::runPastRuins(bool CharacterCheck) {
 	string CharacterName = "";
 	string Enemy = "";
 	bool inputWasCommon;
@@ -1502,7 +1502,7 @@ void Chapter2::runPastRuins(bool CharacterCheck) {
 	}
 }
 
-void Chapter2::runForestPath2() {
+void Story::runForestPath2() {
 	while (currentLocation == "ForestPath2") {
 		string i;
 		getline(cin, i);
@@ -1536,7 +1536,7 @@ void Chapter2::runForestPath2() {
 	}
 }
 
-void Chapter2::runCurrentCastleCrossroads() {
+void Story::runCurrentCastleCrossroads() {
 	while (currentLocation == "CurrentCastleCrossroads") {
 		string i;
 		getline(cin, i);
@@ -1568,7 +1568,7 @@ void Chapter2::runCurrentCastleCrossroads() {
 	}
 }
 
-void Chapter2::runCurrentGreatHall() {
+void Story::runCurrentGreatHall() {
 	while (currentLocation == "CurrentGreatHall") {
 		string i;
 		getline(cin, i);
@@ -1620,7 +1620,7 @@ void Chapter2::runCurrentGreatHall() {
 	}
 }
 
-void Chapter2::runCurrentPort() {
+void Story::runCurrentPort() {
 	while (currentLocation == "CurrentPort") {
 		string i;
 		getline(cin, i);
@@ -1642,7 +1642,7 @@ void Chapter2::runCurrentPort() {
 	}
 }
 
-void Chapter2::runCurrentLibrary() {
+void Story::runCurrentLibrary() {
 	bool libraryLeftOccupied = true;
 	bool libraryCenterOccupied = true;
 	bool libraryRightOccupied = true;
@@ -1870,7 +1870,7 @@ void Chapter2::runCurrentLibrary() {
 	}
 }
 
-void Chapter2::runCurrentStorage() {
+void Story::runCurrentStorage() {
 	bool storageLeftOccupied = false;
 	bool storageRightOccupied = false;
 	bool potionSpawned = false;
@@ -2077,7 +2077,7 @@ void Chapter2::runCurrentStorage() {
 	}
 }
 
-void Chapter2::runCurrentPrison() {
+void Story::runCurrentPrison() {
 
 
 	while (currentLocation == "CurrentPrison") {
@@ -2194,7 +2194,7 @@ void Chapter2::runCurrentPrison() {
 	}
 }
 
-void Chapter2::runLeftHallway() {
+void Story::runLeftHallway() {
 	while (currentLocation == "LeftHallway") {
 		string i;
 		getline(cin, i);
@@ -2266,7 +2266,7 @@ void Chapter2::runLeftHallway() {
 	}
 }
 
-void Chapter2::runRightHallway() {
+void Story::runRightHallway() {
 	while (currentLocation == "RightHallway") {
 		string i;
 		getline(cin, i);
@@ -2329,7 +2329,7 @@ void Chapter2::runRightHallway() {
 	}
 }
 
-void Chapter2::runCurrentDiningRoom() {
+void Story::runCurrentDiningRoom() {
 	while (currentLocation == "CurrentDiningRoom") {
 		string i;
 		getline(cin, i);
@@ -2351,7 +2351,7 @@ void Chapter2::runCurrentDiningRoom() {
 	}
 }
 
-void Chapter2::runCurrentCourtyard() {
+void Story::runCurrentCourtyard() {
 	while (currentLocation == "CurrentCourtyard") {
 		string i;
 		getline(cin, i);
@@ -2415,7 +2415,7 @@ void Chapter2::runCurrentCourtyard() {
 	}
 }
 
-void Chapter2::runCurrentCastleBedroom() {
+void Story::runCurrentCastleBedroom() {
 	while (currentLocation == "CurrentCastleBedroom") {
 		string i;
 		getline(cin, i);
@@ -2498,7 +2498,7 @@ void Chapter2::runCurrentCastleBedroom() {
 	}
 }
 
-void Chapter2::runCurrentCamp() {
+void Story::runCurrentCamp() {
 	if (currentLocation == "BlueCamp") {
 
 	}

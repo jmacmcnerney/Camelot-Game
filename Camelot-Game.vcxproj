@@ -128,7 +128,7 @@
     <ClCompile Include="Camp.cpp" />
     <ClCompile Include="CastleBedroom.cpp" />
     <ClCompile Include="CastleCrossroads.cpp" />
-    <ClCompile Include="Chapter2.cpp" />
+    <ClCompile Include="Story.cpp" />
     <ClCompile Include="City.cpp" />
     <ClCompile Include="Cottage.cpp" />
     <ClCompile Include="Courtyard.cpp" />
@@ -151,7 +151,7 @@
     <ClInclude Include="Camp.h" />
     <ClInclude Include="CastleBedroom.h" />
     <ClInclude Include="CastleCrossroads.h" />
-    <ClInclude Include="Chapter2.h" />
+    <ClInclude Include="Story.h" />
     <ClInclude Include="City.h" />
     <ClInclude Include="Cottage.h" />
     <ClInclude Include="Courtyard.h" />
