@@ -19,6 +19,8 @@ string currentLocation = "ArlanCottage";
 //event booleans
 bool item_placed = false;
 bool sword_taken = false;
+
+//Intro Quest Booleans
 bool spellbook_taken = false;
 bool hasStorybook = false;
 bool hasBrokenLock = false;
@@ -28,9 +30,13 @@ bool hasElderApple = false;
 bool visitedFortuneteller = false;
 bool visitedTownElder = false;
 bool completedErrand = false;
+
+//Flashback Booleans
 bool ArchieEnemy = false;
 bool MathiasFlashback = false;
 bool ArchieFlashback = false;
+
+//Green Puzzle Booleans
 bool hasGreenPotion = true;
 bool hasStorageBottle = false;
 bool hasStorageBread = false;
@@ -48,10 +54,16 @@ bool libraryApplePositionCorrect = false;
 bool libraryGoldCupPositionCorrect = false;
 bool libraryGreenKeyPositionCorrect = false;
 bool libraryPuzzleSolved = false;
+
+//Blue Puzzle Booleans
 bool hasBluePotion = false;
 bool hasBlueBook = false;
+
+//Red Puzzle Booleans
 bool hasRedPotion = false;
 bool hasRedBook = false;
+
+//Purple Puzzle Booleans
 bool hasPurplePotion = false;
 bool hasPurpleBook = false;
 
@@ -99,7 +111,7 @@ bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if
 	setupPort("CurrentPort");
 	setupGreatHall("CurrentGreatHall");
 	setupLibrary("CurrentLibrary");
-	setupCamp("CurrentCamp");
+	//setupCamp("GreenCamp");
 	setupDungeon("CurrentPrison");
 	setupLeftHallway("LeftHallway");
 	setupRightHallway("RightHallway");
@@ -178,7 +190,7 @@ void Chapter2::run() { // begins chapter 2's execution
 		else if (currentLocation == "CurrentCourtyard") {
 			runCurrentCourtyard();
 		}
-		else if (currentLocation == "CurrentCamp") {
+		else if ((currentLocation == "BlueCamp") || (currentLocation == "GreenCamp") || (currentLocation == "RedCamp") || (currentLocation == "PurpleCamp")) {
 			runCurrentCamp();
 		}
 	}
@@ -561,12 +573,38 @@ bool Chapter2::setupLibrary(string name) {
 bool Chapter2::setupCamp(string name) {
 	CurrentCamp = Camp(name);
 
-	//character setup
+	if (name == "GreenCamp") {
+		//character setup
 
-	//items
+		//items
 
-	//icons
+		//icons
+		function.Action("SetPosition(Archie, GreenCamp.Horse)", true);
+		function.Action("Draw(Archie, LeaderFlashPotion)", true);
+		function.Action("EnableEffect(Archie, Force)", true);
+	}
+	if (name == "BlueCamp") {
+		//character setup
 
+		//items
+
+		//icons
+	}
+	if (name == "RedCamp") {
+		//character setup
+
+		//items
+
+		//icons
+	}
+	if (name == "PurpleCamp") {
+		//character setup
+
+		//items
+
+		//icons
+	}
+	
 	return true;
 }
 
@@ -721,8 +759,8 @@ void Chapter2::runCurrentCottage() {
 						currentLocation = "CurrentStorage";
 					}
 					else if (test == 3) {
-						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCamp.Exit");
-						currentLocation = "CurrentCamp";
+						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCourtyard.Exit");
+						currentLocation = "CurrentCourtyard";
 					}
 				}
 				else {
@@ -2335,8 +2373,26 @@ void Chapter2::runCurrentCourtyard() {
 
 		if (i == "input arrived Arlan position CurrentCourtyard.Gate") {
 			if ((hasBlueBook && hasBluePotion) || (hasGreenBook && hasGreenPotion) || (hasRedBook && hasRedPotion) || (hasPurpleBook && hasPurplePotion)) {
-				function.Transition("Arlan", "CurrentCourtyard.Gate", "CurrentCamp.Exit");
-				currentLocation = "CurrentCamp";
+				if (hasBlueBook && hasBluePotion) {
+					setupCamp("BlueCamp");
+					currentLocation = "BlueCamp";
+					function.Transition("Arlan", "CurrentCourtyard.Gate", "BlueCamp.Exit");
+				}
+				else if (hasGreenBook && hasGreenPotion) {
+					setupCamp("GreenCamp");
+					currentLocation = "GreenCamp";
+					function.Transition("Arlan", "CurrentCourtyard.Gate", "GreenCamp.Exit");
+				}
+				else if (hasRedBook && hasRedPotion) {
+					setupCamp("RedCamp");
+					currentLocation = "RedCamp";
+					function.Transition("Arlan", "CurrentCourtyard.Gate", "RedCamp.Exit");
+				}
+				else if (hasPurpleBook && hasPurplePotion) {
+					setupCamp("PurpleCamp");
+					currentLocation = "PurpleCamp";
+					function.Transition("Arlan", "CurrentCourtyard.Gate", "PurpleCamp.Exit");
+				}
 			}
 		}
 
@@ -2443,127 +2499,138 @@ void Chapter2::runCurrentCastleBedroom() {
 }
 
 void Chapter2::runCurrentCamp() {
-	function.Action("SetPosition(Archie, CurrentCamp.Horse)", true);
-	function.Action("Draw(Archie, LeaderFlashPotion)", true);
-	function.Action("EnableEffect(Archie, Force)", true);
-	function.WalkToPlace("Arlan", "Archie");
-	//function.Action("Face(Archie, Arlan)", true);
-	this_thread::sleep_for(chrono::milliseconds(200));
-	function.Action("Face(Arlan, Archie)", true);
-	this_thread::sleep_for(chrono::milliseconds(200));
-	function.Action("SetLeft(Arlan)", true);
-	function.Action("SetRight(Archie)", true);
-	function.SetupDialogText("Ah... you've found me. The power stemming from my relic told me there would be some to try to come take it from me. No matter. You will be slain just like Mathias", "mathiasEnters", "Please dont do thi--");
-	function.Action("ShowDialog()", true);
-	while (currentLocation == "CurrentCamp") {
-		string i;
-		getline(cin, i);
+	if (currentLocation == "BlueCamp") {
 
-		//Gets the first word that isn't "input"
-		modified_I = function.splitInput(i, 6, false);
+	}
+	if (currentLocation == "RedCamp") {
 
-		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+	}
+	if (currentLocation == "PurpleCamp") {
 
-		if (!inputWasCommon) {
+	}
+	if (currentLocation == "GreenCamp") {
+		//function.Action("SetPosition(Archie, CurrentCamp.Horse)", true);
+		//function.Action("Draw(Archie, LeaderFlashPotion)", true);
+		//function.Action("EnableEffect(Archie, Force)", true);
+		function.WalkToPlace("Arlan", "Archie");
+		//function.Action("Face(Archie, Arlan)", true);
+		this_thread::sleep_for(chrono::milliseconds(200));
+		function.Action("Face(Arlan, Archie)", true);
+		this_thread::sleep_for(chrono::milliseconds(200));
+		function.Action("SetLeft(Arlan)", true);
+		function.Action("SetRight(Archie)", true);
+		function.SetupDialogText("Ah... you've found me. The power stemming from my relic told me there would be some to try to come take it from me. No matter. You will be slain just like Mathias", "mathiasEnters", "Please dont do thi--");
+		function.Action("ShowDialog()", true);
+		while (currentLocation == "GreenCamp") {
+			string i;
+			getline(cin, i);
 
-		}
+			//Gets the first word that isn't "input"
+			modified_I = function.splitInput(i, 6, false);
 
-		//CurrentCastleBedroom
-		if (i == "input arrived Arlan position CurrentCamp.Exit") {
-			function.Transition("Arlan", "CurrentCamp.Exit", "CurrentCourtyard.Gate");
-			currentLocation = "CurrentCourtyard";
-		}
+			bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
 
-		else if (i == "input Selected mathiasEnters") {
-			function.Action("HideDialog()", true);
-			function.Action("SetPosition(Mathias, CurrentCamp.Exit)", true);
-			function.Action("SetCameraFocus(Mathias)", true);
-			function.Action("SetCameraMode(Focus)", true);
-			this_thread::sleep_for(chrono::milliseconds(500));
-			function.Action("Draw(Mathias, MathiasSword)", true);
-			this_thread::sleep_for(chrono::milliseconds(500));
-			function.Action("SetCameraMode(Follow)", true);
-			function.Action("Face(Archie, Mathias)", true);
-			function.Action("Face(Arlan, Mathias)", true);
-			function.Action("WalkTo(Mathias, Archie)", true);
-			//this_thread::sleep_for(chrono::milliseconds(3000));
-			function.Action("SetCameraFocus(Arlan)", true);
-			function.SetupDialogText("Quickly Arlan! Use the book to remove the corrupting power!", "reciteIncantation", "**Recite the incantation**");
-			function.Action("SetRight(Mathias)", true);
-			function.Action("ShowDialog()", true);
-		}
+			if (!inputWasCommon) {
 
-		else if (i == "input Selected reciteIncantation") {
-			function.Action("HideDialog()", true);
-			function.Action("Face(Arlan, Archie)", true);
-			function.Action("Draw(Arlan, Book Of Incantations)", true);
-			function.Action("Cast(Arlan, Archie)", true);
-			function.Action("Kneel(Archie)", true);
-			function.Action("DisableEffect(Archie)", true);
-			function.Action("Sheathe(Arlan, Book Of Incantations)", true);
-			function.Action("SetRight(Archie)", true);
-			function.SetupDialogText("Wha.. what is going on..? Where am I..?", "askMathias", "What should we do Mathias?");
-			function.Action("ShowDialog()", true);
-		}
-
-		else if (i == "input Selected askMathias") {
-			function.Action("SetRight(Mathias)", true);
-			function.SetupDialogText("Use your potion to cleanse the corruption or he will die!", "usePotion", "**Use The Potion**");
-		}
-
-		else if (i == "input Selected usePotion") {
-			function.Action("HideDialog()", true);
-			//function.Action("Draw(Arlan, Potion Of Cleansing)", true);
-			function.Action("Give(Arlan, Potion Of Cleansing, Archie)", true);
-			this_thread::sleep_for(chrono::milliseconds(1000));
-			function.Action("Face(Archie, Arlan)", true);
-			function.Action("SetRight(Archie)", true);
-			function.SetupDialogText("Thank you hero... you have saved me from the corruption that consumed me.", "apologizeToMathias", "Of course.");
-			function.Action("ShowDialog()", true);
-		}
-
-		else if (i == "input Selected apologizeToMathias") {
-			function.Action("HideDialog()", true);
-			function.Action("Face(Archie, Mathias", true);
-			function.Action("SetLeft(Archie)", true);
-			function.Action("SetRight(Mathias)", true);
-			function.SetupDialogText("Mathias... I am so sorry for everything I have done.", "apologyAccepted", "...");
-			function.Action("ShowDialog()", true);
-		}
-
-		else if (i == "input Selected apologyAccepted") {
-			function.Action("SetLeft(Mathias)", true);
-			function.Action("SetRight(Archie)", true);
-			function.SetupDialogText("It is ok my friend. Let us return to the kingdom. Arlan... thank you for everything.", "endGame", "...");
-		}
-
-		else if (i == "input Selected endGame") {
-			function.Action("HideDialog()", true);
-			function.Action("WalkTo(Mathias, CurrentCamp.Exit)", true);
-			function.Action("SetPosition(Mathias)", true);
-			function.Action("WalkTo(Archie, CurrentCamp.Exit)", true);
-			function.Action("SetPosition(Archie)", true);
-			function.Action("FadeOut()", true);
-			this_thread::sleep_for(chrono::milliseconds(2000));
-			function.Action("SetNarration(\"THE END\\nCreated by Mac McNerney, Zac Foster, Jake Hayden and John Colfer using Steven G Ware's Camelot Virtual Environment\"", true);
-			function.Action("ShowNarration()", true);
-		}
-
-		else if (i == "input Selected end") {
-			function.Action("HideDialog()", true);
-		}
-
-		else if (i == "input Key Inventory") {
-			function.Action("ClearList()", true);
-			for (string item : playerInv) {
-				function.Action("AddToList(" + item + ")", true);
 			}
-			function.Action("ShowList(Arlan)", true);
-		}
 
-		else if (i == "input Close List") {
-			function.Action("HideList()", true);
-			function.Action("EnableInput()", true);
+			//CurrentCastleBedroom
+			if (i == "input arrived Arlan position GreenCamp.Exit") {
+				function.Transition("Arlan", "GreenCamp.Exit", "CurrentCourtyard.Gate");
+				currentLocation = "CurrentCourtyard";
+			}
+
+			else if (i == "input Selected mathiasEnters") {
+				function.Action("HideDialog()", true);
+				function.Action("SetPosition(Mathias, GreenCamp.Exit)", true);
+				function.Action("SetCameraFocus(Mathias)", true);
+				function.Action("SetCameraMode(Focus)", true);
+				this_thread::sleep_for(chrono::milliseconds(500));
+				function.Action("Draw(Mathias, MathiasSword)", true);
+				this_thread::sleep_for(chrono::milliseconds(500));
+				function.Action("SetCameraMode(Follow)", true);
+				function.Action("Face(Archie, Mathias)", true);
+				function.Action("Face(Arlan, Mathias)", true);
+				function.Action("WalkTo(Mathias, Archie)", true);
+				//this_thread::sleep_for(chrono::milliseconds(3000));
+				function.Action("SetCameraFocus(Arlan)", true);
+				function.SetupDialogText("Quickly Arlan! Use the book to remove the corrupting power!", "reciteIncantation", "**Recite the incantation**");
+				function.Action("SetRight(Mathias)", true);
+				function.Action("ShowDialog()", true);
+			}
+
+			else if (i == "input Selected reciteIncantation") {
+				function.Action("HideDialog()", true);
+				function.Action("Face(Arlan, Archie)", true);
+				function.Action("Draw(Arlan, Book Of Incantations)", true);
+				function.Action("Cast(Arlan, Archie)", true);
+				function.Action("Kneel(Archie)", true);
+				function.Action("DisableEffect(Archie)", true);
+				function.Action("Sheathe(Arlan, Book Of Incantations)", true);
+				function.Action("SetRight(Archie)", true);
+				function.SetupDialogText("Wha.. what is going on..? Where am I..?", "askMathias", "What should we do Mathias?");
+				function.Action("ShowDialog()", true);
+			}
+
+			else if (i == "input Selected askMathias") {
+				function.Action("SetRight(Mathias)", true);
+				function.SetupDialogText("Use your potion to cleanse the corruption or he will die!", "usePotion", "**Use The Potion**");
+			}
+
+			else if (i == "input Selected usePotion") {
+				function.Action("HideDialog()", true);
+				//function.Action("Draw(Arlan, Potion Of Cleansing)", true);
+				function.Action("Give(Arlan, Potion Of Cleansing, Archie)", true);
+				this_thread::sleep_for(chrono::milliseconds(1000));
+				function.Action("Face(Archie, Arlan)", true);
+				function.Action("SetRight(Archie)", true);
+				function.SetupDialogText("Thank you hero... you have saved me from the corruption that consumed me.", "apologizeToMathias", "Of course.");
+				function.Action("ShowDialog()", true);
+			}
+
+			else if (i == "input Selected apologizeToMathias") {
+				function.Action("HideDialog()", true);
+				function.Action("Face(Archie, Mathias", true);
+				function.Action("SetLeft(Archie)", true);
+				function.Action("SetRight(Mathias)", true);
+				function.SetupDialogText("Mathias... I am so sorry for everything I have done.", "apologyAccepted", "...");
+				function.Action("ShowDialog()", true);
+			}
+
+			else if (i == "input Selected apologyAccepted") {
+				function.Action("SetLeft(Mathias)", true);
+				function.Action("SetRight(Archie)", true);
+				function.SetupDialogText("It is ok my friend. Let us return to the kingdom. Arlan... thank you for everything.", "endGame", "...");
+			}
+
+			else if (i == "input Selected endGame") {
+				function.Action("HideDialog()", true);
+				function.Action("WalkTo(Mathias, GreenCamp.Exit)", true);
+				function.Action("SetPosition(Mathias)", true);
+				function.Action("WalkTo(Archie, GreenCamp.Exit)", true);
+				function.Action("SetPosition(Archie)", true);
+				function.Action("FadeOut()", true);
+				this_thread::sleep_for(chrono::milliseconds(2000));
+				function.Action("SetNarration(\"THE END\\nCreated by Mac McNerney, Zac Foster, Jake Hayden and John Colfer using Steven G Ware's Camelot Virtual Environment\"", true);
+				function.Action("ShowNarration()", true);
+			}
+
+			else if (i == "input Selected end") {
+				function.Action("HideDialog()", true);
+			}
+
+			else if (i == "input Key Inventory") {
+				function.Action("ClearList()", true);
+				for (string item : playerInv) {
+					function.Action("AddToList(" + item + ")", true);
+				}
+				function.Action("ShowList(Arlan)", true);
+			}
+
+			else if (i == "input Close List") {
+				function.Action("HideList()", true);
+				function.Action("EnableInput()", true);
+			}
 		}
 	}
 }
