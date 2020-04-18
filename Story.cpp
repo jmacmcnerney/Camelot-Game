@@ -16,8 +16,7 @@ vector<string> playerInv;
 //location boolean
 string currentLocation = "ArlanCottage";
 
-//event booleans
-
+bool cheatsEnabled = true;
 
 //Intro Quest Booleans
 //Cottage
@@ -239,6 +238,13 @@ void Story::flashback1() {
 // location setup functions. return true if setup was successful.
 bool Story::setupCurrentCottage(string name) {
 	currentCottage = Cottage(name);
+
+	//CHEATS
+	if (cheatsEnabled) {
+		function.Action("CreateItem(Cheating Menu, EvilBook)", true);
+		playerInv.push_back("Cheating Menu");
+		currentCottage.icons.push_back(Icon("accessCheatMenu", "unlock", "Cheating Menu", "Open Cheat Menu", "true"));
+	}
 
 	//character setup
 	function.SetupCharacter("Arlan", "B", "LightArmour", "Long", "Brown", "ArlanCottage.Bed");
@@ -786,6 +792,25 @@ void Story::runCurrentCottage() {
 				}
 			}
 		}
+
+		/*-------------------CHEATS-------------------*/
+		if (i == "input accessCheatMenu Cheating Menu") {
+			//function.Action("ClearDialog()", true);
+			//function.Action("SetDialog(Category\\n[teleportCheats|Teleport Cheats]\\n[itemCheats][Item Cheats])", true);
+			function.SetupDialogText("Category", "teleportCheats", "Teleport Cheats", "itemCheats", "ItemCheats");
+			function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Selected teleportCheats") {
+			function.Action("FadeOut()", true);
+			function.Action("ClearDialog()", true);
+			function.Action("SetDialog(Where?\\n[teleportToArlanCottage|Arlan Cottage]\\n[teleportToCurrentTown|Current Town]\\n[teleportToBlacksmithFoundry|Blacksmith Foundry]\\n[teleportToAlchemyShop|Alchemy Shop]\\n[teleportToCurrentForestPath|Current Forest Path]\\n[teleportToCurrentRuins|Current Ruins]\\n[teleportToPastCottage|Past Cottage]\\n[teleportToPastCity|Past City]\\n[teleportToPastForestPath|Past Forest Path]\\n[teleportToPastRuins|Past Ruins]\\n[teleportToForestPath2|Forest Path 2]\\n[teleportToCurrentCastleCrossroads|Current Castle Crossroads]\\n[teleportToCurrentPort|Current Port]\\n[teleportToCurrentStorage|Current Storage]\\n[teleportToRightHallway|Right Hallway]\\n[teleportToCurrentLibrary|Current Library]\\n[teleportToCurrentCastleBedroom|Current Castle Bedroom]\\n[teleportToLeftHallway|Left Hallway]\\n[teleportToCurrentDiningRoom|Current Dining Room]\\n[teleportToCurrentPrison|Current Prison]\\n[teleportToCurrentCourtyard|Current Courtyard])", true);
+		}
+
+		else if (i == "input Selected itemCheats") {
+			function.Action("SetDialog(Which Item?\\n[addStoryBookCheat|StoryBook]\\n[addMathiasSwordCheat][MathiasSword])", true);
+		}
+		/*-------------------CHEATS-------------------*/
 	}
 }
 
