@@ -802,14 +802,61 @@ void Story::runCurrentCottage() {
 		}
 
 		else if (i == "input Selected teleportCheats") {
-			function.Action("FadeOut()", true);
+			//function.Action("FadeOut()", true);
 			function.Action("ClearDialog()", true);
-			function.Action("SetDialog(Where?\\n[teleportToArlanCottage|Arlan Cottage]\\n[teleportToCurrentTown|Current Town]\\n[teleportToBlacksmithFoundry|Blacksmith Foundry]\\n[teleportToAlchemyShop|Alchemy Shop]\\n[teleportToCurrentForestPath|Current Forest Path]\\n[teleportToCurrentRuins|Current Ruins]\\n[teleportToPastCottage|Past Cottage]\\n[teleportToPastCity|Past City]\\n[teleportToPastForestPath|Past Forest Path]\\n[teleportToPastRuins|Past Ruins]\\n[teleportToForestPath2|Forest Path 2]\\n[teleportToCurrentCastleCrossroads|Current Castle Crossroads]\\n[teleportToCurrentPort|Current Port]\\n[teleportToCurrentStorage|Current Storage]\\n[teleportToRightHallway|Right Hallway]\\n[teleportToCurrentLibrary|Current Library]\\n[teleportToCurrentCastleBedroom|Current Castle Bedroom]\\n[teleportToLeftHallway|Left Hallway]\\n[teleportToCurrentDiningRoom|Current Dining Room]\\n[teleportToCurrentPrison|Current Prison]\\n[teleportToCurrentCourtyard|Current Courtyard])", true);
+			function.Action("SetDialog(Where?\\n[teleportToArlanCottage|Arlan Cottage]\\n[teleportToCurrentTown|Current Town]\\n[teleportToBlacksmithFoundry|Blacksmith Foundry]\\n[teleportToAlchemyShop|Alchemy Shop]\\n[teleportToCurrentForestPath|Current Forest Path]\\n[teleportToCurrentRuins|Current Ruins]\\n[teleportToPastCottage|Past Cottage]\\n[teleportToPastCity|Past City]\\n[teleportToPastForestPath|Past Forest Path]\\n[teleportToPastRuins|Past Ruins]\\n[teleportToForestPath2|Forest Path 2]\\n[teleportToCurrentCastleCrossroads|Current Castle Crossroads]\\n[teleportToCurrentPort|Current Port]\\n[teleportToCurrentStorage|Current Storage]\\n[teleportToRightHallway|Right Hallway]\\n[teleportToCurrentLibrary|Current Library]\\n[teleportToCurrentCastleBedroom|Current Castle Bedroom]\\n[teleportToLeftHallway|Left Hallway]\\n[teleportToCurrentDiningRoom|Current Dining Room]\\n[teleportToCurrentPrison|Current Prison]\\n[teleportToCurrentCourtyard|Current Courtyard]\\n[end|Exit Menu])", true);
 		}
 
+		else if (i == "input Selected teleportToArlanCottage") { function.Action("SetPosition(Arlan, ArlanCottage)", true); }
+		else if (i == "input Selected teleportToCurrentTown") { function.Action("SetPosition(Arlan, CurrentTown)", true); }
+		else if (i == "input Selected teleportToAlchemyShop") { function.Action("SetPosition(Arlan, AlchemyShop)", true); }
+		else if (i == "input Selected teleportToCurrentForestPath") { function.Action("SetPosition(Arlan, CurrentForestPath)", true); }
+		else if (i == "input Selected teleportToCurrentRuins") { function.Action("SetPosition(Arlan, CurrentRuins)", true); }
+		else if (i == "input Selected teleportToPastCottage") { function.Action("SetPosition(Arlan, PastCottage)", true); }
+		else if (i == "input Selected teleportToPastCity") { function.Action("SetPosition(Arlan, PastCity)", true); }
+		else if (i == "input Selected teleportToPastForestPath") { function.Action("SetPosition(Arlan, PastForestPath)", true); }
+		else if (i == "input Selected teleportToPastRuins") { function.Action("SetPosition(Arlan, PastRuins)", true); }
+		else if (i == "input Selected teleportToForestPath2") { function.Action("SetPosition(Arlan, ForestPath2)", true); }
+		else if (i == "input Selected teleportToCurrentCastleCrossroads") { function.Action("SetPosition(Arlan, CurrentCastleCrossroads)", true); }
+		else if (i == "input Selected teleportToCurrentPort") { function.Action("SetPosition(Arlan, CurrentPort)", true); }
+		else if (i == "input Selected teleportToCurrentGreatHall") { function.Action("SetPosition(Arlan, CurrentGreatHall)", true); }
+		else if (i == "input Selected teleportToCurrentStorage") { function.Action("SetPosition(Arlan, CurrentStorage)", true); }
+		else if (i == "input Selected teleportToRightHallway") { function.Action("SetPosition(Arlan, RightHallway)", true); }
+		else if (i == "input Selected teleportToCurrentLibrary") { function.Action("SetPosition(Arlan, CurrentLibrary)", true); }
+		else if (i == "input Selected teleportToCurrentCastleBedroom") { function.Action("SetPosition(Arlan, CurrentCastleBedroom)", true); }
+		else if (i == "input Selected teleportToLeftHallway") { function.Action("SetPosition(Arlan, LeftHallway)", true); }
+		else if (i == "input Selected teleportToCurrentDiningRoom") { function.Action("SetPosition(Arlan, CurrentDiningRoom)", true); }
+		else if (i == "input Selected teleportToCurrentPrison") { function.Action("SetPosition(Arlan, CurrentPrison)", true); }
+		else if (i == "input Selected teleportToCurrentCourtyard") { function.Action("SetPosition(Arlan, CurrentCourtyard)", true); }
+
 		else if (i == "input Selected itemCheats") {
-			function.Action("SetDialog(Which Item?\\n[addStoryBookCheat|StoryBook]\\n[addMathiasSwordCheat][MathiasSword])", true);
+			function.Action("ClearDialog()", true);
+			function.Action("SetDialog(Which Item?\\n[addStorybookCheat|Storybook]\\n[addMathiasSwordCheat|MathiasSword]\\n[end|Exit])", true);
 		}
+
+		else if (i == "input Selected addStorybookCheat") { function.ItemCheats("Storybook", hasStorybook, playerInv); }
+		else if (i == "input Selected addBrokenLockCheat") { function.ItemCheats("BrokenLock", hasBrokenLock, playerInv); }
+		else if (i == "input Selected addFixedLockCheat") { function.ItemCheats("FixedLock", hasFixedLock, playerInv); }
+		else if (i == "input Selected addAppleMoneyCheat") { function.ItemCheats("AppleMoney", hasAppleMoney, playerInv); }
+		else if (i == "input Selected addElderAppleCheat") { function.ItemCheats("ElderApple", hasElderApple, playerInv); }
+		else if (i == "input Selected addMathiasSwordCheat") { function.ItemCheats("MathiasSword", sword_taken, playerInv); }
+		else if (i == "input Selected addArchieSpellbookCheat") { function.ItemCheats("ArchieSpellbook", spellbook_taken, playerInv); }
+		else if (i == "input Selected addGreenPotionCheat") { function.ItemCheats("Potion Of Cleansing", hasGreenPotion, playerInv); }
+		else if (i == "input Selected addStorageBottleCheat") { function.ItemCheats("Storage Bottle", hasStorageBottle, playerInv); }
+		else if (i == "input Selected addStorageBreadCheat") { function.ItemCheats("Storage Bread", hasStorageBread, playerInv); }
+		else if (i == "input Selected addStorageHelmetCheat") { function.ItemCheats("Storage Helmet", hasStorageHelmet, playerInv); }
+		else if (i == "input Selected addStorageInkAndQuillCheat") { function.ItemCheats("Storage InkAndQuill", hasStorageInkAndQuill, playerInv); }
+		else if (i == "input Selected addStorageBagCheat") { function.ItemCheats("Storage Bag", hasStorageBag, playerInv); }
+		else if (i == "input Selected addGreenBookCheat") { function.ItemCheats("Book Of Incantations", hasGreenBook, playerInv); }
+		else if (i == "input Selected addLibraryGoldCupCheat") { function.ItemCheats("Library GoldCup", hasLibraryGoldCup, playerInv); }
+		else if (i == "input Selected addLibraryAppleCheat") { function.ItemCheats("Library Apple", hasLibraryApple, playerInv); }
+		else if (i == "input Selected addLibraryGreenKeyCheat") { function.ItemCheats("Library GreenKey", hasLibraryGreenKey, playerInv); }
+		else if (i == "input Selected addBluePotionCheat") { function.ItemCheats("BluePotion", hasBluePotion, playerInv); }
+		else if (i == "input Selected addBlueBookCheat") { function.ItemCheats("BlueBook", hasBlueBook, playerInv); }
+		else if (i == "input Selected addRedPotionCheat") { function.ItemCheats("RedPotion", hasRedPotion, playerInv); }
+		else if (i == "input Selected addRedBookCheat") { function.ItemCheats("RedBook", hasRedBook, playerInv); }
+		else if (i == "input Selected addPurplePotionCheat") { function.ItemCheats("PurplePotion", hasPurplePotion, playerInv); }
+		else if (i == "input Selected addPurpleBookCheat") { function.ItemCheats("Storybook", hasStorybook, playerInv); }
 		/*-------------------CHEATS-------------------*/
 	}
 }

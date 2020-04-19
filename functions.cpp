@@ -399,3 +399,14 @@ void functions::PuzzleItem(string action, string itemname, string position, bool
 	}
 	Action("ShowNarration()", true);
 }
+
+void functions::ItemCheats(string itemname, bool &hasItem, vector<string> &inventory) {
+	if (!hasItem) {
+		inventory.push_back(itemname);
+		hasItem = true;
+	}
+	else if (hasItem) {
+		RemoveItem(itemname, inventory);
+		hasItem = false;
+	}
+}
