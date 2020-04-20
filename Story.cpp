@@ -208,9 +208,6 @@ void Story::run() { // begins chapter 2's execution
 		else if ((currentLocation == "BlueCamp") || (currentLocation == "GreenCamp") || (currentLocation == "RedCamp") || (currentLocation == "PurpleCamp")) {
 			runCurrentCamp();
 		}
-		else if (currentLocation == "CurrentCamp2") {
-			runCurrentCamp2();
-		}
 		else if (currentLocation == "FinalRuins") {
 			runFinalRuins();
 		}
@@ -897,7 +894,7 @@ void Story::runCurrentCottage() {
 					}
 
 					else if (test == 7) {
-						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCamp2.Exit");
+						function.Transition("Arlan", "ArlanCottage.Door", "FinalRuins.Exit");
 						currentLocation = "FinalRuins";
 					}
 				}
@@ -3083,21 +3080,21 @@ void Story::runCurrentCamp() {
 			}
 
 			//CurrentCastleBedroom
-			if (i == "input arrived Arlan position CurrentCamp2.Exit") {
-				function.Transition("Arlan", "CurrentCamp2.Exit", "CurrentCourtyard.Gate");
+			if (i == "input arrived Arlan position BlueCamp.Exit") {
+				function.Transition("Arlan", "BlueCamp.Exit", "CurrentCourtyard.Gate");
 				currentLocation = "CurrentCourtyard";
 			}
 
-			if (i == "input OpenChest CurrentCamp2.Chest") {
+			if (i == "input OpenChest BlueCamp.Chest") {
 				// walk to and interact with chest
-				function.Action("OpenFurniture(Arlan, CurrentCamp2.Chest)", true);
+				function.Action("OpenFurniture(Arlan, BlueCamp.Chest)", true);
 				function.SetupDialog("Arlan", "null", false);
 				function.SetupDialogText("A strange book adorned with a skull lies in the chest. You recognize it as the powerful artifact from your visions and the tome described in the book the sailor gave you. Will you take it?", "takeTome", "*Take the artifact.*", "leaveTome", "*Leave it.*");
 				//function.Action("ShowDialog()", true);
 			}
 
 			else if (i == "input Selected takeTome") {
-				function.Action("Take(Arlan, AncientTome, CurrentCamp2.Chest)", true);
+				function.Action("Take(Arlan, AncientTome, BlueCamp.Chest)", true);
 				function.SetupDialogText("You take the tome into your hands. You feel a surge of incredible energy flowing through you. The power suddenly takes hold of your body and you begin to lose control.", "giveIn", "*GIVE IN.*");
 			}
 
@@ -3105,10 +3102,10 @@ void Story::runCurrentCamp() {
 				function.Action("HideDialog()", true);
 				function.Action("ClearDialog()", true);
 				function.Action("DisableInput()", true);
-				//function.Action("WalkTo(Arlan, CurrentCamp2.LeftLog)", true);
-				function.Action("Face(Arlan, CurrentCamp2.Log)", true);
+				//function.Action("WalkTo(Arlan, BlueCamp.LeftLog)", true);
+				function.Action("Face(Arlan, BlueCamp.Log)", true);
 				function.Action("Cast(Arlan)", true);
-				function.Action("SetPosition(Archie, CurrentCamp2)", true);
+				function.Action("SetPosition(Archie, BlueCamp)", true);
 				function.Action("CreateEffect(Archie, Resurrection)", true);
 				function.Action("Kneel(Arlan)", false);
 				function.Action("WalkTo(Archie, Arlan)", true);
@@ -3122,11 +3119,11 @@ void Story::runCurrentCamp() {
 				function.Action("Take(Archie, AncientTome, Arlan)", true);
 				function.Action("Cast(Archie, Arlan)", true);
 				function.Action("FadeOut()", true);
-				function.Action("WalkTo(Archie, CurrentCamp2.Exit)", true);
+				function.Action("WalkTo(Archie, BlueCamp.Exit)", true);
 				function.Action("SetPosition(Archie)", true);
-				function.Action("SetPosition(Mathias, CurrentCamp2.Exit)", true);
+				function.Action("SetPosition(Mathias, BlueCamp.Exit)", true);
 				function.Action("FadeIn()", false);
-				//function.Action("WalkTo(Mathias, CurrentCamp2.Chest)", true);
+				//function.Action("WalkTo(Mathias, BlueCamp.Chest)", true);
 				//function.Action("Kneel(Mathias)", true);
 				function.Action("WalkTo(Mathias, Arlan)", true);
 				function.SetupDialog("Arlan", "Mathias", false);
@@ -3162,8 +3159,8 @@ void Story::runCurrentCamp() {
 			else if (i == "input Selected letsGo") {
 				function.Action("HideDialog()", true);
 				function.Action("ClearDialog()", true);
-				function.Action("WalkTo(Mathias, CurrentCamp2.Exit)", false);
-				function.Action("WalkTo(Arlan, CurrentCamp2.Exit)", false);
+				function.Action("WalkTo(Mathias, BlueCamp.Exit)", false);
+				function.Action("WalkTo(Arlan, BlueCamp.Exit)", false);
 				function.Action("FadeOut()", true);
 				currentLocation = "FinalRuins";
 			}
@@ -3171,7 +3168,7 @@ void Story::runCurrentCamp() {
 			else if (i == "input Selected leaveTome") {
 				function.Action("HideDialog()", true);
 				function.Action("ClearDialog()", true);
-				function.Action("CloseFurniture(Arlan, CurrentCamp2.Chest)", true);
+				function.Action("CloseFurniture(Arlan, BlueCamp.Chest)", true);
 				function.Action("SetNarration(You leave the tome alone and close the chest. You feel the tome calling out to you. You have come this far... should you really leave it here?)", true);
 				function.Action("ShowNarration()", true);
 			}
