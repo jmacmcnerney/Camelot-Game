@@ -840,10 +840,10 @@ void Story::runCurrentCottage() {
 		}
 
 		else if (i == "input Selected addStorybookCheat") { function.ItemCheats("Storybook", hasStorybook, playerInv); }
-		else if (i == "input Selected addBrokenLockCheat") { function.ItemCheats("BrokenLock", hasBrokenLock, playerInv); }
-		else if (i == "input Selected addFixedLockCheat") { function.ItemCheats("FixedLock", hasFixedLock, playerInv); }
-		else if (i == "input Selected addAppleMoneyCheat") { function.ItemCheats("AppleMoney", hasAppleMoney, playerInv); }
-		else if (i == "input Selected addElderAppleCheat") { function.ItemCheats("ElderApple", hasElderApple, playerInv); }
+		else if (i == "input Selected addBrokenLockCheat") { function.ItemCheats("Broken Lock", hasBrokenLock, playerInv); }
+		else if (i == "input Selected addFixedLockCheat") { function.ItemCheats("Fixed Lock", hasFixedLock, playerInv); }
+		else if (i == "input Selected addAppleMoneyCheat") { function.ItemCheats("Apple Money", hasAppleMoney, playerInv); }
+		else if (i == "input Selected addElderAppleCheat") { function.ItemCheats("Elder Apple", hasElderApple, playerInv); }
 		else if (i == "input Selected addMathiasSwordCheat") { function.ItemCheats("MathiasSword", sword_taken, playerInv); }
 		else if (i == "input Selected addArchieSpellbookCheat") { function.ItemCheats("ArchieSpellbook", spellbook_taken, playerInv); }
 		else if (i == "input Selected addGreenPotionCheat") { function.ItemCheats("Potion Of Cleansing", hasGreenPotion, playerInv); }
@@ -856,12 +856,12 @@ void Story::runCurrentCottage() {
 		else if (i == "input Selected addLibraryGoldCupCheat") { function.ItemCheats("Library GoldCup", hasLibraryGoldCup, playerInv); }
 		else if (i == "input Selected addLibraryAppleCheat") { function.ItemCheats("Library Apple", hasLibraryApple, playerInv); }
 		else if (i == "input Selected addLibraryGreenKeyCheat") { function.ItemCheats("Library GreenKey", hasLibraryGreenKey, playerInv); }
-		else if (i == "input Selected addBluePotionCheat") { function.ItemCheats("BluePotion", hasBluePotion, playerInv); }
-		else if (i == "input Selected addBlueBookCheat") { function.ItemCheats("BlueBook", hasBlueBook, playerInv); }
-		else if (i == "input Selected addRedPotionCheat") { function.ItemCheats("RedPotion", hasRedPotion, playerInv); }
-		else if (i == "input Selected addRedBookCheat") { function.ItemCheats("RedBook", hasRedBook, playerInv); }
-		else if (i == "input Selected addPurplePotionCheat") { function.ItemCheats("PurplePotion", hasPurplePotion, playerInv); }
-		else if (i == "input Selected addPurpleBookCheat") { function.ItemCheats("Storybook", hasStorybook, playerInv); }
+		//else if (i == "input Selected addBluePotionCheat") { function.ItemCheats("BluePotion", hasBluePotion, playerInv); }
+		//else if (i == "input Selected addBlueBookCheat") { function.ItemCheats("BlueBook", hasBlueBook, playerInv); }
+		//else if (i == "input Selected addRedPotionCheat") { function.ItemCheats("RedPotion", hasRedPotion, playerInv); }
+		//else if (i == "input Selected addRedBookCheat") { function.ItemCheats("RedBook", hasRedBook, playerInv); }
+		//else if (i == "input Selected addPurplePotionCheat") { function.ItemCheats("PurplePotion", hasPurplePotion, playerInv); }
+		//else if (i == "input Selected addPurpleBookCheat") { function.ItemCheats("PurpleBook", hasStorybook, playerInv); }
 		/*-------------------CHEATS-------------------*/
 	}
 }
