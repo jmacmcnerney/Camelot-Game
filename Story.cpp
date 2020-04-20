@@ -14,7 +14,8 @@ using namespace std;
 vector<string> playerInv;
 
 //location boolean
-string currentLocation = "ArlanCottage";
+//string currentLocation = "ArlanCottage";
+string currentLocation = "CurrentPrison";
 
 bool cheatsEnabled = true;
 
@@ -95,7 +96,7 @@ bool hasSearchedBedroomCloset = false;
 
 Story::Story() {
 	runSetup();
-	//function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
+	function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
 	run();
 }
 
@@ -446,7 +447,7 @@ bool Story::setupCourtyard(string name) {
 	//character setup
 
 	//items
-
+	function.Action("CreateItem(PrisonerHammer, Hammer)", true);
 	//icons
 
 	return true;
@@ -634,7 +635,8 @@ bool Story::setupDungeon(string name) {
 	function.Action("CreateItem(Potion of Invincibility, RedPotion)", true);
 	function.SetupCharacter("Prisoner", "F", "Bandit", "Spiky", "Blonde", "CurrentPrison.Bed");
 	//items
-
+	function.Action("CreateItem(PrisonerOutfit, Helmet)", true);
+	function.Action("CreateItem(GuardSword, Sword)", true);
 	//icons
 	CurrentPrison.icons.push_back(Icon("Talk_To_Prisoner", "talk", "Prisoner", "Talk To Prisoner", "true"));
 	CurrentPrison.icons.push_back(Icon("Open Door", "door", "CurrentPrison.Door", "Open Door", "true"));
@@ -700,7 +702,7 @@ bool Story::setupStorage(string name) {
 	function.Action("CreateItem(Storage OpenScroll, OpenScroll)", true);
 	function.Action("SetPosition(Storage OpenScroll, CurrentStorage.Barrel)", true);
 
-	function.Action("CreateItem(PrisonerOutfit, Helmet)", true);
+	//function.Action("CreateItem(PrisonerOutfit, Helmet)", true);
 
 	//icons
 	CurrentStorage.icons.push_back(Icon("Storage Chest", "Hand", "CurrentStorage.Chest", "Take All Storage Items", "true"));
@@ -1606,6 +1608,7 @@ void Story::runForestPath2() {
 			function.Action("SetNarration(There is a sword hidden inside the well! You take it.)", true);
 			function.Action("ShowNarration()", true);
 			playerInv.push_back("PrisonerSword");
+			function.Action("DisableIcon(Search Well, ForestPath2.Well)", true);
 			hasSecondPrisItem = true;
 		}
 
@@ -2185,24 +2188,40 @@ void Story::runCurrentPrison() {
 					function.SetupDialog("Arlan", "Prisoner", false);
 					if (hasFirstPrisItem) {
 						function.SetupDialogText("Thank you for finding that outfit for me. Here is the next one", "RiddleTwo", "Hit me with it");
-
+						
+						function.RemoveItem("PrisonerOutfit", playerInv);
 						ForestPath2.icons.push_back(Icon("Search Well", "hand", "ForestPath2.Well", "Search Well", "true"));
 						function.SetupIcons(ForestPath2.icons);
+
+						function.Action("SetClothing(Prisoner, HeavyArmour)", true);
 
 						hasFirstPrisItem = false;
 						firstPrisRiddle = true;
 					}
 					if (hasSecondPrisItem) {
-						//function.SetupDialogText("We are almost there! This is the last one", "RiddleThree", "I am ready");
+						function.SetupDialogText("We are almost there! This is the last one", "RiddleThree", "I am ready");
+
+						function.RemoveItem("PrisonerSword", playerInv);
+						CurrentCourtyard.icons.push_back(Icon("Search Target", "hand", "CurrentCourtyard.Target", "Search Target", "true"));
+						function.SetupIcons(CurrentCourtyard.icons);
+
+						function.Action("Draw(Arlan, GuardSword)", true);
+
 						hasSecondPrisItem = false;
-						function.SetupDialogText("That seems to be everything! I can finally get out of here. Here take this potion like I promised", "EndQuest", "Sweet!");
+						secondPrisRiddle = true;
+						//thirdPrisRiddle = true;
+						//function.SetupDialogText("That seems to be everything! I can finally get out of here. Here take this potion like I promised", "EndQuest", "Sweet!");
 
 						//function.WalkToPlace("Arlan", "ForestPath2.Well");
 
 					}
-					//if (hasThirdPrisItem) {
+					if (hasThirdPrisItem) {
+						hasThirdPrisItem = false;
 
-					//}
+						function.RemoveItem("PrisonerHammer", playerInv);
+
+						function.SetupDialogText("That seems to be everything! I can finally get out of here. Here take this potion like I promised", "EndQuest", "Sweet!");
+					}
 				}
 				else {
 					function.SetupDialog("Arlan", "Prisoner", false);
@@ -2212,9 +2231,9 @@ void Story::runCurrentPrison() {
 					else if (secondPrisRiddle == false) {
 						function.SetupDialogText("I see you have not found the previous item yet. Here is what I said again in case you need it", "RiddleTwo", "Thanks");
 					}
-					//else {
-					//	function.SetupDialogText("I see you have not found the previous item yet. Here is what I said again in case you need it", "RiddleThree", "Thanks");
-					//}
+					else if (thirdPrisRiddle == false) {
+						function.SetupDialogText("I see you have not found the previous item yet. Here is what I said again in case you need it", "RiddleThree", "Thanks");
+					}
 				}
 
 
@@ -2238,12 +2257,13 @@ void Story::runCurrentPrison() {
 				else if (modified_I == "StartQuestCont") {
 					function.SetupDialogText("Alright. Let me cast a location spell to give you a bit of guidance", "RiddleOne", "Wait what?");
 
-					CurrentStorage.icons.push_back(Icon("Search Chest", "hand", "CurrentStorage.Chest", "Search Chest", "true"));
-					function.SetupIcons(CurrentStorage.icons);
+					//CurrentGreatHall.icons.push_back(Icon("Search Chest", "hand", "CurrentStorage.Chest", "Search Chest", "true"));
+					//function.SetupIcons(CurrentStorage.icons);
+					function.Action("EnableIcon(Search Chest, hand, CurrentPrison.Chest, Search Chest, true)", true);
 				}
 				else if (modified_I == "RiddleOne") {
 					//Run some kind of spell animation here
-					function.SetupDialogText("Long and forgotten in a dusty cluttered place. Someone wanted to store this armor for later", "DialogEnd", "Hmmm");
+					function.SetupDialogText("Hiding behind the seat of power this set of armor could rule over everything", "DialogEnd", "Hmmm");
 					firstTalkPris = false;
 				}
 				else if (modified_I == "RiddleThree") {
@@ -2255,11 +2275,10 @@ void Story::runCurrentPrison() {
 				else if (modified_I == "EndQuest") {
 					function.Action("SetNarration(Potion of Invincibility added to Inventory!)", true);
 					function.Action("ShowNarration()", true);
-					playerInv.push_back("RedPotion");
+					playerInv.push_back("Potion of Invincibility");
 					function.Action("ClearDialog()", true);
 					function.Action("HideDialog()", true);
 
-					//function.Action("SetClothing(Prisoner, HeavyArmour)", false);
 					//function.Action("WalkTo(Prisoner, CurrentPrison.CellDoor)", true);
 					//function.Action("OpenFurniture(Prisoner, CurrentPrison.CellDoor)", true);
 					//function.Transition("Prisoner", "CurrentPrison.Door", "LeftHallway.BackDoor");
@@ -2268,6 +2287,16 @@ void Story::runCurrentPrison() {
 					hasRedPotion = true;
 				}
 
+			}
+			
+			else if (i == "input Search Chest CurrentPrison.Chest") {
+				//function.WalkToPlace("Arlan", "CurrentPrison.Chest");
+				function.Action("OpenFurniture(Arlan, CurrentPrison.Chest)", true);
+				function.Action("SetNarration(There is some armor hidden in the chest! You take it.)", true);
+				function.Action("ShowNarration()", true);
+				playerInv.push_back("PrisonerOutfit");
+				function.Action("DisableIcon(Search Chest, CurrentPrison.Chest)", true);
+				hasFirstPrisItem = true;
 			}
 		}
 
@@ -2496,6 +2525,15 @@ void Story::runCurrentCourtyard() {
 		else if (i == "input Close List") {
 			function.Action("HideList()", true);
 			function.Action("EnableInput()", true);
+		}
+
+		else if (i == "input Search Target CurrentCourtyard.Target") {
+			function.WalkToPlace("Arlan", "CurrentCourtyard.Target");
+			function.Action("SetNarration(There is a hammer hidden behind the target! You take it.)", true);
+			function.Action("ShowNarration()", true);
+			playerInv.push_back("PrisonerHammer");
+			function.Action("DisableIcon(Search Target, CurrentCourtyard.Target)", true);
+			hasThirdPrisItem = true;
 		}
 	}
 }
