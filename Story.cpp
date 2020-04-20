@@ -37,7 +37,7 @@ bool item_placed = false;
 //Flashback Booleans
 bool ArchieEnemy = false;
 bool MathiasFlashback = false;
-bool ArchieFlashback = true;
+bool ArchieFlashback = false;
 
 //Green Puzzle Booleans
 //Potion
