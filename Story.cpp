@@ -14,8 +14,7 @@ using namespace std;
 vector<string> playerInv;
 
 //location boolean
-//string currentLocation = "ArlanCottage";
-string currentLocation = "CurrentPrison";
+string currentLocation = "ArlanCottage";
 
 bool cheatsEnabled = true;
 
@@ -96,7 +95,7 @@ bool hasSearchedBedroomCloset = false;
 
 Story::Story() {
 	runSetup();
-	function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
+	//function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
 	run();
 }
 
@@ -612,9 +611,12 @@ bool Story::setupCamp(string name) {
 	}
 	if (name == "RedCamp") {
 		//character setup
-
+		function.SetupCharacter("ArchieR", "D", "Warlock", "Mage_Full", "Red", name + ".Stall");
+		function.SetupCharacter("MathiasR", "F", "HeavyArmour", "Short_Full", "Brown", name + ".Log");
 		//items
-
+		function.Action("CreateItem(Mathias_Sword, Sword)", true);
+		function.Action("CreateItem(Artifact, Skull)", true);
+		function.Action("CreateItem(TempPotion, RedPotion)", true);
 		//icons
 	}
 	if (name == "PurpleCamp") {
@@ -2628,7 +2630,91 @@ void Story::runCurrentCamp() {
 		}
 	}
 	if (currentLocation == "RedCamp") {
+
+		bool ActionSequence = true;
+
 		while (currentLocation == "RedCamp") {
+
+			string i;
+			getline(cin, i);
+
+			//Gets the first word that isn't "input"
+			modified_I = function.splitInput(i, 6, false);
+
+			bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+			if (!inputWasCommon) {
+				if (ActionSequence == true) {
+
+					ActionSequence = false;
+
+					function.Action("DisableInput()", true);
+					function.Action("Draw(MathiasR, Mathias_Sword)", true);
+					function.Action("WalkTo(MathiasR, ArchieR)", false);
+					function.Action("WalkTo(ArchieR, MathiasR)", true);
+					function.Action("Attack(MathiasR, ArchieR, true)", true);
+					function.Action("Die(ArchieR)", true);
+					function.Action("Sheathe(MathiasR, Mathias_Sword)", true);
+					function.Action("Draw(MathiasR, Artifact)", true);
+					function.Action("EnableInput()", true);
+
+					function.SetupDialog("Arlan", "MathiasR", false);
+					function.SetupDialogText("Alright now that Archie is out of the way there's nothing stopping me from using the true power of this artifact", "ReadBook", "**I can't let that happen! Read Translated Book**");
+				}
+				else if (modified_I == "Selected") {
+
+					modified_I = function.splitInput(i, 0, true);
+
+					if (modified_I == "ReadBook") {
+						function.SetupDialogText("Wait a minute who's that speaking?", "Continue", "**Continue Reading**");
+					}
+
+					else if (modified_I == "Continue") {
+						function.SetupDialogText("No! Don't say that!", "FinishSpell", "**Finish Spell**");
+					}
+
+					else if (modified_I == "FinishSpell") {
+						function.Action("ClearDialog()", true);
+						function.Action("HideDialog()", true);
+						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetCameraMode(focus)", true);
+						function.Action("CreateEffect(Artifact, Poison)", true);
+						this_thread::sleep_for(chrono::milliseconds(2500));
+
+						function.SetupDialog("Arlan", "MathiasR", false);
+						function.SetupDialogText("Oh no this isn't good... It's about to explode!", "Drink", "**Drink Potion**");
+					}
+
+					else if (modified_I == "Drink") {
+						function.Action("ClearDialog()", true);
+						function.Action("HideDialog()", true);
+
+						function.Action("SetCameraFocus(Arlan)", true);
+						function.Action("SetCameraMode(focus)", true);
+						function.Action("Unpocket(Arlan, TempPotion)", true);
+						function.Action("Drink(Arlan)", true);
+						this_thread::sleep_for(chrono::milliseconds(300));
+
+						function.Action("SetNarration(This tastes strangely like water... You've been tricked!)", true);
+						function.Action("ShowNarration()", true);
+						this_thread::sleep_for(chrono::milliseconds(1500));
+						function.Action("HideNarration()", true);
+
+						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetCameraMode(focus)", true);
+						this_thread::sleep_for(chrono::milliseconds(1000));
+						function.Action("CreateEffect(Artifact, Explosion)", true);
+						this_thread::sleep_for(chrono::milliseconds(1000));
+
+						function.Action("SetCameraMode(track)", true);
+						function.Action("CreateEffect(MathiasR, Death)", true);
+						function.Action("Die(MathiasR)", true);
+						function.Action("CreateEffect(Arlan, Death)", true);
+						function.Action("Die(Arlan)", true);
+					}
+
+				}
+			}
 
 		}
 	}
