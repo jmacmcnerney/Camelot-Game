@@ -97,7 +97,6 @@ int numCoins = 0;
 
 Story::Story() {
 	runSetup();
-	//function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
 	run();
 }
 
@@ -640,7 +639,7 @@ bool Story::setupCamp(string name) {
 	if (name == "RedCamp") {
 		//character setup
 		function.SetupCharacter("ArchieR", "D", "Warlock", "Mage_Full", "Red", name + ".Stall");
-		function.SetupCharacter("MathiasR", "F", "HeavyArmour", "Short_Full", "Brown", name + ".Log");
+		//function.SetupCharacter("MathiasR", "F", "HeavyArmour", "Short_Full", "Brown", name + ".Log");
 		//items
 		function.Action("CreateItem(Mathias_Sword, Sword)", true);
 		function.Action("CreateItem(Artifact, Skull)", true);
@@ -3195,6 +3194,10 @@ void Story::runCurrentCamp() {
 
 		bool ActionSequence = true;
 
+		//		function.Action("WalkTo(Arlan, ArchieR, true)", true);
+		//		function.SetupDialog("Arlan", "ArchieR", true);
+		//		function.SetupDialogText("Ah you found me and brought along company I see. Guess it it time to deal with you once and for all Mathias", "Battle", "Don't fight!");
+
 		while (currentLocation == "RedCamp") {
 
 			string i;
@@ -3211,17 +3214,13 @@ void Story::runCurrentCamp() {
 					ActionSequence = false;
 
 					function.Action("DisableInput()", true);
-					function.Action("Draw(MathiasR, Mathias_Sword)", true);
-					function.Action("WalkTo(MathiasR, ArchieR)", false);
-					function.Action("WalkTo(ArchieR, MathiasR)", true);
-					function.Action("Attack(MathiasR, ArchieR, true)", true);
-					function.Action("Die(ArchieR)", true);
-					function.Action("Sheathe(MathiasR, Mathias_Sword)", true);
-					function.Action("Draw(MathiasR, Artifact)", true);
-					function.Action("EnableInput()", true);
+					function.Action("WalkTo(Arlan, ArchieR, true)", true);
 
-					function.SetupDialog("Arlan", "MathiasR", false);
-					function.SetupDialogText("Alright now that Archie is out of the way there's nothing stopping me from using the true power of this artifact", "ReadBook", "**I can't let that happen! Read Translated Book**");
+					function.SetupDialog("Arlan", "ArchieR", true);
+					function.SetupDialogText("Ah you found me and brought along company I see. Guess it is time to deal with you once and for all Mathias", "Battle", "Don't fight!");
+					// Then have dialog setting up scene more
+	//				if (i == "input Selected Battle") {
+	//				}
 				}
 				else if (modified_I == "Selected") {
 
@@ -3233,6 +3232,26 @@ void Story::runCurrentCamp() {
 
 					else if (modified_I == "Continue") {
 						function.SetupDialogText("No! Don't say that!", "FinishSpell", "**Finish Spell**");
+					}
+
+					else if (modified_I == "Battle") {
+						function.Action("ClearDialog()", true);
+						function.Action("HideDialog()", true);
+						function.SetupCharacter("MathiasR", "F", "HeavyArmour", "Short_Full", "Brown", "RedCamp.Exit");
+						function.Action("SetCameraFocus(MathiasR)", true);
+
+						function.Action("DisableInput()", true);
+						function.Action("Draw(MathiasR, Mathias_Sword)", true);
+						function.Action("WalkTo(MathiasR, ArchieR)", false);
+						function.Action("WalkTo(ArchieR, MathiasR)", true);
+						function.Action("Attack(MathiasR, ArchieR, true)", true);
+						function.Action("Die(ArchieR)", true);
+						function.Action("Sheathe(MathiasR, Mathias_Sword)", true);
+						function.Action("Draw(MathiasR, Artifact)", true);
+						function.Action("EnableInput()", true);
+
+						function.SetupDialog("Arlan", "MathiasR", false);
+						function.SetupDialogText("Alright now that Archie is out of the way there's nothing stopping me from using the true power of this artifact", "ReadBook", "**I can't let that happen! Read Translated Book**");
 					}
 
 					else if (modified_I == "FinishSpell") {
