@@ -8,11 +8,11 @@
 
 #include <iostream>
 #include <string>
-#include "Chapter2.h"
+#include "Story.h"
 
 
 using namespace std;
 
 int main() {
-	Chapter2();
+	Story();
 }

@@ -1,10 +1,10 @@
 /* Project: Camelot Narrative Story + Experience Manager
 -- Project Description: An experience manager for the Camelot Virtual Environment.
 -- Authors: John (Mac) McNerney, Zac Foster, John Colfer, Jake Hayden
--- File: Chapter2.cpp
+-- File: Story.cpp
 -- File Description: Chapter 2 execution.
 */
-#include "Chapter2.h"
+#include "Story.h"
 #include <chrono>
 #include <thread>
 #include <vector>
@@ -16,11 +16,12 @@ vector<string> playerInv;
 //location boolean
 string currentLocation = "ArlanCottage";
 
-//event booleans
-bool item_placed = false;
-bool sword_taken = false;
-bool spellbook_taken = false;
+bool cheatsEnabled = true;
+
+//Intro Quest Booleans
+//Cottage
 bool hasStorybook = false;
+//City
 bool hasBrokenLock = false;
 bool hasFixedLock = false;
 bool hasAppleMoney = false;
@@ -28,9 +29,18 @@ bool hasElderApple = false;
 bool visitedFortuneteller = false;
 bool visitedTownElder = false;
 bool completedErrand = false;
+//Ruins
+bool sword_taken = false;
+bool spellbook_taken = false;
+bool item_placed = false;
+
+//Flashback Booleans
 bool ArchieEnemy = false;
 bool MathiasFlashback = false;
 bool ArchieFlashback = false;
+
+//Green Puzzle Booleans
+//Potion
 bool hasGreenPotion = true;
 bool hasStorageBottle = false;
 bool hasStorageBread = false;
@@ -40,6 +50,7 @@ bool hasStorageBag = false;
 bool storageBreadPositionCorrect = false;
 bool storageBottlePositionCorrect = false;
 bool storagePuzzleSolved = false;
+//Book
 bool hasGreenBook = true;
 bool hasLibraryGoldCup = false;
 bool hasLibraryApple = false;
@@ -48,14 +59,23 @@ bool libraryApplePositionCorrect = false;
 bool libraryGoldCupPositionCorrect = false;
 bool libraryGreenKeyPositionCorrect = false;
 bool libraryPuzzleSolved = false;
+
+//Blue Puzzle Booleans
+//Potion
 bool hasBluePotion = false;
+//Book
 bool hasBlueBook = false;
 bool visitedDiningRoom = false;
 bool canWorkForBlacksmith = false;
 bool hasCompass = false;
 bool hasRedPotion = false;
+//Book
 bool hasRedBook = false;
+
+//Purple Puzzle Booleans
+//Potion
 bool hasPurplePotion = false;
+//Book
 bool hasPurpleBook = false;
 
 bool camptest = true;
@@ -75,16 +95,16 @@ bool hasSearchedBedroomCloset = false;
 
 int numCoins = 0;
 
-Chapter2::Chapter2() {
+Story::Story() {
 	runSetup();
 	//function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
 	run();
 }
 
-Chapter2::~Chapter2() {
+Story::~Story() {
 }
 
-bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if setup was successful.
+bool Story::runSetup() { // runs initial setup for chapter 2. returns true if setup was successful.
 	//location setup calls
 	setupCurrentCottage("ArlanCottage");
 	setupCurrentTown("CurrentTown");
@@ -92,8 +112,10 @@ bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if
 	setupCurrentForestPath("CurrentForestPath");
 	setupForestPath2("ForestPath2");
 	setupCurrentRuins("CurrentRuins");
+
 	//delete this
 	setupPastRuins("PastRuins", ArchieEnemy);
+
 	setupPastCottage("PastCottage");
 	setupPastForestPath("PastForestPath");
 	setupPastCity("PastCity");
@@ -104,8 +126,6 @@ bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if
 	setupPort("CurrentPort");
 	setupGreatHall("CurrentGreatHall");
 	setupLibrary("CurrentLibrary");
-	setupCamp("CurrentCamp");
-	setupCamp2("CurrentCamp2");
 	setupFinalRuins("FinalRuins");
 	setupDungeon("CurrentPrison");
 	setupLeftHallway("LeftHallway");
@@ -117,7 +137,7 @@ bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if
 	return true;
 }
 
-void Chapter2::run() { // begins chapter 2's execution
+void Story::run() { // begins chapter 2's execution
 	while (true) {
 		if (currentLocation == "ArlanCottage") {
 			runCurrentCottage();
@@ -185,7 +205,7 @@ void Chapter2::run() { // begins chapter 2's execution
 		else if (currentLocation == "CurrentCourtyard") {
 			runCurrentCourtyard();
 		}
-		else if (currentLocation == "CurrentCamp") {
+		else if ((currentLocation == "BlueCamp") || (currentLocation == "GreenCamp") || (currentLocation == "RedCamp") || (currentLocation == "PurpleCamp")) {
 			runCurrentCamp();
 		}
 		else if (currentLocation == "CurrentCamp2") {
@@ -198,7 +218,7 @@ void Chapter2::run() { // begins chapter 2's execution
 }
 
 //Flashback execution function
-void Chapter2::flashback1() {
+void Story::flashback1() {
 	//flashback transistion
 	function.Action("WalkTo(Arlan, CurrentRuins.Altar)", true);
 	function.Action("SetCameraMode(Focus)", true);
@@ -225,8 +245,15 @@ void Chapter2::flashback1() {
 }
 
 // location setup functions. return true if setup was successful.
-bool Chapter2::setupCurrentCottage(string name) {
+bool Story::setupCurrentCottage(string name) {
 	currentCottage = Cottage(name);
+
+	//CHEATS
+	if (cheatsEnabled) {
+		function.Action("CreateItem(Cheating Menu, EvilBook)", true);
+		playerInv.push_back("Cheating Menu");
+		currentCottage.icons.push_back(Icon("accessCheatMenu", "unlock", "Cheating Menu", "Open Cheat Menu", "true"));
+	}
 
 	//character setup
 	function.SetupCharacter("Arlan", "B", "LightArmour", "Long", "Brown", "ArlanCottage.Bed");
@@ -242,7 +269,7 @@ bool Chapter2::setupCurrentCottage(string name) {
 	return true;
 }
 
-bool Chapter2::setupCurrentTown(string name) {
+bool Story::setupCurrentTown(string name) {
 	currentCity = City(name);
 
 	//character setup
@@ -272,7 +299,7 @@ bool Chapter2::setupCurrentTown(string name) {
 	return true;
 }
 
-bool Chapter2::setupBlacksmithFoundry(string name) {
+bool Story::setupBlacksmithFoundry(string name) {
 	BlacksmithFoundry = Blacksmith(name);
 
 	//character setup
@@ -291,7 +318,7 @@ bool Chapter2::setupBlacksmithFoundry(string name) {
 	return true;
 }
 
-bool Chapter2::setupAlchemyShop(string name) {
+bool Story::setupAlchemyShop(string name) {
 	Alchemy = AlchemyShop(name);
 
 	//character setup
@@ -305,7 +332,7 @@ bool Chapter2::setupAlchemyShop(string name) {
 	return true;
 }
 
-bool Chapter2::setupCurrentForestPath(string name) {
+bool Story::setupCurrentForestPath(string name) {
 	currentForestPath = ForestPath(name);
 
 	//character setup
@@ -320,7 +347,7 @@ bool Chapter2::setupCurrentForestPath(string name) {
 	return true;
 }
 
-bool Chapter2::setupCurrentRuins(string name) {
+bool Story::setupCurrentRuins(string name) {
 	currentRuins = Ruins(name);
 
 	//character setup
@@ -336,7 +363,7 @@ bool Chapter2::setupCurrentRuins(string name) {
 	return true;
 }
 
-bool Chapter2::setupPastCottage(string name) {
+bool Story::setupPastCottage(string name) {
 	pastCottage = Cottage(name);
 
 	function.Action("CreateItem(Letter, OpenScroll)", true);
@@ -353,7 +380,7 @@ bool Chapter2::setupPastCottage(string name) {
 	return true;
 }
 
-bool Chapter2::setupPastForestPath(string name) {
+bool Story::setupPastForestPath(string name) {
 	pastForestPath = ForestPath(name);
 
 	//character setup
@@ -363,7 +390,7 @@ bool Chapter2::setupPastForestPath(string name) {
 	return true;
 }
 
-bool Chapter2::setupPastCity(string name) {
+bool Story::setupPastCity(string name) {
 	pastCity = City(name);
 
 	//character setup
@@ -375,7 +402,7 @@ bool Chapter2::setupPastCity(string name) {
 	return true;
 }
 
-bool Chapter2::setupPastRuins(string name, bool Enemy) {
+bool Story::setupPastRuins(string name, bool Enemy) {
 	pastRuins = Ruins(name);
 
 	string EnemyName = "";
@@ -410,7 +437,7 @@ bool Chapter2::setupPastRuins(string name, bool Enemy) {
 	return true;
 }
 
-bool Chapter2::setupForestPath2(string name) {
+bool Story::setupForestPath2(string name) {
 	ForestPath2 = ForestPath(name);
 
 	//character setup
@@ -422,19 +449,19 @@ bool Chapter2::setupForestPath2(string name) {
 	return true;
 }
 
-bool Chapter2::setupCourtyard(string name) {
+bool Story::setupCourtyard(string name) {
 	CurrentCourtyard = Courtyard(name);
 
 	//character setup
 
 	//items
-
+	function.Action("CreateItem(PrisonerHammer, Hammer)", true);
 	//icons
 
 	return true;
 }
 
-bool Chapter2::setupCastleBedroom(string name) {
+bool Story::setupCastleBedroom(string name) {
 	CurrentCastleBedroom = CastleBedroom(name);
 
 	//character setup
@@ -492,7 +519,7 @@ bool Chapter2::setupCastleBedroom(string name) {
 	return true;
 }
 
-bool Chapter2::setupPort(string name) {
+bool Story::setupPort(string name) {
 	CurrentPort = Port(name);
 
 	//character setup
@@ -512,7 +539,7 @@ bool Chapter2::setupPort(string name) {
 	return true;
 }
 
-bool Chapter2::setupGreatHall(string name) {
+bool Story::setupGreatHall(string name) {
 	CurrentGreatHall = GreatHall(name);
 
 	//character setup
@@ -529,7 +556,7 @@ bool Chapter2::setupGreatHall(string name) {
 	return true;
 }
 
-bool Chapter2::setupCastleCrossroads(string name) {
+bool Story::setupCastleCrossroads(string name) {
 	CurrentCastleCrossroads = CastleCrossroads(name);
 
 	//character setup
@@ -541,7 +568,7 @@ bool Chapter2::setupCastleCrossroads(string name) {
 	return true;
 }
 
-bool Chapter2::setupLibrary(string name) {
+bool Story::setupLibrary(string name) {
 	CurrentLibrary = Library(name);
 
 	//character setup
@@ -579,45 +606,62 @@ bool Chapter2::setupLibrary(string name) {
 	return true;
 }
 
-bool Chapter2::setupCamp(string name) {
+bool Story::setupCamp(string name) {
 	CurrentCamp = Camp(name);
 
-	//character setup
+	if (name == "GreenCamp") {
+		//character setup
 
-	//items
+		//items
 
-	//icons
+		//icons
+		function.Action("SetPosition(Archie, GreenCamp.Horse)", true);
+		function.Action("Draw(Archie, LeaderFlashPotion)", true);
+		function.Action("EnableEffect(Archie, Force)", true);
+	}
+	if (name == "BlueCamp") {
+		function.Action("HideFurniture(" + name + ".Plant)", true);
+		function.Action("HideFurniture(" + name + ".Barrel)", true);
+		function.Action("HideFurniture(" + name + ".Stall)", true);
+		function.Action("HideFurniture(" + name + ".LeftLog)", true);
+		function.Action("HideFurniture(" + name + ".Cauldron)", true);
+		function.Action("HideFurniture(" + name + ".Roast)", true);
+		function.Action("HideFurniture(" + name + ".Firepit)", true);
+		//function.Action("HideFurniture(" + name + ".Log)", true);
+		function.Action("HideFurniture(" + name + ".RightLog)", true);
+		function.Action("HideFurniture(" + name + ".Horse)", true);
 
+		//character setup
+
+		//items
+		function.Action("CreateItem(AncientTome, EvilBook)", true);
+
+		//icons
+		CurrentCamp.icons.push_back(Icon("OpenChest", "chest, ", name + ".Chest", "Open the Chest", "true"));
+		function.SetupIcons(CurrentCamp.icons);
+	}
+	if (name == "RedCamp") {
+		//character setup
+		function.SetupCharacter("ArchieR", "D", "Warlock", "Mage_Full", "Red", name + ".Stall");
+		function.SetupCharacter("MathiasR", "F", "HeavyArmour", "Short_Full", "Brown", name + ".Log");
+		//items
+		function.Action("CreateItem(Mathias_Sword, Sword)", true);
+		function.Action("CreateItem(Artifact, Skull)", true);
+		function.Action("CreateItem(TempPotion, RedPotion)", true);
+		//icons
+	}
+	if (name == "PurpleCamp") {
+		//character setup
+
+		//items
+
+		//icons
+	}
+	
 	return true;
 }
 
-bool Chapter2::setupCamp2(string name) {
-	CurrentCamp2 = Camp(name);
-
-	function.Action("HideFurniture(" + name + ".Plant)", true);
-	function.Action("HideFurniture(" + name + ".Barrel)", true);
-	function.Action("HideFurniture(" + name + ".Stall)", true);
-	function.Action("HideFurniture(" + name + ".LeftLog)", true);
-	function.Action("HideFurniture(" + name + ".Cauldron)", true);
-	function.Action("HideFurniture(" + name + ".Roast)", true);
-	function.Action("HideFurniture(" + name + ".Firepit)", true);
-	//function.Action("HideFurniture(" + name + ".Log)", true);
-	function.Action("HideFurniture(" + name + ".RightLog)", true);
-	function.Action("HideFurniture(" + name + ".Horse)", true);
-
-	//character setup
-
-	//items
-	function.Action("CreateItem(AncientTome, EvilBook)", true);
-
-	//icons
-	CurrentCamp2.icons.push_back(Icon("OpenChest", "chest, ", name + ".Chest", "Open the Chest", "true"));
-	function.SetupIcons(CurrentCamp2.icons);
-
-	return true;
-}
-
-bool Chapter2::setupFinalRuins(string name) {
+bool Story::setupFinalRuins(string name) {
 	finalRuins = Ruins(name);
 
 	//character setup
@@ -630,14 +674,15 @@ bool Chapter2::setupFinalRuins(string name) {
 	return true;
 }
 
-bool Chapter2::setupDungeon(string name) {
+bool Story::setupDungeon(string name) {
 	CurrentPrison = Dungeon(name);
 
 	//character setup
 	function.Action("CreateItem(Potion of Invincibility, RedPotion)", true);
 	function.SetupCharacter("Prisoner", "F", "Bandit", "Spiky", "Blonde", "CurrentPrison.Bed");
 	//items
-
+	function.Action("CreateItem(PrisonerOutfit, Helmet)", true);
+	function.Action("CreateItem(GuardSword, Sword)", true);
 	//icons
 	CurrentPrison.icons.push_back(Icon("Talk_To_Prisoner", "talk", "Prisoner", "Talk To Prisoner", "true"));
 	CurrentPrison.icons.push_back(Icon("Open Door", "door", "CurrentPrison.Door", "Open Door", "true"));
@@ -645,7 +690,7 @@ bool Chapter2::setupDungeon(string name) {
 	return true;
 }
 
-bool Chapter2::setupLeftHallway(string name) {
+bool Story::setupLeftHallway(string name) {
 	LeftHallway = Hallway(name);
 
 	//character setup
@@ -659,7 +704,7 @@ bool Chapter2::setupLeftHallway(string name) {
 	return true;
 }
 
-bool Chapter2::setupRightHallway(string name) {
+bool Story::setupRightHallway(string name) {
 	RightHallway = Hallway(name);
 
 	//character setup
@@ -671,7 +716,7 @@ bool Chapter2::setupRightHallway(string name) {
 	return true;
 }
 
-bool Chapter2::setupDiningRoom(string name) {
+bool Story::setupDiningRoom(string name) {
 	CurrentDiningRoom = DiningRoom(name);
 
 	//character setup
@@ -712,7 +757,7 @@ bool Chapter2::setupDiningRoom(string name) {
 	return true;
 }
 
-bool Chapter2::setupStorage(string name) {
+bool Story::setupStorage(string name) {
 	CurrentStorage = Storage(name);
 
 	//character setup
@@ -732,7 +777,7 @@ bool Chapter2::setupStorage(string name) {
 	function.Action("CreateItem(Storage OpenScroll, OpenScroll)", true);
 	function.Action("SetPosition(Storage OpenScroll, CurrentStorage.Barrel)", true);
 
-	function.Action("CreateItem(PrisonerOutfit, Helmet)", true);
+	//function.Action("CreateItem(PrisonerOutfit, Helmet)", true);
 
 	//icons
 	CurrentStorage.icons.push_back(Icon("Storage Chest", "Hand", "CurrentStorage.Chest", "Take All Storage Items", "true"));
@@ -759,7 +804,7 @@ bool Chapter2::setupStorage(string name) {
 
 
 // location execution functions.
-void Chapter2::runCurrentCottage() {
+void Story::runCurrentCottage() {
 	while (currentLocation == "ArlanCottage") {
 		string i;
 		getline(cin, i);
@@ -794,7 +839,7 @@ void Chapter2::runCurrentCottage() {
 			}
 
 			else if (modified_I == "Open_Door") {
-				int test = 6;
+				int test = 7;
 				if (hasStorybook) {
 					//testing
 					if (test == 0) {
@@ -810,10 +855,14 @@ void Chapter2::runCurrentCottage() {
 						currentLocation = "CurrentStorage";
 					}
 					else if (test == 3) {
+						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCourtyard.Exit");
+						currentLocation = "CurrentCourtyard";
+					}
+					else if (test == 4) {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentDiningRoom.Door");
 						currentLocation = "CurrentDiningRoom";
 					}
-					else if (test == 4) {
+					else if (test == 5) {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentTown.BlueHouseDoor");
 						currentLocation = "CurrentTown";
 
@@ -823,7 +872,7 @@ void Chapter2::runCurrentCottage() {
 
 						function.Action("CreateItem(Coin2, Coin)", true);
 						canWorkForBlacksmith = true;
-						
+
 						function.Action("CreateItem(Coin3, Coin)", true);
 						function.Action("EnableIcon(TakeCoin3, Hand, ForestPath2.Well, Inspect the Well, true)", true);
 
@@ -841,13 +890,13 @@ void Chapter2::runCurrentCottage() {
 						playerInv.push_back("Coin5");
 						numCoins = 2;
 					}
-				
-					else if (test == 5) {
+
+					else if (test == 6) {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCamp.Exit");
 						currentLocation = "CurrentCamp";
 					}
 
-					else if (test == 6) {
+					else if (test == 7) {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCamp2.Exit");
 						currentLocation = "FinalRuins";
 					}
@@ -862,10 +911,77 @@ void Chapter2::runCurrentCottage() {
 				}
 			}
 		}
+
+		/*-------------------CHEATS-------------------*/
+		if (i == "input accessCheatMenu Cheating Menu") {
+			//function.Action("ClearDialog()", true);
+			//function.Action("SetDialog(Category\\n[teleportCheats|Teleport Cheats]\\n[itemCheats][Item Cheats])", true);
+			function.Action("HideList()", true);
+			function.SetupDialogText("Category", "teleportCheats", "Teleport Cheats", "itemCheats", "ItemCheats");
+			function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Selected teleportCheats") {
+			//function.Action("FadeOut()", true);
+			function.Action("ClearDialog()", true);
+			function.Action("SetDialog(Where?\\n[teleportToArlanCottage|Arlan Cottage]\\n[teleportToCurrentTown|Current Town]\\n[teleportToBlacksmithFoundry|Blacksmith Foundry]\\n[teleportToAlchemyShop|Alchemy Shop]\\n[teleportToCurrentForestPath|Current Forest Path]\\n[teleportToCurrentRuins|Current Ruins]\\n[teleportToPastCottage|Past Cottage]\\n[teleportToPastCity|Past City]\\n[teleportToPastForestPath|Past Forest Path]\\n[teleportToPastRuins|Past Ruins]\\n[teleportToForestPath2|Forest Path 2]\\n[teleportToCurrentCastleCrossroads|Current Castle Crossroads]\\n[teleportToCurrentPort|Current Port]\\n[teleportToCurrentStorage|Current Storage]\\n[teleportToRightHallway|Right Hallway]\\n[teleportToCurrentLibrary|Current Library]\\n[teleportToCurrentCastleBedroom|Current Castle Bedroom]\\n[teleportToLeftHallway|Left Hallway]\\n[teleportToCurrentDiningRoom|Current Dining Room]\\n[teleportToCurrentPrison|Current Prison]\\n[teleportToCurrentCourtyard|Current Courtyard]\\n[end|Exit Menu])", true);
+		}
+
+		else if (i == "input Selected teleportToArlanCottage") { function.Action("SetPosition(Arlan, ArlanCottage)", true); }
+		else if (i == "input Selected teleportToCurrentTown") { function.Action("SetPosition(Arlan, CurrentTown)", true); }
+		else if (i == "input Selected teleportToAlchemyShop") { function.Action("SetPosition(Arlan, AlchemyShop)", true); }
+		else if (i == "input Selected teleportToCurrentForestPath") { function.Action("SetPosition(Arlan, CurrentForestPath)", true); }
+		else if (i == "input Selected teleportToCurrentRuins") { function.Action("SetPosition(Arlan, CurrentRuins)", true); }
+		else if (i == "input Selected teleportToPastCottage") { function.Action("SetPosition(Arlan, PastCottage)", true); }
+		else if (i == "input Selected teleportToPastCity") { function.Action("SetPosition(Arlan, PastCity)", true); }
+		else if (i == "input Selected teleportToPastForestPath") { function.Action("SetPosition(Arlan, PastForestPath)", true); }
+		else if (i == "input Selected teleportToPastRuins") { function.Action("SetPosition(Arlan, PastRuins)", true); }
+		else if (i == "input Selected teleportToForestPath2") { function.Action("SetPosition(Arlan, ForestPath2)", true); }
+		else if (i == "input Selected teleportToCurrentCastleCrossroads") { function.Action("SetPosition(Arlan, CurrentCastleCrossroads)", true); }
+		else if (i == "input Selected teleportToCurrentPort") { function.Action("SetPosition(Arlan, CurrentPort)", true); }
+		else if (i == "input Selected teleportToCurrentGreatHall") { function.Action("SetPosition(Arlan, CurrentGreatHall)", true); }
+		else if (i == "input Selected teleportToCurrentStorage") { function.Action("SetPosition(Arlan, CurrentStorage)", true); }
+		else if (i == "input Selected teleportToRightHallway") { function.Action("SetPosition(Arlan, RightHallway)", true); }
+		else if (i == "input Selected teleportToCurrentLibrary") { function.Action("SetPosition(Arlan, CurrentLibrary)", true); }
+		else if (i == "input Selected teleportToCurrentCastleBedroom") { function.Action("SetPosition(Arlan, CurrentCastleBedroom)", true); }
+		else if (i == "input Selected teleportToLeftHallway") { function.Action("SetPosition(Arlan, LeftHallway)", true); }
+		else if (i == "input Selected teleportToCurrentDiningRoom") { function.Action("SetPosition(Arlan, CurrentDiningRoom)", true); }
+		else if (i == "input Selected teleportToCurrentPrison") { function.Action("SetPosition(Arlan, CurrentPrison)", true); }
+		else if (i == "input Selected teleportToCurrentCourtyard") { function.Action("SetPosition(Arlan, CurrentCourtyard)", true); }
+
+		else if (i == "input Selected itemCheats") {
+			function.Action("ClearDialog()", true);
+			function.Action("SetDialog(Which Item?\\n[addStorybookCheat|Storybook]\\n[addBrokenLockCheat|BrokenLock]\\n[addFixedLockCheat|FixedLock]\\n[addAppleMoneyCheat|AppleMoney]\\n[addElderAppleCheat|ElderApple]\\n[addMathiasSwordCheat|MathiasSword]\\n[addArchieSpellbookCheat|ArchieSpellbook]\\n[addGreenPotionCheat|GreenPotion]\\n[addStorageBottleCheat|StorageBottle]\\n[addStorageBreadCheat|StorageBread]\\n[addStorageHelmetCheat|StorageHelmet]\\n[addStorageInkAndQuillCheat|StorageInkAndQuill]\\n[addStorageBagCheat|StorageBag]\\n[addGreenBookCheat|GreenBook]\\n[addLibraryGoldCupCheat|LibraryGoldCup]\\n[addLibraryAppleCheat|LibraryApple]\\n[addLibraryGreenKeyCheat|LibraryGreenKey]\\n[addBluePotionCheat|BluePotion]\\n[addBlueBookCheat|BlueBook]\\n[addRedPotionCheat|RedPotion]\\n[addRedBookCheat|RedBook]\\n[addPurplePotionCheat|PurplePotion]\\n[addPurpleBookCheat|PurpleBook]\\n[end|Exit])", true);
+		}
+
+		else if (i == "input Selected addStorybookCheat") { function.ItemCheats("Storybook", hasStorybook, playerInv); }
+		else if (i == "input Selected addBrokenLockCheat") { function.ItemCheats("Broken Lock", hasBrokenLock, playerInv); }
+		else if (i == "input Selected addFixedLockCheat") { function.ItemCheats("Fixed Lock", hasFixedLock, playerInv); }
+		else if (i == "input Selected addAppleMoneyCheat") { function.ItemCheats("Apple Money", hasAppleMoney, playerInv); }
+		else if (i == "input Selected addElderAppleCheat") { function.ItemCheats("Elder Apple", hasElderApple, playerInv); }
+		else if (i == "input Selected addMathiasSwordCheat") { function.ItemCheats("MathiasSword", sword_taken, playerInv); }
+		else if (i == "input Selected addArchieSpellbookCheat") { function.ItemCheats("ArchieSpellbook", spellbook_taken, playerInv); }
+		else if (i == "input Selected addGreenPotionCheat") { function.ItemCheats("Potion Of Cleansing", hasGreenPotion, playerInv); }
+		else if (i == "input Selected addStorageBottleCheat") { function.ItemCheats("Storage Bottle", hasStorageBottle, playerInv); }
+		else if (i == "input Selected addStorageBreadCheat") { function.ItemCheats("Storage Bread", hasStorageBread, playerInv); }
+		else if (i == "input Selected addStorageHelmetCheat") { function.ItemCheats("Storage Helmet", hasStorageHelmet, playerInv); }
+		else if (i == "input Selected addStorageInkAndQuillCheat") { function.ItemCheats("Storage InkAndQuill", hasStorageInkAndQuill, playerInv); }
+		else if (i == "input Selected addStorageBagCheat") { function.ItemCheats("Storage Bag", hasStorageBag, playerInv); }
+		else if (i == "input Selected addGreenBookCheat") { function.ItemCheats("Book Of Incantations", hasGreenBook, playerInv); }
+		else if (i == "input Selected addLibraryGoldCupCheat") { function.ItemCheats("Library GoldCup", hasLibraryGoldCup, playerInv); }
+		else if (i == "input Selected addLibraryAppleCheat") { function.ItemCheats("Library Apple", hasLibraryApple, playerInv); }
+		else if (i == "input Selected addLibraryGreenKeyCheat") { function.ItemCheats("Library GreenKey", hasLibraryGreenKey, playerInv); }
+		//else if (i == "input Selected addBluePotionCheat") { function.ItemCheats("BluePotion", hasBluePotion, playerInv); }
+		//else if (i == "input Selected addBlueBookCheat") { function.ItemCheats("BlueBook", hasBlueBook, playerInv); }
+		//else if (i == "input Selected addRedPotionCheat") { function.ItemCheats("RedPotion", hasRedPotion, playerInv); }
+		//else if (i == "input Selected addRedBookCheat") { function.ItemCheats("RedBook", hasRedBook, playerInv); }
+		//else if (i == "input Selected addPurplePotionCheat") { function.ItemCheats("PurplePotion", hasPurplePotion, playerInv); }
+		//else if (i == "input Selected addPurpleBookCheat") { function.ItemCheats("PurpleBook", hasStorybook, playerInv); }
+		/*-------------------CHEATS-------------------*/
 	}
 }
 
-void Chapter2::runCurrentTown() {
+void Story::runCurrentTown() {
 	while (currentLocation == "CurrentTown") {
 		string i;
 		getline(cin, i);
@@ -1074,7 +1190,7 @@ void Chapter2::runCurrentTown() {
 	}
 }
 
-void Chapter2::runBlacksmithFoundry() {
+void Story::runBlacksmithFoundry() {
 	while (currentLocation == "BlacksmithFoundry") {
 		string i;
 		getline(cin, i);
@@ -1162,7 +1278,7 @@ void Chapter2::runBlacksmithFoundry() {
 	}
 }
 
-void Chapter2::runAlchemyShop() {
+void Story::runAlchemyShop() {
 	while (currentLocation == "AlchemyShop") {
 		string i;
 		getline(cin, i);
@@ -1215,7 +1331,7 @@ void Chapter2::runAlchemyShop() {
 	}
 }
 
-void Chapter2::runCurrentForestPath() {
+void Story::runCurrentForestPath() {
 	while (currentLocation == "CurrentForestPath") {
 		string i;
 		getline(cin, i);
@@ -1269,7 +1385,7 @@ void Chapter2::runCurrentForestPath() {
 	}
 }
 
-void Chapter2::runCurrentRuins() {
+void Story::runCurrentRuins() {
 	while (currentLocation == "CurrentRuins") {
 		string i;
 		getline(cin, i);
@@ -1377,7 +1493,7 @@ void Chapter2::runCurrentRuins() {
 }
 
 //Chractercheck is sword_taken
-void Chapter2::runPastCottage(bool CharacterCheck) {
+void Story::runPastCottage(bool CharacterCheck) {
 	currentLocation = "PastCottage";
 	bool LetterCheck = false;
 	bool inputWasCommon;
@@ -1446,7 +1562,7 @@ void Chapter2::runPastCottage(bool CharacterCheck) {
 
 	}
 }
-void Chapter2::runPastForestPath(bool CharacterCheck) {
+void Story::runPastForestPath(bool CharacterCheck) {
 	bool inputWasCommon;
 	string CharacterName = "";
 
@@ -1491,7 +1607,7 @@ void Chapter2::runPastForestPath(bool CharacterCheck) {
 	}
 }
 
-void Chapter2::runPastCity(bool CharacterCheck) {
+void Story::runPastCity(bool CharacterCheck) {
 
 	string CharacterName = "";
 	bool inputWasCommon;
@@ -1537,7 +1653,7 @@ void Chapter2::runPastCity(bool CharacterCheck) {
 	}
 }
 
-void Chapter2::runPastRuins(bool CharacterCheck) {
+void Story::runPastRuins(bool CharacterCheck) {
 	string CharacterName = "";
 	string Enemy = "";
 	bool inputWasCommon;
@@ -1618,7 +1734,7 @@ void Chapter2::runPastRuins(bool CharacterCheck) {
 	}
 }
 
-void Chapter2::runForestPath2() {
+void Story::runForestPath2() {
 	while (currentLocation == "ForestPath2") {
 		string i;
 		getline(cin, i);
@@ -1637,6 +1753,7 @@ void Chapter2::runForestPath2() {
 			function.Action("SetNarration(There is a sword hidden inside the well! You take it.)", true);
 			function.Action("ShowNarration()", true);
 			playerInv.push_back("PrisonerSword");
+			function.Action("DisableIcon(Search Well, ForestPath2.Well)", true);
 			hasSecondPrisItem = true;
 		}
 
@@ -1661,7 +1778,7 @@ void Chapter2::runForestPath2() {
 	}
 }
 
-void Chapter2::runCurrentCastleCrossroads() {
+void Story::runCurrentCastleCrossroads() {
 	while (currentLocation == "CurrentCastleCrossroads") {
 		string i;
 		getline(cin, i);
@@ -1693,7 +1810,7 @@ void Chapter2::runCurrentCastleCrossroads() {
 	}
 }
 
-void Chapter2::runCurrentGreatHall() {
+void Story::runCurrentGreatHall() {
 	while (currentLocation == "CurrentGreatHall") {
 		string i;
 		getline(cin, i);
@@ -1755,7 +1872,7 @@ void Chapter2::runCurrentGreatHall() {
 	}
 }
 
-void Chapter2::runCurrentPort() {
+void Story::runCurrentPort() {
 	while (currentLocation == "CurrentPort") {
 		string i;
 		getline(cin, i);
@@ -1865,7 +1982,7 @@ void Chapter2::runCurrentPort() {
 	}
 }
 
-void Chapter2::runCurrentLibrary() {
+void Story::runCurrentLibrary() {
 	bool libraryLeftOccupied = true;
 	bool libraryCenterOccupied = true;
 	bool libraryRightOccupied = true;
@@ -2093,7 +2210,7 @@ void Chapter2::runCurrentLibrary() {
 	}
 }
 
-void Chapter2::runCurrentStorage() {
+void Story::runCurrentStorage() {
 	bool storageLeftOccupied = false;
 	bool storageRightOccupied = false;
 	bool potionSpawned = false;
@@ -2300,7 +2417,7 @@ void Chapter2::runCurrentStorage() {
 	}
 }
 
-void Chapter2::runCurrentPrison() {
+void Story::runCurrentPrison() {
 
 
 	while (currentLocation == "CurrentPrison") {
@@ -2323,24 +2440,40 @@ void Chapter2::runCurrentPrison() {
 					function.SetupDialog("Arlan", "Prisoner", false);
 					if (hasFirstPrisItem) {
 						function.SetupDialogText("Thank you for finding that outfit for me. Here is the next one", "RiddleTwo", "Hit me with it");
-
+						
+						function.RemoveItem("PrisonerOutfit", playerInv);
 						ForestPath2.icons.push_back(Icon("Search Well", "hand", "ForestPath2.Well", "Search Well", "true"));
 						function.SetupIcons(ForestPath2.icons);
+
+						function.Action("SetClothing(Prisoner, HeavyArmour)", true);
 
 						hasFirstPrisItem = false;
 						firstPrisRiddle = true;
 					}
 					if (hasSecondPrisItem) {
-						//function.SetupDialogText("We are almost there! This is the last one", "RiddleThree", "I am ready");
+						function.SetupDialogText("We are almost there! This is the last one", "RiddleThree", "I am ready");
+
+						function.RemoveItem("PrisonerSword", playerInv);
+						CurrentCourtyard.icons.push_back(Icon("Search Target", "hand", "CurrentCourtyard.Target", "Search Target", "true"));
+						function.SetupIcons(CurrentCourtyard.icons);
+
+						function.Action("Draw(Arlan, GuardSword)", true);
+
 						hasSecondPrisItem = false;
-						function.SetupDialogText("That seems to be everything! I can finally get out of here. Here take this potion like I promised", "EndQuest", "Sweet!");
+						secondPrisRiddle = true;
+						//thirdPrisRiddle = true;
+						//function.SetupDialogText("That seems to be everything! I can finally get out of here. Here take this potion like I promised", "EndQuest", "Sweet!");
 
 						//function.WalkToPlace("Arlan", "ForestPath2.Well");
 
 					}
-					//if (hasThirdPrisItem) {
+					if (hasThirdPrisItem) {
+						hasThirdPrisItem = false;
 
-					//}
+						function.RemoveItem("PrisonerHammer", playerInv);
+
+						function.SetupDialogText("That seems to be everything! I can finally get out of here. Here take this potion like I promised", "EndQuest", "Sweet!");
+					}
 				}
 				else {
 					function.SetupDialog("Arlan", "Prisoner", false);
@@ -2350,9 +2483,9 @@ void Chapter2::runCurrentPrison() {
 					else if (secondPrisRiddle == false) {
 						function.SetupDialogText("I see you have not found the previous item yet. Here is what I said again in case you need it", "RiddleTwo", "Thanks");
 					}
-					//else {
-					//	function.SetupDialogText("I see you have not found the previous item yet. Here is what I said again in case you need it", "RiddleThree", "Thanks");
-					//}
+					else if (thirdPrisRiddle == false) {
+						function.SetupDialogText("I see you have not found the previous item yet. Here is what I said again in case you need it", "RiddleThree", "Thanks");
+					}
 				}
 
 
@@ -2376,12 +2509,13 @@ void Chapter2::runCurrentPrison() {
 				else if (modified_I == "StartQuestCont") {
 					function.SetupDialogText("Alright. Let me cast a location spell to give you a bit of guidance", "RiddleOne", "Wait what?");
 
-					CurrentStorage.icons.push_back(Icon("Search Chest", "hand", "CurrentStorage.Chest", "Search Chest", "true"));
-					function.SetupIcons(CurrentStorage.icons);
+					//CurrentGreatHall.icons.push_back(Icon("Search Chest", "hand", "CurrentStorage.Chest", "Search Chest", "true"));
+					//function.SetupIcons(CurrentStorage.icons);
+					function.Action("EnableIcon(Search Chest, hand, CurrentPrison.Chest, Search Chest, true)", true);
 				}
 				else if (modified_I == "RiddleOne") {
 					//Run some kind of spell animation here
-					function.SetupDialogText("Long and forgotten in a dusty cluttered place. Someone wanted to store this armor for later", "DialogEnd", "Hmmm");
+					function.SetupDialogText("Hiding behind the seat of power this set of armor could rule over everything", "DialogEnd", "Hmmm");
 					firstTalkPris = false;
 				}
 				else if (modified_I == "RiddleThree") {
@@ -2393,11 +2527,10 @@ void Chapter2::runCurrentPrison() {
 				else if (modified_I == "EndQuest") {
 					function.Action("SetNarration(Potion of Invincibility added to Inventory!)", true);
 					function.Action("ShowNarration()", true);
-					playerInv.push_back("RedPotion");
+					playerInv.push_back("Potion of Invincibility");
 					function.Action("ClearDialog()", true);
 					function.Action("HideDialog()", true);
 
-					//function.Action("SetClothing(Prisoner, HeavyArmour)", false);
 					//function.Action("WalkTo(Prisoner, CurrentPrison.CellDoor)", true);
 					//function.Action("OpenFurniture(Prisoner, CurrentPrison.CellDoor)", true);
 					//function.Transition("Prisoner", "CurrentPrison.Door", "LeftHallway.BackDoor");
@@ -2406,6 +2539,16 @@ void Chapter2::runCurrentPrison() {
 					hasRedPotion = true;
 				}
 
+			}
+			
+			else if (i == "input Search Chest CurrentPrison.Chest") {
+				//function.WalkToPlace("Arlan", "CurrentPrison.Chest");
+				function.Action("OpenFurniture(Arlan, CurrentPrison.Chest)", true);
+				function.Action("SetNarration(There is some armor hidden in the chest! You take it.)", true);
+				function.Action("ShowNarration()", true);
+				playerInv.push_back("PrisonerOutfit");
+				function.Action("DisableIcon(Search Chest, CurrentPrison.Chest)", true);
+				hasFirstPrisItem = true;
 			}
 		}
 
@@ -2417,7 +2560,7 @@ void Chapter2::runCurrentPrison() {
 	}
 }
 
-void Chapter2::runLeftHallway() {
+void Story::runLeftHallway() {
 	while (currentLocation == "LeftHallway") {
 		string i;
 		getline(cin, i);
@@ -2489,7 +2632,7 @@ void Chapter2::runLeftHallway() {
 	}
 }
 
-void Chapter2::runRightHallway() {
+void Story::runRightHallway() {
 	while (currentLocation == "RightHallway") {
 		string i;
 		getline(cin, i);
@@ -2552,7 +2695,7 @@ void Chapter2::runRightHallway() {
 	}
 }
 
-void Chapter2::runCurrentDiningRoom() {
+void Story::runCurrentDiningRoom() {
 	if (!visitedDiningRoom) {
 		function.Action("DisableInput()", true);
 		function.Action("Face(Arlan, Chef)", false);
@@ -2768,7 +2911,7 @@ void Chapter2::runCurrentDiningRoom() {
 	}
 }
 
-void Chapter2::runCurrentCourtyard() {
+void Story::runCurrentCourtyard() {
 	while (currentLocation == "CurrentCourtyard") {
 		string i;
 		getline(cin, i);
@@ -2790,8 +2933,26 @@ void Chapter2::runCurrentCourtyard() {
 
 		if (i == "input arrived Arlan position CurrentCourtyard.Gate") {
 			if ((hasBlueBook && hasBluePotion) || (hasGreenBook && hasGreenPotion) || (hasRedBook && hasRedPotion) || (hasPurpleBook && hasPurplePotion)) {
-				function.Transition("Arlan", "CurrentCourtyard.Gate", "CurrentCamp.Exit");
-				currentLocation = "CurrentCamp";
+				if (hasBlueBook && hasBluePotion) {
+					setupCamp("BlueCamp");
+					currentLocation = "BlueCamp";
+					function.Transition("Arlan", "CurrentCourtyard.Gate", "BlueCamp.Exit");
+				}
+				else if (hasGreenBook && hasGreenPotion) {
+					setupCamp("GreenCamp");
+					currentLocation = "GreenCamp";
+					function.Transition("Arlan", "CurrentCourtyard.Gate", "GreenCamp.Exit");
+				}
+				else if (hasRedBook && hasRedPotion) {
+					setupCamp("RedCamp");
+					currentLocation = "RedCamp";
+					function.Transition("Arlan", "CurrentCourtyard.Gate", "RedCamp.Exit");
+				}
+				else if (hasPurpleBook && hasPurplePotion) {
+					setupCamp("PurpleCamp");
+					currentLocation = "PurpleCamp";
+					function.Transition("Arlan", "CurrentCourtyard.Gate", "PurpleCamp.Exit");
+				}
 			}
 		}
 
@@ -2811,10 +2972,19 @@ void Chapter2::runCurrentCourtyard() {
 			function.Action("HideList()", true);
 			function.Action("EnableInput()", true);
 		}
+
+		else if (i == "input Search Target CurrentCourtyard.Target") {
+			function.WalkToPlace("Arlan", "CurrentCourtyard.Target");
+			function.Action("SetNarration(There is a hammer hidden behind the target! You take it.)", true);
+			function.Action("ShowNarration()", true);
+			playerInv.push_back("PrisonerHammer");
+			function.Action("DisableIcon(Search Target, CurrentCourtyard.Target)", true);
+			hasThirdPrisItem = true;
+		}
 	}
 }
 
-void Chapter2::runCurrentCastleBedroom() {
+void Story::runCurrentCastleBedroom() {
 	while (currentLocation == "CurrentCastleBedroom") {
 		string i;
 		getline(cin, i);
@@ -2897,189 +3067,353 @@ void Chapter2::runCurrentCastleBedroom() {
 	}
 }
 
-void Chapter2::runCurrentCamp() {
-	function.Action("SetPosition(Archie, CurrentCamp.Horse)", true);
-	//function.WalkToPlace("Arlan", "Archie");
-	function.SetupDialog("Arlan", "Archie", true);
-	function.SetupDialogText("Ah... you've found me. The power stemming from my relic told me there would be some to try to come take it from me. No matter. You will be slain just like Mathias", "mathiasEnters", "Please dont do thi--");
-	function.Action("ShowDialog()", true);
-	while (currentLocation == "CurrentCamp") {
-		string i;
-		getline(cin, i);
+void Story::runCurrentCamp() {
+	if (currentLocation == "BlueCamp") {
+		while (currentLocation == "BlueCamp") {
+			string i;
+			getline(cin, i);
 
-		//Gets the first word that isn't "input"
-		modified_I = function.splitInput(i, 6, false);
+			//Gets the first word that isn't "input"
+			modified_I = function.splitInput(i, 6, false);
 
-		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+			bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
 
-		if (!inputWasCommon) {
+			if (!inputWasCommon) {
 
-		}
-
-		//CurrentCastleBedroom
-		if (i == "input arrived Arlan position CurrentCamp.Exit") {
-			function.Transition("Arlan", "CurrentCamp.Exit", "CurrentCourtyard.Gate");
-			currentLocation = "CurrentCourtyard";
-		}
-
-		else if (i == "input Selected mathiasEnters") {
-			function.Action("SetPosition(Mathias, CurrentCamp.RightLog", true);
-			function.Action("WalkTo(Mathias, Archie)", true);
-			this_thread::sleep_for(chrono::milliseconds(3000));
-			function.SetupDialogText("Use the book to remove the corrupting power!", "reciteIncantation", "**Recite the incantation**");
-		}
-
-		else if (i == "input Selected reciteIncantation") {
-			function.SetupDialogText("Test end", "end", "Done Test");
-		}
-
-		else if (i == "input Selected end") {
-			function.Action("HideDialog()", true);
-		}
-
-		else if (i == "input Key Inventory") {
-			function.Action("ClearList()", true);
-			for (string item : playerInv) {
-				function.Action("AddToList(" + item + ")", true);
 			}
-			function.Action("ShowList(Arlan)", true);
-		}
 
-		else if (i == "input Close List") {
-			function.Action("HideList()", true);
-			function.Action("EnableInput()", true);
+			//CurrentCastleBedroom
+			if (i == "input arrived Arlan position CurrentCamp2.Exit") {
+				function.Transition("Arlan", "CurrentCamp2.Exit", "CurrentCourtyard.Gate");
+				currentLocation = "CurrentCourtyard";
+			}
+
+			if (i == "input OpenChest CurrentCamp2.Chest") {
+				// walk to and interact with chest
+				function.Action("OpenFurniture(Arlan, CurrentCamp2.Chest)", true);
+				function.SetupDialog("Arlan", "null", false);
+				function.SetupDialogText("A strange book adorned with a skull lies in the chest. You recognize it as the powerful artifact from your visions and the tome described in the book the sailor gave you. Will you take it?", "takeTome", "*Take the artifact.*", "leaveTome", "*Leave it.*");
+				//function.Action("ShowDialog()", true);
+			}
+
+			else if (i == "input Selected takeTome") {
+				function.Action("Take(Arlan, AncientTome, CurrentCamp2.Chest)", true);
+				function.SetupDialogText("You take the tome into your hands. You feel a surge of incredible energy flowing through you. The power suddenly takes hold of your body and you begin to lose control.", "giveIn", "*GIVE IN.*");
+			}
+
+			else if (i == "input Selected giveIn") {
+				function.Action("HideDialog()", true);
+				function.Action("ClearDialog()", true);
+				function.Action("DisableInput()", true);
+				//function.Action("WalkTo(Arlan, CurrentCamp2.LeftLog)", true);
+				function.Action("Face(Arlan, CurrentCamp2.Log)", true);
+				function.Action("Cast(Arlan)", true);
+				function.Action("SetPosition(Archie, CurrentCamp2)", true);
+				function.Action("CreateEffect(Archie, Resurrection)", true);
+				function.Action("Kneel(Arlan)", false);
+				function.Action("WalkTo(Archie, Arlan)", true);
+				function.SetupDialog("Arlan", "Archie", false);
+				function.SetupDialogText("Finally! My soul has been sealed away for far too long... I have been waiting for some fool to come and free me. You have my thanks... but I will be taking that now.", "obey", "*OBEY.*");
+			}
+
+			else if (i == "input Selected obey") {
+				function.Action("HideDialog()", true);
+				function.Action("ClearDialog()", true);
+				function.Action("Take(Archie, AncientTome, Arlan)", true);
+				function.Action("Cast(Archie, Arlan)", true);
+				function.Action("FadeOut()", true);
+				function.Action("WalkTo(Archie, CurrentCamp2.Exit)", true);
+				function.Action("SetPosition(Archie)", true);
+				function.Action("SetPosition(Mathias, CurrentCamp2.Exit)", true);
+				function.Action("FadeIn()", false);
+				//function.Action("WalkTo(Mathias, CurrentCamp2.Chest)", true);
+				//function.Action("Kneel(Mathias)", true);
+				function.Action("WalkTo(Mathias, Arlan)", true);
+				function.SetupDialog("Arlan", "Mathias", false);
+				function.SetupDialogText("You okay kid?", "arlanOkay", "I think so... what happened?");
+			}
+
+			else if (i == "input Selected arlanOkay") {
+				function.SetupDialogText("Looks like my old friend outwitted you. This is quite bad... I used that book to seal Archie away years ago. Kept the book a secret hoping that would be the end of it. I should have known it was only a matter of time before the book found someone else...", "arlanFound", "Found someone else?");
+			}
+
+			else if (i == "input Selected arlanFound") {
+				function.SetupDialogText("Yeah... that book you found instills its wielder with immense power. Archie discovered it many years ago and used it to try and seize control of the kingdom. I got lucky and managed to stop him. Now he is going to attempt it again. He will be more prepared this time.", "stopArchie", "We have to stop him!");
+			}
+
+			else if (i == "input Selected stopArchie") {
+				function.SetupDialogText("Indeed we must. Im afraid you may not be strong enough to take him on... unless... If you were able to come to this place you must have found the Potion of Power. Do you still have it?", "yesPotion", "You mean the one that gave me the strange visions?");
+			}
+
+			else if (i == "input Selected yesPotion") {
+				function.SetupDialogText("Thats the one! Looks like you still have some left. Perfect! It will give you great strength. If we are to defeat him you must take the potion when I signal you and then strike him down. Here. Take this sword. You shall need it.", "okaySword", "Okay!");
+			}
+
+			else if (i == "input Selected okaySword") {
+				function.Action("HideDialog()", true);
+				function.Action("ClearDialog()", true);
+				function.Action("WalkTo(Arlan, Arlan)", false);
+				function.Action("Unpocket(Mathias, MathiasSword)", true);
+				function.Action("Take(Arlan, MathiasSword, Mathias)", true);
+				function.SetupDialogText("Archie likely fled to the place where this all started. We will confront him in the ruins. Follow me!", "letsGo", "Lets go!");
+				function.Action("ShowDialog()", true);
+			}
+
+			else if (i == "input Selected letsGo") {
+				function.Action("HideDialog()", true);
+				function.Action("ClearDialog()", true);
+				function.Action("WalkTo(Mathias, CurrentCamp2.Exit)", false);
+				function.Action("WalkTo(Arlan, CurrentCamp2.Exit)", false);
+				function.Action("FadeOut()", true);
+				currentLocation = "FinalRuins";
+			}
+
+			else if (i == "input Selected leaveTome") {
+				function.Action("HideDialog()", true);
+				function.Action("ClearDialog()", true);
+				function.Action("CloseFurniture(Arlan, CurrentCamp2.Chest)", true);
+				function.Action("SetNarration(You leave the tome alone and close the chest. You feel the tome calling out to you. You have come this far... should you really leave it here?)", true);
+				function.Action("ShowNarration()", true);
+			}
+
+			else if (i == "input Selected end") {
+				function.Action("HideDialog()", true);
+			}
+
+			else if (i == "input Key Inventory") {
+				function.Action("ClearList()", true);
+				for (string item : playerInv) {
+					function.Action("AddToList(" + item + ")", true);
+				}
+				function.Action("ShowList(Arlan)", true);
+			}
+
+			else if (i == "input Close List") {
+				function.Action("HideList()", true);
+				function.Action("EnableInput()", true);
+			}
+		}
+	}
+	if (currentLocation == "RedCamp") {
+
+		bool ActionSequence = true;
+
+		while (currentLocation == "RedCamp") {
+
+			string i;
+			getline(cin, i);
+
+			//Gets the first word that isn't "input"
+			modified_I = function.splitInput(i, 6, false);
+
+			bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+			if (!inputWasCommon) {
+				if (ActionSequence == true) {
+
+					ActionSequence = false;
+
+					function.Action("DisableInput()", true);
+					function.Action("Draw(MathiasR, Mathias_Sword)", true);
+					function.Action("WalkTo(MathiasR, ArchieR)", false);
+					function.Action("WalkTo(ArchieR, MathiasR)", true);
+					function.Action("Attack(MathiasR, ArchieR, true)", true);
+					function.Action("Die(ArchieR)", true);
+					function.Action("Sheathe(MathiasR, Mathias_Sword)", true);
+					function.Action("Draw(MathiasR, Artifact)", true);
+					function.Action("EnableInput()", true);
+
+					function.SetupDialog("Arlan", "MathiasR", false);
+					function.SetupDialogText("Alright now that Archie is out of the way there's nothing stopping me from using the true power of this artifact", "ReadBook", "**I can't let that happen! Read Translated Book**");
+				}
+				else if (modified_I == "Selected") {
+
+					modified_I = function.splitInput(i, 0, true);
+
+					if (modified_I == "ReadBook") {
+						function.SetupDialogText("Wait a minute who's that speaking?", "Continue", "**Continue Reading**");
+					}
+
+					else if (modified_I == "Continue") {
+						function.SetupDialogText("No! Don't say that!", "FinishSpell", "**Finish Spell**");
+					}
+
+					else if (modified_I == "FinishSpell") {
+						function.Action("ClearDialog()", true);
+						function.Action("HideDialog()", true);
+						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetCameraMode(focus)", true);
+						function.Action("CreateEffect(Artifact, Poison)", true);
+						this_thread::sleep_for(chrono::milliseconds(2500));
+
+						function.SetupDialog("Arlan", "MathiasR", false);
+						function.SetupDialogText("Oh no this isn't good... It's about to explode!", "Drink", "**Drink Potion**");
+					}
+
+					else if (modified_I == "Drink") {
+						function.Action("ClearDialog()", true);
+						function.Action("HideDialog()", true);
+
+						function.Action("SetCameraFocus(Arlan)", true);
+						function.Action("SetCameraMode(focus)", true);
+						function.Action("Unpocket(Arlan, TempPotion)", true);
+						function.Action("Drink(Arlan)", true);
+						this_thread::sleep_for(chrono::milliseconds(300));
+
+						function.Action("SetNarration(This tastes strangely like water... You've been tricked!)", true);
+						function.Action("ShowNarration()", true);
+						this_thread::sleep_for(chrono::milliseconds(1500));
+						function.Action("HideNarration()", true);
+
+						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetCameraMode(focus)", true);
+						this_thread::sleep_for(chrono::milliseconds(1000));
+						function.Action("CreateEffect(Artifact, Explosion)", true);
+						this_thread::sleep_for(chrono::milliseconds(1000));
+
+						function.Action("SetCameraMode(track)", true);
+						function.Action("CreateEffect(MathiasR, Death)", true);
+						function.Action("Die(MathiasR)", true);
+						function.Action("CreateEffect(Arlan, Death)", true);
+						function.Action("Die(Arlan)", true);
+					}
+
+				}
+			}
+
+		}
+	}
+	if (currentLocation == "PurpleCamp") {
+		while (currentLocation == "PurpleCamp") {
+
+		}
+	}
+	if (currentLocation == "GreenCamp") {
+		//function.Action("SetPosition(Archie, CurrentCamp.Horse)", true);
+		//function.Action("Draw(Archie, LeaderFlashPotion)", true);
+		//function.Action("EnableEffect(Archie, Force)", true);
+		function.WalkToPlace("Arlan", "Archie");
+		//function.Action("Face(Archie, Arlan)", true);
+		this_thread::sleep_for(chrono::milliseconds(200));
+		function.Action("Face(Arlan, Archie)", true);
+		this_thread::sleep_for(chrono::milliseconds(200));
+		function.Action("SetLeft(Arlan)", true);
+		function.Action("SetRight(Archie)", true);
+		function.SetupDialogText("Ah... you've found me. The power stemming from my relic told me there would be some to try to come take it from me. No matter. You will be slain just like Mathias", "mathiasEnters", "Please dont do thi--");
+		function.Action("ShowDialog()", true);
+		while (currentLocation == "GreenCamp") {
+			string i;
+			getline(cin, i);
+
+			//Gets the first word that isn't "input"
+			modified_I = function.splitInput(i, 6, false);
+
+			bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+			if (!inputWasCommon) {
+
+			}
+
+			//CurrentCastleBedroom
+			if (i == "input arrived Arlan position GreenCamp.Exit") {
+				function.Transition("Arlan", "GreenCamp.Exit", "CurrentCourtyard.Gate");
+				currentLocation = "CurrentCourtyard";
+			}
+
+			else if (i == "input Selected mathiasEnters") {
+				function.Action("HideDialog()", true);
+				function.Action("SetPosition(Mathias, GreenCamp.Exit)", true);
+				function.Action("SetCameraFocus(Mathias)", true);
+				function.Action("SetCameraMode(Focus)", true);
+				this_thread::sleep_for(chrono::milliseconds(500));
+				function.Action("Draw(Mathias, MathiasSword)", true);
+				this_thread::sleep_for(chrono::milliseconds(500));
+				function.Action("SetCameraMode(Follow)", true);
+				function.Action("Face(Archie, Mathias)", true);
+				function.Action("Face(Arlan, Mathias)", true);
+				function.Action("WalkTo(Mathias, Archie)", true);
+				//this_thread::sleep_for(chrono::milliseconds(3000));
+				function.Action("SetCameraFocus(Arlan)", true);
+				function.SetupDialogText("Quickly Arlan! Use the book to remove the corrupting power!", "reciteIncantation", "**Recite the incantation**");
+				function.Action("SetRight(Mathias)", true);
+				function.Action("ShowDialog()", true);
+			}
+
+			else if (i == "input Selected reciteIncantation") {
+				function.Action("HideDialog()", true);
+				function.Action("Face(Arlan, Archie)", true);
+				function.Action("Draw(Arlan, Book Of Incantations)", true);
+				function.Action("Cast(Arlan, Archie)", true);
+				function.Action("Kneel(Archie)", true);
+				function.Action("DisableEffect(Archie)", true);
+				function.Action("Sheathe(Arlan, Book Of Incantations)", true);
+				function.Action("SetRight(Archie)", true);
+				function.SetupDialogText("Wha.. what is going on..? Where am I..?", "askMathias", "What should we do Mathias?");
+				function.Action("ShowDialog()", true);
+			}
+
+			else if (i == "input Selected askMathias") {
+				function.Action("SetRight(Mathias)", true);
+				function.SetupDialogText("Use your potion to cleanse the corruption or he will die!", "usePotion", "**Use The Potion**");
+			}
+
+			else if (i == "input Selected usePotion") {
+				function.Action("HideDialog()", true);
+				//function.Action("Draw(Arlan, Potion Of Cleansing)", true);
+				function.Action("Give(Arlan, Potion Of Cleansing, Archie)", true);
+				this_thread::sleep_for(chrono::milliseconds(1000));
+				function.Action("Face(Archie, Arlan)", true);
+				function.Action("SetRight(Archie)", true);
+				function.SetupDialogText("Thank you hero... you have saved me from the corruption that consumed me.", "apologizeToMathias", "Of course.");
+				function.Action("ShowDialog()", true);
+			}
+
+			else if (i == "input Selected apologizeToMathias") {
+				function.Action("HideDialog()", true);
+				function.Action("Face(Archie, Mathias", true);
+				function.Action("SetLeft(Archie)", true);
+				function.Action("SetRight(Mathias)", true);
+				function.SetupDialogText("Mathias... I am so sorry for everything I have done.", "apologyAccepted", "...");
+				function.Action("ShowDialog()", true);
+			}
+
+			else if (i == "input Selected apologyAccepted") {
+				function.Action("SetLeft(Mathias)", true);
+				function.Action("SetRight(Archie)", true);
+				function.SetupDialogText("It is ok my friend. Let us return to the kingdom. Arlan... thank you for everything.", "endGame", "...");
+			}
+
+			else if (i == "input Selected endGame") {
+				function.Action("HideDialog()", true);
+				function.Action("WalkTo(Mathias, GreenCamp.Exit)", true);
+				function.Action("SetPosition(Mathias)", true);
+				function.Action("WalkTo(Archie, GreenCamp.Exit)", true);
+				function.Action("SetPosition(Archie)", true);
+				function.Action("FadeOut()", true);
+				this_thread::sleep_for(chrono::milliseconds(2000));
+			}
+
+			else if (i == "input Selected end") {
+				function.Action("HideDialog()", true);
+			}
+
+			else if (i == "input Key Inventory") {
+				function.Action("ClearList()", true);
+				for (string item : playerInv) {
+					function.Action("AddToList(" + item + ")", true);
+				}
+				function.Action("ShowList(Arlan)", true);
+			}
+
+			else if (i == "input Close List") {
+				function.Action("HideList()", true);
+				function.Action("EnableInput()", true);
+			}
 		}
 	}
 }
 
-void Chapter2::runCurrentCamp2() {
-	while (currentLocation == "CurrentCamp2") {
-		string i;
-		getline(cin, i);
-
-		//Gets the first word that isn't "input"
-		modified_I = function.splitInput(i, 6, false);
-
-		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
-
-		if (!inputWasCommon) {
-
-		}
-
-		//CurrentCastleBedroom
-		if (i == "input arrived Arlan position CurrentCamp2.Exit") {
-			function.Transition("Arlan", "CurrentCamp2.Exit", "CurrentCourtyard.Gate");
-			currentLocation = "CurrentCourtyard";
-		}
-
-		if (i == "input OpenChest CurrentCamp2.Chest") {
-			// walk to and interact with chest
-			function.Action("OpenFurniture(Arlan, CurrentCamp2.Chest)", true);
-			function.SetupDialog("Arlan", "null", false);
-			function.SetupDialogText("A strange book adorned with a skull lies in the chest. You recognize it as the powerful artifact from your visions and the tome described in the book the sailor gave you. Will you take it?", "takeTome", "*Take the artifact.*", "leaveTome", "*Leave it.*");
-			//function.Action("ShowDialog()", true);
-		}
-
-		else if (i == "input Selected takeTome") {
-			function.Action("Take(Arlan, AncientTome, CurrentCamp2.Chest)", true);
-			function.SetupDialogText("You take the tome into your hands. You feel a surge of incredible energy flowing through you. The power suddenly takes hold of your body and you begin to lose control.", "giveIn", "*GIVE IN.*");
-		}
-
-		else if (i == "input Selected giveIn") {
-			function.Action("HideDialog()", true);
-			function.Action("ClearDialog()", true);
-			function.Action("DisableInput()", true);
-			//function.Action("WalkTo(Arlan, CurrentCamp2.LeftLog)", true);
-			function.Action("Face(Arlan, CurrentCamp2.Log)", true);
-			function.Action("Cast(Arlan)", true);
-			function.Action("SetPosition(Archie, CurrentCamp2)", true);
-			function.Action("CreateEffect(Archie, Resurrection)", true);
-			function.Action("Kneel(Arlan)", false);
-			function.Action("WalkTo(Archie, Arlan)", true);
-			function.SetupDialog("Arlan", "Archie", false);
-			function.SetupDialogText("Finally! My soul has been sealed away for far too long... I have been waiting for some fool to come and free me. You have my thanks... but I will be taking that now.", "obey", "*OBEY.*");
-		}
-
-		else if (i == "input Selected obey") {
-			function.Action("HideDialog()", true);
-			function.Action("ClearDialog()", true);
-			function.Action("Take(Archie, AncientTome, Arlan)", true);
-			function.Action("Cast(Archie, Arlan)", true);
-			function.Action("FadeOut()", true);
-			function.Action("WalkTo(Archie, CurrentCamp2.Exit)", true);
-			function.Action("SetPosition(Archie)", true);
-			function.Action("SetPosition(Mathias, CurrentCamp2.Exit)", true);
-			function.Action("FadeIn()", false);
-			//function.Action("WalkTo(Mathias, CurrentCamp2.Chest)", true);
-			//function.Action("Kneel(Mathias)", true);
-			function.Action("WalkTo(Mathias, Arlan)", true);
-			function.SetupDialog("Arlan", "Mathias", false);
-			function.SetupDialogText("You okay kid?", "arlanOkay", "I think so... what happened?");
-		}
-
-		else if (i == "input Selected arlanOkay") {
-			function.SetupDialogText("Looks like my old friend outwitted you. This is quite bad... I used that book to seal Archie away years ago. Kept the book a secret hoping that would be the end of it. I should have known it was only a matter of time before the book found someone else...", "arlanFound", "Found someone else?");
-		}
-
-		else if (i == "input Selected arlanFound") {
-			function.SetupDialogText("Yeah... that book you found instills its wielder with immense power. Archie discovered it many years ago and used it to try and seize control of the kingdom. I got lucky and managed to stop him. Now he is going to attempt it again. He will be more prepared this time.", "stopArchie", "We have to stop him!");
-		}
-
-		else if (i == "input Selected stopArchie") {
-			function.SetupDialogText("Indeed we must. Im afraid you may not be strong enough to take him on... unless... If you were able to come to this place you must have found the Potion of Power. Do you still have it?", "yesPotion", "You mean the one that gave me the strange visions?");
-		}
-
-		else if (i == "input Selected yesPotion") {
-			function.SetupDialogText("Thats the one! Looks like you still have some left. Perfect! It will give you great strength. If we are to defeat him you must take the potion when I signal you and then strike him down. Here. Take this sword. You shall need it.", "okaySword", "Okay!");
-		}
-
-		else if (i == "input Selected okaySword") {
-			function.Action("HideDialog()", true);
-			function.Action("ClearDialog()", true);
-			function.Action("WalkTo(Arlan, Arlan)", false);
-			function.Action("Unpocket(Mathias, MathiasSword)", true);
-			function.Action("Take(Arlan, MathiasSword, Mathias)", true);
-			function.SetupDialogText("Archie likely fled to the place where this all started. We will confront him in the ruins. Follow me!", "letsGo", "Lets go!");
-			function.Action("ShowDialog()", true);
-		}
-
-		else if (i == "input Selected letsGo") {
-			function.Action("HideDialog()", true);
-			function.Action("ClearDialog()", true);
-			function.Action("WalkTo(Mathias, CurrentCamp2.Exit)", false);
-			function.Action("WalkTo(Arlan, CurrentCamp2.Exit)", false);
-			function.Action("FadeOut()", true);
-			currentLocation = "FinalRuins";
-		}
-
-		else if (i == "input Selected leaveTome") {
-			function.Action("HideDialog()", true);
-			function.Action("ClearDialog()", true);
-			function.Action("CloseFurniture(Arlan, CurrentCamp2.Chest)", true);
-			function.Action("SetNarration(You leave the tome alone and close the chest. You feel the tome calling out to you. You have come this far... should you really leave it here?)", true);
-			function.Action("ShowNarration()", true);
-		}
-
-		else if (i == "input Selected end") {
-			function.Action("HideDialog()", true);
-		}
-
-		else if (i == "input Key Inventory") {
-			function.Action("ClearList()", true);
-			for (string item : playerInv) {
-				function.Action("AddToList(" + item + ")", true);
-			}
-			function.Action("ShowList(Arlan)", true);
-		}
-
-		else if (i == "input Close List") {
-			function.Action("HideList()", true);
-			function.Action("EnableInput()", true);
-		}
-	}
-}
-
-void Chapter2::runFinalRuins() {
+void Story::runFinalRuins() {
 	function.Action("SetPosition(Archie, FinalRuins.Throne)", true);
 	function.Action("Sit(Archie, FinalRuins.Throne)", true);
 	function.Action("Enter(Mathias, FinalRuins.Exit, false)", true);

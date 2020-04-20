@@ -70,4 +70,7 @@ public:
 
 	//Puzzle Item Handler
 	void PuzzleItem(string action, string itemname, string position, bool& positionOccupied, bool& hasItem, bool& correctPosition, vector<string>& inventory);
+
+	//Cheat Item Menu
+	void ItemCheats(string itemname, bool &hasItem, vector<string>& inventory);
 };

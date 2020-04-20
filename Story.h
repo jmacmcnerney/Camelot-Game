@@ -29,10 +29,10 @@
 
 using namespace std;
 
-class Chapter2 {
+class Story {
 public:
-	Chapter2();
-	~Chapter2();
+	Story();
+	~Story();
 	bool runSetup(); // runs initial setup for chapter 2. returns true if setup was successful.
 	void run(); // begins chapter 2's execution
 
