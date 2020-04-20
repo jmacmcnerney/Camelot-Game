@@ -797,6 +797,7 @@ void Story::runCurrentCottage() {
 		if (i == "input accessCheatMenu Cheating Menu") {
 			//function.Action("ClearDialog()", true);
 			//function.Action("SetDialog(Category\\n[teleportCheats|Teleport Cheats]\\n[itemCheats][Item Cheats])", true);
+			function.Action("HideList()", true);
 			function.SetupDialogText("Category", "teleportCheats", "Teleport Cheats", "itemCheats", "ItemCheats");
 			function.Action("ShowDialog()", true);
 		}
@@ -831,7 +832,7 @@ void Story::runCurrentCottage() {
 
 		else if (i == "input Selected itemCheats") {
 			function.Action("ClearDialog()", true);
-			function.Action("SetDialog(Which Item?\\n[addStorybookCheat|Storybook]\\n[addMathiasSwordCheat|MathiasSword]\\n[end|Exit])", true);
+			function.Action("SetDialog(Which Item?\\n[addStorybookCheat|Storybook]\\n[addBrokenLockCheat|BrokenLock]\\n[addFixedLockCheat|FixedLock]\\n[addAppleMoneyCheat|AppleMoney]\\n[addElderAppleCheat|ElderApple]\\n[addMathiasSwordCheat|MathiasSword]\\n[addArchieSpellbookCheat|ArchieSpellbook]\\n[addGreenPotionCheat|GreenPotion]\\n[addStorageBottleCheat|StorageBottle]\\n[addStorageBreadCheat|StorageBread]\\n[addStorageHelmetCheat|StorageHelmet]\\n[addStorageInkAndQuillCheat|StorageInkAndQuill]\\n[addStorageBagCheat|StorageBag]\\n[addGreenBookCheat|GreenBook]\\n[addLibraryGoldCupCheat|LibraryGoldCup]\\n[addLibraryAppleCheat|LibraryApple]\\n[addLibraryGreenKeyCheat|LibraryGreenKey]\\n[addBluePotionCheat|BluePotion]\\n[addBlueBookCheat|BlueBook]\\n[addRedPotionCheat|RedPotion]\\n[addRedBookCheat|RedBook]\\n[addPurplePotionCheat|PurplePotion]\\n[addPurpleBookCheat|PurpleBook]\\n[end|Exit])", true);
 		}
 
 		else if (i == "input Selected addStorybookCheat") { function.ItemCheats("Storybook", hasStorybook, playerInv); }
