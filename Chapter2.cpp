@@ -77,7 +77,7 @@ int numCoins = 0;
 
 Chapter2::Chapter2() {
 	runSetup();
-	function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
+	//function.Action("SetPosition(Arlan, CurrentPrison.Chest)", true);
 	run();
 }
 
@@ -105,6 +105,8 @@ bool Chapter2::runSetup() { // runs initial setup for chapter 2. returns true if
 	setupGreatHall("CurrentGreatHall");
 	setupLibrary("CurrentLibrary");
 	setupCamp("CurrentCamp");
+	setupCamp2("CurrentCamp2");
+	setupFinalRuins("FinalRuins");
 	setupDungeon("CurrentPrison");
 	setupLeftHallway("LeftHallway");
 	setupRightHallway("RightHallway");
@@ -185,6 +187,12 @@ void Chapter2::run() { // begins chapter 2's execution
 		}
 		else if (currentLocation == "CurrentCamp") {
 			runCurrentCamp();
+		}
+		else if (currentLocation == "CurrentCamp2") {
+			runCurrentCamp2();
+		}
+		else if (currentLocation == "FinalRuins") {
+			runFinalRuins();
 		}
 	}
 }
@@ -583,6 +591,45 @@ bool Chapter2::setupCamp(string name) {
 	return true;
 }
 
+bool Chapter2::setupCamp2(string name) {
+	CurrentCamp2 = Camp(name);
+
+	function.Action("HideFurniture(" + name + ".Plant)", true);
+	function.Action("HideFurniture(" + name + ".Barrel)", true);
+	function.Action("HideFurniture(" + name + ".Stall)", true);
+	function.Action("HideFurniture(" + name + ".LeftLog)", true);
+	function.Action("HideFurniture(" + name + ".Cauldron)", true);
+	function.Action("HideFurniture(" + name + ".Roast)", true);
+	function.Action("HideFurniture(" + name + ".Firepit)", true);
+	//function.Action("HideFurniture(" + name + ".Log)", true);
+	function.Action("HideFurniture(" + name + ".RightLog)", true);
+	function.Action("HideFurniture(" + name + ".Horse)", true);
+
+	//character setup
+
+	//items
+	function.Action("CreateItem(AncientTome, EvilBook)", true);
+
+	//icons
+	CurrentCamp2.icons.push_back(Icon("OpenChest", "chest, ", name + ".Chest", "Open the Chest", "true"));
+	function.SetupIcons(CurrentCamp2.icons);
+
+	return true;
+}
+
+bool Chapter2::setupFinalRuins(string name) {
+	finalRuins = Ruins(name);
+
+	//character setup
+
+	//items
+	function.Action("CreateItem(MathiasSword2, Sword)", true);
+
+	//icons
+
+	return true;
+}
+
 bool Chapter2::setupDungeon(string name) {
 	CurrentPrison = Dungeon(name);
 
@@ -747,7 +794,7 @@ void Chapter2::runCurrentCottage() {
 			}
 
 			else if (modified_I == "Open_Door") {
-				int test = 4;
+				int test = 6;
 				if (hasStorybook) {
 					//testing
 					if (test == 0) {
@@ -798,6 +845,11 @@ void Chapter2::runCurrentCottage() {
 					else if (test == 5) {
 						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCamp.Exit");
 						currentLocation = "CurrentCamp";
+					}
+
+					else if (test == 6) {
+						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCamp2.Exit");
+						currentLocation = "FinalRuins";
 					}
 				}
 				else {
@@ -2879,6 +2931,257 @@ void Chapter2::runCurrentCamp() {
 
 		else if (i == "input Selected reciteIncantation") {
 			function.SetupDialogText("Test end", "end", "Done Test");
+		}
+
+		else if (i == "input Selected end") {
+			function.Action("HideDialog()", true);
+		}
+
+		else if (i == "input Key Inventory") {
+			function.Action("ClearList()", true);
+			for (string item : playerInv) {
+				function.Action("AddToList(" + item + ")", true);
+			}
+			function.Action("ShowList(Arlan)", true);
+		}
+
+		else if (i == "input Close List") {
+			function.Action("HideList()", true);
+			function.Action("EnableInput()", true);
+		}
+	}
+}
+
+void Chapter2::runCurrentCamp2() {
+	while (currentLocation == "CurrentCamp2") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+		//CurrentCastleBedroom
+		if (i == "input arrived Arlan position CurrentCamp2.Exit") {
+			function.Transition("Arlan", "CurrentCamp2.Exit", "CurrentCourtyard.Gate");
+			currentLocation = "CurrentCourtyard";
+		}
+
+		if (i == "input OpenChest CurrentCamp2.Chest") {
+			// walk to and interact with chest
+			function.Action("OpenFurniture(Arlan, CurrentCamp2.Chest)", true);
+			function.SetupDialog("Arlan", "null", false);
+			function.SetupDialogText("A strange book adorned with a skull lies in the chest. You recognize it as the powerful artifact from your visions and the tome described in the book the sailor gave you. Will you take it?", "takeTome", "*Take the artifact.*", "leaveTome", "*Leave it.*");
+			//function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Selected takeTome") {
+			function.Action("Take(Arlan, AncientTome, CurrentCamp2.Chest)", true);
+			function.SetupDialogText("You take the tome into your hands. You feel a surge of incredible energy flowing through you. The power suddenly takes hold of your body and you begin to lose control.", "giveIn", "*GIVE IN.*");
+		}
+
+		else if (i == "input Selected giveIn") {
+			function.Action("HideDialog()", true);
+			function.Action("ClearDialog()", true);
+			function.Action("DisableInput()", true);
+			//function.Action("WalkTo(Arlan, CurrentCamp2.LeftLog)", true);
+			function.Action("Face(Arlan, CurrentCamp2.Log)", true);
+			function.Action("Cast(Arlan)", true);
+			function.Action("SetPosition(Archie, CurrentCamp2)", true);
+			function.Action("CreateEffect(Archie, Resurrection)", true);
+			function.Action("Kneel(Arlan)", false);
+			function.Action("WalkTo(Archie, Arlan)", true);
+			function.SetupDialog("Arlan", "Archie", false);
+			function.SetupDialogText("Finally! My soul has been sealed away for far too long... I have been waiting for some fool to come and free me. You have my thanks... but I will be taking that now.", "obey", "*OBEY.*");
+		}
+
+		else if (i == "input Selected obey") {
+			function.Action("HideDialog()", true);
+			function.Action("ClearDialog()", true);
+			function.Action("Take(Archie, AncientTome, Arlan)", true);
+			function.Action("Cast(Archie, Arlan)", true);
+			function.Action("FadeOut()", true);
+			function.Action("WalkTo(Archie, CurrentCamp2.Exit)", true);
+			function.Action("SetPosition(Archie)", true);
+			function.Action("SetPosition(Mathias, CurrentCamp2.Exit)", true);
+			function.Action("FadeIn()", false);
+			//function.Action("WalkTo(Mathias, CurrentCamp2.Chest)", true);
+			//function.Action("Kneel(Mathias)", true);
+			function.Action("WalkTo(Mathias, Arlan)", true);
+			function.SetupDialog("Arlan", "Mathias", false);
+			function.SetupDialogText("You okay kid?", "arlanOkay", "I think so... what happened?");
+		}
+
+		else if (i == "input Selected arlanOkay") {
+			function.SetupDialogText("Looks like my old friend outwitted you. This is quite bad... I used that book to seal Archie away years ago. Kept the book a secret hoping that would be the end of it. I should have known it was only a matter of time before the book found someone else...", "arlanFound", "Found someone else?");
+		}
+
+		else if (i == "input Selected arlanFound") {
+			function.SetupDialogText("Yeah... that book you found instills its wielder with immense power. Archie discovered it many years ago and used it to try and seize control of the kingdom. I got lucky and managed to stop him. Now he is going to attempt it again. He will be more prepared this time.", "stopArchie", "We have to stop him!");
+		}
+
+		else if (i == "input Selected stopArchie") {
+			function.SetupDialogText("Indeed we must. Im afraid you may not be strong enough to take him on... unless... If you were able to come to this place you must have found the Potion of Power. Do you still have it?", "yesPotion", "You mean the one that gave me the strange visions?");
+		}
+
+		else if (i == "input Selected yesPotion") {
+			function.SetupDialogText("Thats the one! Looks like you still have some left. Perfect! It will give you great strength. If we are to defeat him you must take the potion when I signal you and then strike him down. Here. Take this sword. You shall need it.", "okaySword", "Okay!");
+		}
+
+		else if (i == "input Selected okaySword") {
+			function.Action("HideDialog()", true);
+			function.Action("ClearDialog()", true);
+			function.Action("WalkTo(Arlan, Arlan)", false);
+			function.Action("Unpocket(Mathias, MathiasSword)", true);
+			function.Action("Take(Arlan, MathiasSword, Mathias)", true);
+			function.SetupDialogText("Archie likely fled to the place where this all started. We will confront him in the ruins. Follow me!", "letsGo", "Lets go!");
+			function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Selected letsGo") {
+			function.Action("HideDialog()", true);
+			function.Action("ClearDialog()", true);
+			function.Action("WalkTo(Mathias, CurrentCamp2.Exit)", false);
+			function.Action("WalkTo(Arlan, CurrentCamp2.Exit)", false);
+			function.Action("FadeOut()", true);
+			currentLocation = "FinalRuins";
+		}
+
+		else if (i == "input Selected leaveTome") {
+			function.Action("HideDialog()", true);
+			function.Action("ClearDialog()", true);
+			function.Action("CloseFurniture(Arlan, CurrentCamp2.Chest)", true);
+			function.Action("SetNarration(You leave the tome alone and close the chest. You feel the tome calling out to you. You have come this far... should you really leave it here?)", true);
+			function.Action("ShowNarration()", true);
+		}
+
+		else if (i == "input Selected end") {
+			function.Action("HideDialog()", true);
+		}
+
+		else if (i == "input Key Inventory") {
+			function.Action("ClearList()", true);
+			for (string item : playerInv) {
+				function.Action("AddToList(" + item + ")", true);
+			}
+			function.Action("ShowList(Arlan)", true);
+		}
+
+		else if (i == "input Close List") {
+			function.Action("HideList()", true);
+			function.Action("EnableInput()", true);
+		}
+	}
+}
+
+void Chapter2::runFinalRuins() {
+	function.Action("SetPosition(Archie, FinalRuins.Throne)", true);
+	function.Action("Sit(Archie, FinalRuins.Throne)", true);
+	function.Action("Enter(Mathias, FinalRuins.Exit, false)", true);
+	function.Action("WalkTo(Mathias, FinalRuins.Altar)", false);
+	function.Action("Enter(Arlan, FinalRuins.Exit, true)", true);
+	function.Action("WalkToSpot(Arlan, 5983.3, 62.2, 98.5)", false);
+	function.WaitFor("succeeded WalkTo(Mathias, FinalRuins.Altar)");
+	function.Action("Face(Mathias, Archie)", false);
+	function.WaitFor("succeeded WalkToSpot(Arlan, 5983.3, 62.2, 98.5)");
+	function.Action("Face(Arlan, Archie)", false);
+	function.Action("WalkToSpot(Archie, 5984.8, 62.5, 97.6)", true);
+	function.SetupDialog("Arlan", "Archie", false);
+	function.SetupDialogText("Ah... I see you two have met. You are bold to challenge me boy. But your courage is in vain. Not even my old rival Mathias can help you.", "beginFight", "We shall see. *Attack!*");
+	while (currentLocation == "FinalRuins") {
+		string i;
+		getline(cin, i);
+
+		//Gets the first word that isn't "input"
+		modified_I = function.splitInput(i, 6, false);
+
+		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
+
+		if (!inputWasCommon) {
+
+		}
+
+
+		if (i == "input Selected beginFight") {
+			function.Action("HideDialog()", true);
+			function.Action("ClearDialog()", false);
+			function.Action("Draw(Mathias, MathiasSword2)", true);
+			function.Action("Attack(Mathias, Archie, false)", true);
+			function.Action("Cast(Archie, Mathias)", true);
+			function.Action("Kneel(Mathias)", true);
+			function.SetupDialog("Arlan", "Mathias", false);
+			function.SetupDialogText("Arlan! Do it now!", "drinkPotion", "*Drink the potion*", "askWhat", "...Do what?");
+			function.Action("Face(Archie, Arlan)", false);
+		}
+
+		else if (i == "input Selected askWhat") {
+			function.SetupDialogText("Drink the potion you fool!", "drinkPotion", "Oh! Right!");
+		}
+
+		else if (i == "input Selected drinkPotion") {
+			function.Action("HideDialog()", true);
+			function.Action("ClearDialog()", false);
+			function.Action("Pocket(Arlan, MathiasSword)", true);
+			function.Action("Unpocket(Arlan, PotionOfPower)", true);
+			function.Action("Drink(Arlan)", true);
+			function.SetupDialog("Arlan", "null", false);
+			function.SetupDialogText("The power of the potion surges through you. You feel... invincible.", "attackArchie", "*Attack!*");
+		}
+
+		else if (i == "input Selected attackArchie") {
+			function.Action("HideDialog()", true);
+			function.Action("ClearDialog()", false);
+			function.Action("Pocket(Arlan, PotionOfPower)", true);
+			function.Action("Draw(Arlan, MathiasSword)", true);
+			function.Action("Attack(Arlan, Archie, true)", true);
+			function.Action("Die(Archie)", true);
+			function.Action("Sheathe(Arlan, MathiasSword)", true);
+			function.Action("Face(Arlan, Mathias)", false);
+			function.SetupDialog("Arlan", "Mathias", false);
+			function.SetupDialogText("Finally... it is over. Goodbye old friend... You did well Arlan. If you will excuse me I need a moment to recover.", "ofCourse", "Of course!");
+		}
+
+		else if (i == "input Selected ofCourse") {
+			function.Action("LookAt(Arlan, AncientTome)", false);
+			function.Action("SetRight(null)", true);
+			function.SetupDialogText("You hear the ancient tome summoning you once more. Its call is too difficult to resist.", "takeBook", "*TAKE THE BOOK.*");
+		}
+
+		else if (i == "input Selected takeBook") {
+			function.Action("HideDialog()", true);
+			function.Action("ClearDialog()", false);
+			function.Action("Face(Arlan, Archie)", false);
+			function.Action("Take(Arlan, AncientTome, Archie)", true);
+			function.SetupDialogText("Ancient knowledge fills your mind. You feel a sudden sense of total clarity. A new thought creeps into your head... maybe Mathias has ulterior motives. He wants the power for himself. He must. You cannot allow him to take it.", "stopMathias", "*STOP HIM.*");
+			function.Action("ShowDialog()", true);
+		}
+
+		else if (i == "input Selected stopMathias") {
+			function.Action("Face(Arlan, Mathias)", false);
+			function.Action("WalkTo(Mathias, FinalRuins.Altar)", false);
+			function.Action("SetRight(Mathias)", true);
+			function.Action("Face(Mathias, Arlan)", false);
+			function.SetupDialogText("Arlan... what are you doing? That tome must be destroyed!", "finish", "HE MUST NOT BE ALLOWED TO TAKE IT.");
+		}
+
+		else if (i == "input Selected finish") {
+			function.Action("HideDialog()", true);
+			function.Action("ClearDialog()", false);
+			function.Action("Draw(Arlan, MathiasSword)", true);
+			function.Action("Attack(Arlan, Mathias, true)", true);
+			function.Action("Die(Mathias)", true);
+			function.Action("Sheathe(Arlan, MathiasSword)", true);
+			function.Action("WalkTo(Arlan, FinalRuins.Throne)", true);
+			function.Action("SetCameraMode(focus)", false);
+			function.Action("Sit(Arlan, FinalRuins.Throne)", true);
+			function.Action("FadeOut()", true);
+			function.Action("SetNarration(THE END.)", true);
+			function.Action("ShowNarration()", true);
 		}
 
 		else if (i == "input Selected end") {

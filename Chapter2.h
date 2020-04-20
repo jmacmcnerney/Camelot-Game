@@ -55,6 +55,8 @@ public:
 	bool setupGreatHall(string name);
 	bool setupLibrary(string name);
 	bool setupCamp(string name);
+	bool setupCamp2(string name);
+	bool setupFinalRuins(string name);
 	bool setupDungeon(string name);
 	bool setupLeftHallway(string name);
 	bool setupRightHallway(string name);
@@ -85,6 +87,8 @@ public:
 	void runCurrentCourtyard();
 	void runCurrentCastleBedroom();
 	void runCurrentCamp();
+	void runCurrentCamp2();
+	void runFinalRuins();
 
 	void flashback1();
 
@@ -93,7 +97,7 @@ public:
 	// interactions relevant to this chapter.
 	vector<Icon> icons;
 
-	Ruins currentRuins, pastRuins;
+	Ruins currentRuins, pastRuins, finalRuins;
 	Cottage currentCottage, pastCottage;
 	Blacksmith BlacksmithFoundry;
 	ForestPath currentForestPath, pastForestPath, ForestPath2;
@@ -105,7 +109,7 @@ public:
 	Port CurrentPort;
 	GreatHall CurrentGreatHall;
 	Library CurrentLibrary;
-	Camp CurrentCamp;
+	Camp CurrentCamp, CurrentCamp2;
 	Dungeon CurrentPrison;
 	Hallway LeftHallway, RightHallway;
 	DiningRoom CurrentDiningRoom;
