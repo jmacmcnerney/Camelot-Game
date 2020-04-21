@@ -763,7 +763,7 @@ bool Story::setupLeftHallway(string name) {
 	function.Action("CreateItem(Potion of Healing, PurplePotion)", true);
 	//icons
 	LeftHallway.icons.push_back(Icon("Talk_To_Guard", "talk", "PrisonGuard", "Talk To Guard", "true"));
-	LeftHallway.icons.push_back(Icon("Enter Door", "Hand", "LeftHallway.Door", "Enter", "true"));
+	//LeftHallway.icons.push_back(Icon("Enter LeftHallway Door", "Hand", "LeftHallway.Door", "Enter", "true"));
 	function.SetupIcons(LeftHallway.icons);
 
 	return true;
@@ -777,7 +777,7 @@ bool Story::setupRightHallway(string name) {
 	//items
 
 	//icons
-	RightHallway.icons.push_back(Icon("Enter Door", "Hand", "RightHallway.Door", "Enter", "true"));
+	RightHallway.icons.push_back(Icon("Enter RightHallway Door", "Hand", "RightHallway.Door", "Enter", "true"));
 	function.SetupIcons(RightHallway.icons);
 
 	return true;
@@ -1038,7 +1038,7 @@ void Story::runCurrentCottage() {
 		else if (i == "input Selected teleportToCurrentPort") { function.Action("SetPosition(Arlan, CurrentPort)", true); }
 		else if (i == "input Selected teleportToCurrentGreatHall") { function.Action("SetPosition(Arlan, CurrentGreatHall)", true); }
 		else if (i == "input Selected teleportToCurrentStorage") { function.Action("SetPosition(Arlan, CurrentStorage)", true); }
-		else if (i == "input Selected teleportToRightHallway") { function.Action("SetPosition(Arlan, RightHallway)", true); }
+		else if (i == "input Selected teleportToRightHallway") { function.Action("SetPosition(Arlan, RightHallway)", true); currentLocation = "RightHallway"; }
 		else if (i == "input Selected teleportToCurrentLibrary") { function.Action("SetPosition(Arlan, CurrentLibrary)", true); }
 		else if (i == "input Selected teleportToCurrentCastleBedroom") { function.Action("SetPosition(Arlan, CurrentCastleBedroom)", true); }
 		else if (i == "input Selected teleportToLeftHallway") { function.Action("SetPosition(Arlan, LeftHallway)", true); }
@@ -1574,6 +1574,7 @@ void Story::runCurrentRuins() {
 		}
 
 		else if (i == "input arrived Arlan position CurrentRuins.Altar") {
+			function.Action("SetRight(null)", true);
 			if (!item_placed && (sword_taken || spellbook_taken)) {
 				function.Action("DisableInput()", true);
 				function.Action("ShowDialog()", true);
@@ -2455,6 +2456,7 @@ void Story::runCurrentLibrary() {
 		}
 
 		else if (i == "input Library Table CurrentLibrary.Table") {
+			function.Action("SetRight(null)", true);
 			function.WalkToPlace("Arlan", "CurrentLibrary.Table");
 			if (libraryPuzzleSolved && hasGreenBook) {
 				function.Action("SetNarration(You already won.)", true);
@@ -2488,12 +2490,14 @@ void Story::runCurrentLibrary() {
 		}
 
 		else if (i == "input Library Spellbook CurrentLibrary.SpellBook") {
+			function.Action("SetRight(null)", true);
 			function.WalkToPlace("Arlan", "CurrentLibrary.SpellBook");
 			function.SetupDialogText("Restore the order to reveal an Incantation.", "end", "Hmm...");
 			function.Action("ShowDialog()", true);
 		}
 
 		else if (i == "input Library Alchemist Table CurrentLibrary.AlchemistTable") {
+			function.Action("SetRight(null)", true);
 			function.WalkToPlace("Arlan", "CurrentLibrary.AlchemistTable");
 			function.Action("ShowDialog()", true);
 			if (libraryPuzzleSolved) {
@@ -2702,6 +2706,7 @@ void Story::runCurrentStorage() {
 			}
 
 			else if (i == "input Interact With Potion Of Cleansing Potion Of Cleansing") {
+				function.Action("SetRight(null)", true);
 				function.Action("SetNarration(This potion can cleanse the evil spirits from the heart of men. Potion Of Cleansing Added To Inventory.)", true);
 				function.Action("ShowNarration()", true);
 				function.Action("DisableEffect(Potion Of Cleansing)", true);
@@ -2745,6 +2750,7 @@ void Story::runCurrentStorage() {
 			}
 
 			else if (i == "input Place Items On Shelf CurrentStorage.Shelf") {
+				function.Action("SetRight(null)", true);
 				function.WalkToPlace("Arlan", "CurrentStorage.Shelf");
 				function.Action("ShowDialog()", true);
 				if (storagePuzzleSolved) {
@@ -2813,6 +2819,7 @@ void Story::runCurrentStorage() {
 
 			else if (i == "input Read Storage OpenScroll Storage OpenScroll") {
 				//function.WalkToPlace("Arlan", "CurrentStorage.Barrel");
+				function.Action("SetRight(null)", true);
 				function.SetupDialogText("In this storage some items reside in a chest.\\nSome are useless a red herring at its best.\\nSet a meal on the shelf for this particular test.\\nRemember that thirst is quenched from the right of the perspective of the guest.", "end", "**Walk Away**", "end", "reset");
 				function.Action("ShowDialog()", true);
 			}
@@ -3098,7 +3105,8 @@ void Story::runLeftHallway() {
 				currentLocation = "CurrentDiningRoom";
 			}
 		}
-		else if (i == "input Enter Door LeftHallway.Door") {
+		//else if (i == "input Enter LeftHallway Door LeftHallway.Door") {
+		else if (i == "input arrived Arlan position LeftHallway.Door") {
 			function.Transition("Arlan", "LeftHallway.Door", "CurrentGreatHall.LeftDoor");
 			currentLocation = "CurrentGreatHall";
 		}
@@ -3163,7 +3171,8 @@ void Story::runRightHallway() {
 			}
 		}
 		//CurrentGreatHall
-		else if (i == "input Enter Door RightHallway.Door") {
+		//else if (i == "input Enter RightHallway Door RightHallway.Door") {
+		else if (i == "input arrived Arlan position RightHallway.Door") {
 			function.Transition("Arlan", "RightHallway.Door", "CurrentGreatHall.RightDoor");
 			currentLocation = "CurrentGreatHall";
 		}
