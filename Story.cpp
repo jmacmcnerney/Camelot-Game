@@ -1021,30 +1021,30 @@ void Story::runCurrentCottage() {
 		else if (i == "input Selected teleportCheats") {
 			//function.Action("FadeOut()", true);
 			function.Action("ClearDialog()", true);
-			function.Action("SetDialog(Where?\\n[teleportToArlanCottage|Arlan Cottage]\\n[teleportToCurrentTown|Current Town]\\n[teleportToBlacksmithFoundry|Blacksmith Foundry]\\n[teleportToAlchemyShop|Alchemy Shop]\\n[teleportToCurrentForestPath|Current Forest Path]\\n[teleportToCurrentRuins|Current Ruins]\\n[teleportToPastCottage|Past Cottage]\\n[teleportToPastCity|Past City]\\n[teleportToPastForestPath|Past Forest Path]\\n[teleportToPastRuins|Past Ruins]\\n[teleportToForestPath2|Forest Path 2]\\n[teleportToCurrentCastleCrossroads|Current Castle Crossroads]\\n[teleportToCurrentPort|Current Port]\\n[teleportToCurrentStorage|Current Storage]\\n[teleportToRightHallway|Right Hallway]\\n[teleportToCurrentLibrary|Current Library]\\n[teleportToCurrentCastleBedroom|Current Castle Bedroom]\\n[teleportToLeftHallway|Left Hallway]\\n[teleportToCurrentDiningRoom|Current Dining Room]\\n[teleportToCurrentPrison|Current Prison]\\n[teleportToCurrentCourtyard|Current Courtyard]\\n[end|Exit Menu])", true);
+			function.Action("SetDialog(Where?\\n[teleportToArlanCottage|Arlan Cottage]\\n[teleportToCurrentTown|Current Town]\\n[teleportToBlacksmithFoundry|Blacksmith Foundry]\\n[teleportToAlchemyShop|Alchemy Shop]\\n[teleportToCurrentForestPath|Current Forest Path]\\n[teleportToCurrentRuins|Current Ruins]\\n[teleportToPastCottage|Past Cottage]\\n[teleportToPastCity|Past City]\\n[teleportToPastForestPath|Past Forest Path]\\n[teleportToPastRuins|Past Ruins]\\n[teleportToForestPath2|Forest Path 2]\\n[teleportToCurrentCastleCrossroads|Current Castle Crossroads]\\n[teleportToCurrentPort|Current Port]\\n[teleportToCurrentGreatHall|Current Great Hall]\\n[teleportToCurrentStorage|Current Storage]\\n[teleportToRightHallway|Right Hallway]\\n[teleportToCurrentLibrary|Current Library]\\n[teleportToCurrentCastleBedroom|Current Castle Bedroom]\\n[teleportToLeftHallway|Left Hallway]\\n[teleportToCurrentDiningRoom|Current Dining Room]\\n[teleportToCurrentPrison|Current Prison]\\n[teleportToCurrentCourtyard|Current Courtyard]\\n[end|Exit Menu])", true);
 		}
 
-		else if (i == "input Selected teleportToArlanCottage") { function.Action("SetPosition(Arlan, ArlanCottage)", true); }
-		else if (i == "input Selected teleportToCurrentTown") { function.Action("SetPosition(Arlan, CurrentTown)", true); }
-		else if (i == "input Selected teleportToAlchemyShop") { function.Action("SetPosition(Arlan, AlchemyShop)", true); }
-		else if (i == "input Selected teleportToCurrentForestPath") { function.Action("SetPosition(Arlan, CurrentForestPath)", true); }
-		else if (i == "input Selected teleportToCurrentRuins") { function.Action("SetPosition(Arlan, CurrentRuins)", true); }
-		else if (i == "input Selected teleportToPastCottage") { function.Action("SetPosition(Arlan, PastCottage)", true); }
-		else if (i == "input Selected teleportToPastCity") { function.Action("SetPosition(Arlan, PastCity)", true); }
-		else if (i == "input Selected teleportToPastForestPath") { function.Action("SetPosition(Arlan, PastForestPath)", true); }
-		else if (i == "input Selected teleportToPastRuins") { function.Action("SetPosition(Arlan, PastRuins)", true); }
-		else if (i == "input Selected teleportToForestPath2") { function.Action("SetPosition(Arlan, ForestPath2)", true); }
-		else if (i == "input Selected teleportToCurrentCastleCrossroads") { function.Action("SetPosition(Arlan, CurrentCastleCrossroads)", true); }
-		else if (i == "input Selected teleportToCurrentPort") { function.Action("SetPosition(Arlan, CurrentPort)", true); }
-		else if (i == "input Selected teleportToCurrentGreatHall") { function.Action("SetPosition(Arlan, CurrentGreatHall)", true); }
-		else if (i == "input Selected teleportToCurrentStorage") { function.Action("SetPosition(Arlan, CurrentStorage)", true); }
-		else if (i == "input Selected teleportToRightHallway") { function.Action("SetPosition(Arlan, RightHallway)", true); currentLocation = "RightHallway"; }
-		else if (i == "input Selected teleportToCurrentLibrary") { function.Action("SetPosition(Arlan, CurrentLibrary)", true); }
-		else if (i == "input Selected teleportToCurrentCastleBedroom") { function.Action("SetPosition(Arlan, CurrentCastleBedroom)", true); }
-		else if (i == "input Selected teleportToLeftHallway") { function.Action("SetPosition(Arlan, LeftHallway)", true); }
-		else if (i == "input Selected teleportToCurrentDiningRoom") { function.Action("SetPosition(Arlan, CurrentDiningRoom)", true); }
-		else if (i == "input Selected teleportToCurrentPrison") { function.Action("SetPosition(Arlan, CurrentPrison)", true); }
-		else if (i == "input Selected teleportToCurrentCourtyard") { function.Action("SetPosition(Arlan, CurrentCourtyard)", true); }
+		else if (i == "input Selected teleportToArlanCottage") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, ArlanCottage)", true); currentLocation = "ArlanCottage"; }
+		else if (i == "input Selected teleportToCurrentTown") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentTown)", true); currentLocation = "CurrentTown"; }
+		else if (i == "input Selected teleportToAlchemyShop") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, AlchemyShop)", true); currentLocation = "AlchemyShop"; }
+		else if (i == "input Selected teleportToCurrentForestPath") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentForestPath)", true); currentLocation = "CurrentForestPath"; }
+		else if (i == "input Selected teleportToCurrentRuins") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentRuins)", true); currentLocation = "CurrentRuins"; }
+		else if (i == "input Selected teleportToPastCottage") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, PastCottage)", true); currentLocation = "PastCottage"; }
+		else if (i == "input Selected teleportToPastCity") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, PastCity)", true); currentLocation = "PastCity"; }
+		else if (i == "input Selected teleportToPastForestPath") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, PastForestPath)", true); currentLocation = "PastForestPath"; }
+		else if (i == "input Selected teleportToPastRuins") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, PastRuins)", true); currentLocation = "PastRuins"; }
+		else if (i == "input Selected teleportToForestPath2") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, ForestPath2)", true); currentLocation = "ForestPath2"; }
+		else if (i == "input Selected teleportToCurrentCastleCrossroads") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentCastleCrossroads)", true); currentLocation = "CurrentCastleCrossroads"; }
+		else if (i == "input Selected teleportToCurrentPort") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentPort)", true); currentLocation = "CurrentPort"; }
+		else if (i == "input Selected teleportToCurrentGreatHall") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentGreatHall)", true); currentLocation = "CurrentGreatHall"; }
+		else if (i == "input Selected teleportToCurrentStorage") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentStorage)", true); currentLocation = "CurrentStorage"; }
+		else if (i == "input Selected teleportToRightHallway") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, RightHallway)", true); currentLocation = "RightHallway"; }
+		else if (i == "input Selected teleportToCurrentLibrary") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentLibrary)", true); currentLocation = "CurrentLibrary"; }
+		else if (i == "input Selected teleportToCurrentCastleBedroom") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentCastleBedroom)", true); currentLocation = "CurrentCastleBedroom"; }
+		else if (i == "input Selected teleportToLeftHallway") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, LeftHallway)", true); currentLocation = "LeftHallway"; }
+		else if (i == "input Selected teleportToCurrentDiningRoom") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentDiningRoom)", true); currentLocation = "CurrentDiningRoom"; }
+		else if (i == "input Selected teleportToCurrentPrison") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentPrison)", true); currentLocation = "CurrentPrison"; }
+		else if (i == "input Selected teleportToCurrentCourtyard") { function.Action("HideDialog()", true); function.Action("SetPosition(Arlan, CurrentCourtyard)", true); currentLocation = "CurrentCourtyard"; }
 
 		else if (i == "input Selected itemCheats") {
 			function.Action("ClearDialog()", true);
