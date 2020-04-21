@@ -2183,6 +2183,9 @@ void Story::runCurrentPort() {
 						if (hasCompass) {
 							function.SetupDialogText("Ah! That compass! I cannot sail again until I have one just like that. Would you be willing to trade it for a valuable relic I found at sea?", "giveCompass", "Sure!", "end", "No thanks.");
 						}
+						else if (hasBlueBook) {
+							function.SetupDialogText("Thanks again for your help! Hope that book is useful for ya.", "end", "*Leave.*");
+						}
 						else {
 							function.SetupDialogText("You there! Care to help an old sailor out? I cant sail again until I have a compass. That merchant over there is selling one but he refuses to take sea shells as payment. Could you get it for me? I'll trade you an artifact I found at sea for it!", "end", "Ill see what I can do.");
 						}
@@ -3051,8 +3054,22 @@ void Story::runLeftHallway() {
 		}
 		//CurrentDiningRoom
 		else if (i == "input arrived Arlan position LeftHallway.Stairs") {
-			function.Transition("Arlan", "LeftHallway.Stairs", "CurrentDiningRoom.Door");
-			currentLocation = "CurrentDiningRoom";
+			if (!MathiasFlashback) {
+				function.Action("SetNarration(A mysterious force prevents you from entering. You should adventure elsewhere.)", true);
+				function.Action("ShowNarration()", true);
+			}
+			else if (hasGreenBook || hasGreenPotion) {
+				function.Action("SetNarration(A mysterious force prevents you from entering. You should adventure elsewhere.)", true);
+				function.Action("ShowNarration()", true);
+			}
+			else if (hasBluePotion) {
+				function.Action("SetNarration(A mysterious force prevents you from entering. You feel your work here is completed. You should adventure elsewhere.)", true);
+				function.Action("ShowNarration()", true);
+			}
+			else if (MathiasFlashback && !hasGreenBook && !hasGreenPotion && !hasBluePotion) {
+				function.Transition("Arlan", "LeftHallway.Stairs", "CurrentDiningRoom.Door");
+				currentLocation = "CurrentDiningRoom";
+			}
 		}
 		else if (i == "input arrived Arlan position LeftHallway.Door") {
 			function.Transition("Arlan", "LeftHallway.Door", "CurrentGreatHall.LeftDoor");
