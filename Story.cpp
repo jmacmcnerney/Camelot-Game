@@ -2933,7 +2933,7 @@ void Story::runCurrentPrison() {
 						CurrentCourtyard.icons.push_back(Icon("Search Target", "hand", "CurrentCourtyard.Target", "Search Target", "true"));
 						function.SetupIcons(CurrentCourtyard.icons);
 
-						function.Action("Draw(Arlan, GuardSword)", true);
+						function.Action("Draw(Prisoner, GuardSword)", true);
 
 						hasSecondPrisItem = false;
 						secondPrisRiddle = true;
@@ -2991,7 +2991,7 @@ void Story::runCurrentPrison() {
 				}
 				else if (modified_I == "RiddleOne") {
 					//Run some kind of spell animation here
-					function.SetupDialogText("Hiding behind the seat of power this set of armor could rule over everything", "DialogEnd", "Hmmm");
+					function.SetupDialogText("In a sarcophagus of wood, you won't have to look far to find this suit of armor", "DialogEnd", "Hmmm");
 					firstTalkPris = false;
 				}
 				else if (modified_I == "RiddleThree") {
@@ -4005,6 +4005,7 @@ void Story::runCurrentCamp() {
 						function.Action("Die(MathiasR)", true);
 						function.Action("CreateEffect(Arlan, Death)", true);
 						function.Action("Die(Arlan)", true);
+						function.Action("FadeOut()", true);
 					}
 
 				}
