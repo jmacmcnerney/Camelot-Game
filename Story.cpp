@@ -63,9 +63,13 @@ bool libraryPuzzleSolved = false;
 //Blue Puzzle Booleans
 //Potion
 bool hasBluePotion = false;
+bool visitedDiningRoom = false;
 //Book
 bool hasBlueBook = false;
-bool visitedDiningRoom = false;
+bool spokenWithMerchant = false;
+bool hasStrangeElixir = false;
+bool drankStangeElixir = false;
+//bool spokenWithSailor = false;
 bool canWorkForBlacksmith = false;
 bool hasCompass = false;
 bool hasRedPotion = false;
@@ -561,11 +565,13 @@ bool Story::setupPort(string name) {
 		//items
 		function.Action("CreateItem(Compass, Compass)", true);
 		function.Action("CreateItem(BookOfLore, BlueBook)", true);
+		function.Action("CreateItem(StrangeElixir, Bottle)", true);
 
 		//icons
 		CurrentPort.icons.push_back(Icon("Talk to PortMerchant", "Talk", "PortMerchant", "Talk To Port Merchant", "true"));
 		CurrentPort.icons.push_back(Icon("Talk to Sailor", "Talk", "Sailor", "Talk To Sailor", "true"));
 		CurrentPort.icons.push_back(Icon("ReadBookOfLore", "Research", "BookOfLore", "Read the Book", "true"));
+		CurrentPort.icons.push_back(Icon("DrinkStrangeElixir", "potion", "StrangeElixir", "Drink the Elixir", "true"));
 		function.SetupIcons(CurrentPort.icons);
 	}
 	else if (ArchieFlashback) {
@@ -574,6 +580,7 @@ bool Story::setupPort(string name) {
 
 		//items
 		function.Action("CreateItem(Translating Glass, MagnifyingGlass)", true);
+		function.Action("CreateItem(StrangeElixir, Bottle)", true);
 		function.Action("SetPosition(Translating Glass, CurrentPort.BigStall.Left)", true);
 
 
@@ -581,6 +588,7 @@ bool Story::setupPort(string name) {
 		CurrentPort.icons.push_back(Icon("Talk_To_Trader", "Talk", "ShipTrader", "Talk to Ship Merchant", "true"));
 		CurrentPort.icons.push_back(Icon("Take_Glass", "Hand", "Translating Glass", "Take Translaing Glass", "true"));
 		CurrentPort.icons.push_back(Icon("Intract_Ship", "Torch", "CurrentPort.SmallShip", "Interact with Ship", "true"));
+		CurrentPort.icons.push_back(Icon("DrinkStrangeElixir", "potion", "StrangeElixir", "Drink the Elixir", "true"));
 		function.SetupIcons(CurrentPort.icons);
 
 		//visual effect
@@ -2170,17 +2178,41 @@ void Story::runCurrentPort() {
 
 					if (modified_I == "PortMerchant") {
 						function.SetupDialog("Arlan", "PortMerchant", true);
-						if (hasCompass) {
+						if (hasStrangeElixir) {
+							if (drankStangeElixir) {
+								function.SetupDialogText("That was my last item, sorry!", "askElixir", "That elixir didnt do anything!");
+							}
+							else {
+								function.SetupDialogText("That was my last item, sorry!", "end", "*Leave.*");
+							}
+						}
+						else if (!MathiasFlashback) {
+							function.SetupDialogText("Hello there! Unfortunately I just sold my last seafaring item to that sailor gentlemen over there. Sorry!", "askCoins", "Any idea where I could spend some coin?", "end", "*Leave.*");
+						}
+						else if (hasGreenBook || hasGreenPotion)
+						{
+							if (!spokenWithMerchant) {
+								function.SetupDialogText("Hello there! Unfortunately I just sold my last seafaring item to that sailor gentlemen over there. Sorry!", "askCoins", "Any idea where I could spend some coin?", "end", "*Leave.*");
+							}
+							else {
+								function.SetupDialogText("Hello again! Unfortunately that sailor gentleman gathered enough coin to purchase the compass. I can no longer sell it to you. Sorry!", "askCoins", "Is there anything else I can purchase?", "end", "*Leave.*");
+							}
+						}
+						else if (hasCompass) {
 							function.SetupDialogText("That compass was my last item. Sorry!", "end", "Okay!");
 						}
 						else {
 							function.SetupDialogText("High quality ship wares for sale! Our newest item is a top notch compass! Interested? Only five gold pieces!", "buyCompass", "Ill take it!", "end", "No thanks.");
+							spokenWithMerchant = true;
 						}
 					}
 
 					else if (modified_I == "Sailor") {
 						function.SetupDialog("Arlan", "Sailor", true);
-						if (hasCompass) {
+						if (!MathiasFlashback || hasGreenBook || hasGreenPotion) {
+							function.SetupDialogText("*The sailor appears enthralled by a compass and isnt responding.*", "end", "*Leave.*");
+						}
+						else if (hasCompass) {
 							function.SetupDialogText("Ah! That compass! I cannot sail again until I have one just like that. Would you be willing to trade it for a valuable relic I found at sea?", "giveCompass", "Sure!", "end", "No thanks.");
 						}
 						else if (hasBlueBook) {
@@ -2222,6 +2254,38 @@ void Story::runCurrentPort() {
 						function.Action("ShowNarration()", true);
 					}
 
+					else if (modified_I == "askCoins") {
+						function.SetupDialogText("Well... I do have an imported elixir from overseas... It is said to induce strange visions and abilities. I could part with it for say... 5 coins?", "buyElixir", "Sure.", "end", "*No thanks.");
+					}
+
+					else if (modified_I == "buyElixir") {
+						if (numCoins >= 5) {
+							function.SetupDialogText("Here you are! Enjoy!", "endPortMerchantElixir", "Thanks!");
+						}
+						else {
+							function.SetupDialogText("Ah. My apologies. It seems you dont quite have enough coin. Im sure you could find some scattered about the kingdom if you looked hard enough.", "end", "Okay!");
+						}
+					}
+
+					else if (modified_I == "endPortMerchantElixir") {
+						function.Action("ClearDialog()", true);
+						function.Action("HideDialog()", true);
+						function.RemoveItem("Coin1", playerInv);
+						function.RemoveItem("Coin2", playerInv);
+						function.RemoveItem("Coin3", playerInv);
+						function.RemoveItem("Coin4", playerInv);
+						function.RemoveItem("Coin5", playerInv);
+						numCoins = 0;
+						playerInv.push_back("StrangeElixir");
+						hasStrangeElixir = true;
+						function.Action("SetNarration(A strange elixir has been added to your inventory. 5 coins have been removed.)", true);
+						function.Action("ShowNarration()", true);
+					}
+
+					else if (modified_I == "askElixir") {
+						function.SetupDialogText("*He shrugs.* Sorry! No refunds.", "end", "Fine. *Leave*");
+					}
+
 					else if (modified_I == "giveCompass") {
 						function.SetupDialogText("Finally! I can sail again! Here. You can have this old book I found at sea. Seems valuable!", "endSailor", "Thanks!");
 						function.RemoveItem("Compass", playerInv);
@@ -2256,6 +2320,15 @@ void Story::runCurrentPort() {
 				function.Action("ClearList()", true);
 				function.Action("SetNarration(The book describes an ancient tome that instills its owner with unimaginable power. Those who posess it are said to be destined to rule to world.)", true);
 				function.Action("ShowNarration()", true);
+			}
+
+			else if (i == "input DrinkStrangeElixir StrangeElixir") {
+				function.Action("Unpocket(Arlan, StrangeElixir)", true);
+				function.Action("Drink(Arlan)", true);
+				function.Action("SetNarration(The elixir tastes terrible. It doesnt seem to do much else.)", true);
+				function.Action("ShowNarration()", true);
+				function.RemoveItem("StrangeElixir", playerInv);
+				drankStangeElixir = true;
 			}
 
 			//CurrentCastleCrossroads
