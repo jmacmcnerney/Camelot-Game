@@ -3060,6 +3060,7 @@ void Story::runLeftHallway() {
 					function.SetupDialog("Arlan", "PrisonGuard", false);
 					function.SetupDialogText("You figured it out! The Kingdom is eternally thankful for your help. Have this weird potion I found laying around as a reward", "DialogEnd", "Accept the Potion");
 					playerInv.push_back("Potion of Healing");
+					hasPurplePotion = true;
 				}
 			}
 		}
@@ -3088,10 +3089,15 @@ void Story::runLeftHallway() {
 		}
 		//CurrentDiningRoom
 		else if (i == "input arrived Arlan position LeftHallway.Stairs") {
-			if (!MathiasFlashback) {
+			if (ArchieFlashback && !hasRedPotion && !hasRedBook && !hasPurpleBook) {
+				function.Transition("Arlan", "LeftHallway.Stairs", "CurrentDiningRoom.Door");
+				currentLocation = "CurrentDiningRoom";
+			}
+			else if (ArchieFlashback && (hasRedBook || hasRedPotion || hasPurpleBook)) {
 				function.Action("SetNarration(A mysterious force prevents you from entering. You should adventure elsewhere.)", true);
 				function.Action("ShowNarration()", true);
 			}
+
 			else if (hasGreenBook || hasGreenPotion) {
 				function.Action("SetNarration(A mysterious force prevents you from entering. You should adventure elsewhere.)", true);
 				function.Action("ShowNarration()", true);
