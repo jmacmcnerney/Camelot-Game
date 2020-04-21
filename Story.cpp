@@ -1148,6 +1148,23 @@ void Story::runCurrentTown() {
 					}
 					else if (ArchieFlashback || MathiasFlashback) {
 						function.SetupDialogText("You saw what? Oh my... the storybook did have some additional information. It said to stop the corruption you must locate 2 ancient artifacts and bring them to the region beyond the courtyard at the north end of the town.", "end", "Okay! Thanks!");
+
+						//spawn coins in world 
+						function.Action("CreateItem(Coin1, Coin)", true);
+						function.Action("EnableIcon(TakeCoin1, Hand, CurrentTown.Fountain, Inspect the Fountain, true)", true);
+
+						function.Action("CreateItem(Coin2, Coin)", true);
+						canWorkForBlacksmith = true;
+
+						function.Action("CreateItem(Coin3, Coin)", true);
+						function.Action("EnableIcon(TakeCoin3, Hand, ForestPath2.Well, Inspect the Well, true)", true);
+
+						function.Action("CreateItem(Coin4, Coin)", true);
+						function.Action("EnableIcon(TakeCoin4, Hand, CurrentPort.Barrel, Inspect the Barrel, true)", true);
+
+						function.Action("CreateItem(Coin5, Coin)", true);
+						function.Action("EnableIcon(TakeCoin5, Hand, Coin5, Take the Coin, true", true);
+						function.Action("SetPosition(Coin5, AlchemyShop.Table)", true);
 					}
 				}
 
@@ -1496,6 +1513,15 @@ void Story::runAlchemyShop() {
 				function.Transition("Arlan", "AlchemyShop.Door", "CurrentTown.BrownHouseDoor");
 				currentLocation = "CurrentTown";
 			}
+		}
+		else if (i == "input TakeCoin5 Coin5") {
+			function.WalkToPlace("Arlan", "AlchemyShop.Table");
+			function.Action("SetNarration(You take the gold coin.)", true);
+			function.Action("ShowNarration()", true);
+			playerInv.push_back("Coin5");
+			numCoins++;
+			function.Action("SetPosition(Coin5)", true);
+			function.Action("DisableIcon(TakeCoin5, Coin5)", true);
 		}
 	}
 }
@@ -2053,16 +2079,6 @@ void Story::runCurrentGreatHall() {
 					function.Action("ShowNarration()", true);
 				}
 			}
-
-			else if (i == "input TakeCoin5 Coin5") {
-				function.WalkToPlace("Arlan", "CurrentGreatHall.Table");
-				function.Action("SetNarration(You take the gold coin.)", true);
-				function.Action("ShowNarration()", true);
-				playerInv.push_back("Coin5");
-				numCoins++;
-				function.Action("SetPosition(Coin5)", true);
-				function.Action("DisableIcon(TakeCoin5, Coin5)", true);
-			}
 		}
 	}
 	else if (ArchieFlashback) {
@@ -2218,7 +2234,7 @@ void Story::runCurrentPort() {
 							function.SetupDialogText("That compass was my last item. Sorry!", "end", "Okay!");
 						}
 						else {
-							function.SetupDialogText("High quality ship wares for sale! Our newest item is a top notch compass! Interested? Only five gold pieces!", "buyCompass", "Ill take it!", "end", "No thanks.");
+							function.SetupDialogText("High quality ship wares for sale! Our newest item is a top notch compass! Interested? Only four gold pieces!", "buyCompass", "Ill take it!", "end", "No thanks.");
 							spokenWithMerchant = true;
 						}
 					}
@@ -2244,7 +2260,7 @@ void Story::runCurrentPort() {
 					modified_I = function.splitInput(i, 0, true);
 
 					if (modified_I == "buyCompass") {
-						if (numCoins >= 5) {
+						if (numCoins >= 4) {
 							function.SetupDialogText("Here you are! Watch out for that sailor over there. He has been eyeballing that compass for a while now.", "endPortMerchant", "Okay. Thanks!");
 						}
 						else if (hasBlueBook) {
@@ -2262,11 +2278,11 @@ void Story::runCurrentPort() {
 						function.RemoveItem("Coin2", playerInv);
 						function.RemoveItem("Coin3", playerInv);
 						function.RemoveItem("Coin4", playerInv);
-						function.RemoveItem("Coin5", playerInv);
+						//function.RemoveItem("Coin5", playerInv);
 						numCoins = 0;
 						playerInv.push_back("Compass");
 						hasCompass = true;
-						function.Action("SetNarration(A compass has been added to your inventory. 5 coins have been removed.)", true);
+						function.Action("SetNarration(A compass has been added to your inventory. 4 coins have been removed.)", true);
 						function.Action("ShowNarration()", true);
 					}
 
@@ -3484,12 +3500,13 @@ void Story::runCurrentDiningRoom() {
 				function.Action("ClearList()", true);
 				function.Action("Unpocket(Arlan, PotionOfPower)", true);
 				function.Action("Drink(Arlan)", true);
-				function.Action("SetNarration(You take a sip of the potion. Sudden images of a mysterious book adorned with a skull flash before your eyes. You feel stronger as the book calls out to you. You get the feeling should save to the rest of the potion.)", true);
+				function.Action("SetNarration(You take a sip of the potion. Sudden images of a mysterious book adorned with a skull flash before your eyes. You feel stronger as the book calls out to you. You get the feeling should save the rest of the potion.)", true);
 				function.Action("ShowNarration()", true);
 				function.Action("DisableIcon(Drink, PotionOfPower)", true);
 
 					function.Action("FadeOut()", true);
 					function.Action("SetPosition(Arlan, LeftHallway)", true);
+					function.Action("Pocket(Arlan, PotionOfPower)", true);
 					function.Action("FadeIn()", true);
 					currentLocation = "LeftHallway";
 				}
@@ -3872,7 +3889,7 @@ void Story::runCurrentCamp() {
 
 			if (i == "input OpenChest BlueCamp.Chest") {
 				// walk to and interact with chest
-				function.Action("OpenFurniture(Arlan, BlueCamp.Chest)", true);
+				//function.Action("OpenFurniture(Arlan, BlueCamp.Chest)", true); (camelot bug)
 				function.SetupDialog("Arlan", "null", false);
 				function.SetupDialogText("A strange book adorned with a skull lies in the chest. You recognize it as the powerful artifact from your visions and the tome described in the book the sailor gave you. Will you take it?", "takeTome", "*Take the artifact.*", "leaveTome", "*Leave it.*");
 				//function.Action("ShowDialog()", true);
@@ -4319,12 +4336,12 @@ void Story::runFinalRuins() {
 	function.Action("Enter(Mathias, FinalRuins.Exit, false)", true);
 	function.Action("WalkTo(Mathias, FinalRuins.Altar)", false);
 	function.Action("Enter(Arlan, FinalRuins.Exit, true)", true);
-	function.Action("WalkToSpot(Arlan, 5983.3, 62.2, 98.5)", false);
+	function.Action("WalkTo(Arlan, FinalRuins.Plant)", false);
 	function.WaitFor("succeeded WalkTo(Mathias, FinalRuins.Altar)");
 	function.Action("Face(Mathias, Archie)", false);
-	function.WaitFor("succeeded WalkToSpot(Arlan, 5983.3, 62.2, 98.5)");
+	function.WaitFor("succeeded WalkTo(Arlan, FinalRuins.Plant)");
 	function.Action("Face(Arlan, Archie)", false);
-	function.Action("WalkToSpot(Archie, 5984.8, 62.5, 97.6)", true);
+	function.Action("WalkTo(Archie, Mathias)", true);
 	function.SetupDialog("Arlan", "Archie", false);
 	function.SetupDialogText("Ah... I see you two have met. You are bold to challenge me boy. But your courage is in vain. Not even my old rival Mathias can help you.", "beginFight", "We shall see. *Attack!*");
 	while (currentLocation == "FinalRuins") {
@@ -4345,7 +4362,7 @@ void Story::runFinalRuins() {
 			function.Action("HideDialog()", true);
 			function.Action("ClearDialog()", false);
 			function.Action("Draw(Mathias, MathiasSword2)", true);
-			function.Action("Attack(Mathias, Archie, false)", true);
+			//function.Action("Attack(Mathias, Archie, false)", true); camelot bug
 			function.Action("Cast(Archie, Mathias)", true);
 			function.Action("Kneel(Mathias)", true);
 			function.SetupDialog("Arlan", "Mathias", false);
