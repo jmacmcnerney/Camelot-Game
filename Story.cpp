@@ -117,6 +117,8 @@ bool BedroomSpot4Correct = false;
 bool BedroomSpot5Correct = false;
 bool BedroomSpot6Correct = false;
 
+bool BedroomPuzzleFin = false;
+
 int numCoins = 0;
 
 Story::Story() {
@@ -3635,27 +3637,27 @@ void Story::runCurrentCastleBedroom() {
 
 			if (modified_I == "Spot1" && !BedroomSpot1Full) {
 				currentPosition = "CurrentCastleBedroom.Table.FrontLeft";
-				BedroomSpot1Full = true;
+				//BedroomSpot1Full = true;
 			}
 			else if (modified_I == "Spot2" && !BedroomSpot2Full) {
 				currentPosition = "CurrentCastleBedroom.Table.FrontRight";
-				BedroomSpot2Full = true;
+				//BedroomSpot2Full = true;
 			}
 			else if (modified_I == "Spot3" && !BedroomSpot3Full) {
 				currentPosition = "CurrentCastleBedroom.Table.Right";
-				BedroomSpot3Full = true;
+				//BedroomSpot3Full = true;
 			}
 			else if (modified_I == "Spot4" && !BedroomSpot4Full) {
 				currentPosition = "CurrentCastleBedroom.Table.BackRight";
-				BedroomSpot4Full = true;
+				//BedroomSpot4Full = true;
 			}
 			else if (modified_I == "Spot5" && !BedroomSpot5Full) {
 				currentPosition = "CurrentCastleBedroom.Table.BackLeft";
-				BedroomSpot5Full = true;
+				//BedroomSpot5Full = true;
 			}
 			else if (modified_I == "Spot6" && !BedroomSpot6Full) {
 				currentPosition = "CurrentCastleBedroom.Table.Left";
-				BedroomSpot6Full = true;
+				//BedroomSpot6Full = true;
 			}
 
 			if (currentPosition != "") {
@@ -3688,23 +3690,47 @@ void Story::runCurrentCastleBedroom() {
 				function.Action("HideDialog()", true);
 				function.Action("Put(Arlan, " + modified_I + ", " + currentPosition + ")", true);
 
-				if (modified_I == "CastleBedroomLock" && currentPosition == "CurrentCastleBedroom.Table.FrontLeft") {
-					BedroomSpot1Correct = true;
+				if (currentPosition == "CurrentCastleBedroom.Table.FrontLeft") {
+					BedroomSpot1Full = true;
+
+					if (modified_I == "CastleBedroomLock") {
+						BedroomSpot1Correct = true;
+					}
 				}
-				else if (modified_I == "CastleBedroomBag" && currentPosition == "CurrentCastleBedroom.Table.FrontRight") {
-					BedroomSpot2Correct = true;
+				else if (currentPosition == "CurrentCastleBedroom.Table.FrontRight") {
+					BedroomSpot2Full = true;
+
+					if (modified_I == "CastleBedroomBag") {
+						BedroomSpot2Correct = true;
+					}
 				}
-				else if (modified_I == "CastleBedroomSkull" && currentPosition == "CurrentCastleBedroom.Table.Left") {
-					BedroomSpot6Correct = true;
+				else if (currentPosition == "CurrentCastleBedroom.Table.Left") {
+					BedroomSpot6Full = true;
+
+					if (modified_I == "CastleBedroomSkull") {
+						BedroomSpot6Correct = true;
+					}
 				}
-				else if (modified_I == "CastleBedroomJewelKey" && currentPosition == "CurrentCastleBedroom.Table.BackRight") {
-					BedroomSpot4Correct = true;
+				else if (currentPosition == "CurrentCastleBedroom.Table.BackRight") {
+					BedroomSpot4Full = true;
+
+					if (modified_I == "CastleBedroomJewelKey") {
+						BedroomSpot4Correct = true;
+					}
 				}
-				else if (modified_I == "CastleBedroomGoldCup" && currentPosition == "CurrentCastleBedroom.Table.BackLeft") {
-					BedroomSpot5Correct = true;
+				else if (currentPosition == "CurrentCastleBedroom.Table.BackLeft") {
+					BedroomSpot5Full = true;
+
+					if (modified_I == "CastleBedroomGoldCup") {
+						BedroomSpot5Correct = true;
+					}
 				}
-				else if (modified_I == "CastleBedroomInkAndQuill" && currentPosition == "CurrentCastleBedroom.Table.Right") {
-					BedroomSpot3Correct = true;
+				else if (currentPosition == "CurrentCastleBedroom.Table.Right") {
+					BedroomSpot3Full = true;
+
+					if (modified_I == "CastleBedroomInkAndQuill") {
+						BedroomSpot3Correct = true;
+					}
 				}
 
 				function.RemoveItem(modified_I, playerInv);
@@ -3714,27 +3740,32 @@ void Story::runCurrentCastleBedroom() {
 
 		}
 
-		if (BedroomSpot1Full && BedroomSpot2Full && BedroomSpot3Full && BedroomSpot4Full && BedroomSpot5Full && BedroomSpot6Full) {
+		if (BedroomSpot1Full && BedroomSpot2Full && BedroomSpot3Full && BedroomSpot4Full && BedroomSpot5Full && BedroomSpot6Full && !BedroomPuzzleFin) {
 			if (BedroomSpot1Correct && BedroomSpot2Correct && BedroomSpot3Correct && BedroomSpot4Correct && BedroomSpot5Correct && BedroomSpot6Correct) {
 				function.Action("EnableIcon(Search_Chest, magnifyingglass, CurrentCastleBedroom.Chest, Search Chest, true)", true);
-				BedroomSpot1Correct = false;
+				BedroomPuzzleFin = true;
 			}
 			else {
-				//BedroomSpot1Correct = false;
-				//BedroomSpot2Correct = false;
-				//BedroomSpot3Correct = false;
-				//BedroomSpot4Correct = false;
-				//BedroomSpot5Correct = false;
-				//BedroomSpot6Correct = false;
+				BedroomSpot1Correct = false;
+				BedroomSpot2Correct = false;
+				BedroomSpot3Correct = false;
+				BedroomSpot4Correct = false;
+				BedroomSpot5Correct = false;
+				BedroomSpot6Correct = false;
 
-				//BedroomSpot1Full = false;
-				//BedroomSpot2Full = false;
-				//BedroomSpot3Full = false;
-				//BedroomSpot4Full = false;
-				//BedroomSpot5Full = false;
-				//BedroomSpot6Full = false;
+				BedroomSpot1Full = false;
+				BedroomSpot2Full = false;
+				BedroomSpot3Full = false;
+				BedroomSpot4Full = false;
+				BedroomSpot5Full = false;
+				BedroomSpot6Full = false;
 
-				//function.Action("Take(Arlan, Healing potion, Camp.Chest)", true);
+				function.Action("Take(Arlan, CastleBedroomLock)", true);
+				function.Action("Take(Arlan, CastleBedroomBag)", true);
+				function.Action("Take(Arlan, CastleBedroomSkull)", true);
+				function.Action("Take(Arlan, CastleBedroomJewelKey)", true);
+				function.Action("Take(Arlan, CastleBedroomGoldCup)", true);
+				function.Action("Take(Arlan, CastleBedroomInkAndQuill)", true);
 			}
 		}
 
@@ -3745,7 +3776,6 @@ void Story::runCurrentCastleBedroom() {
 		}
 	}
 }
-
 void Story::runCurrentCamp() {
 	if (currentLocation == "BlueCamp") {
 		while (currentLocation == "BlueCamp") {
