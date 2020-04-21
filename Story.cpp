@@ -16,7 +16,7 @@ vector<string> playerInv;
 //location boolean
 string currentLocation = "ArlanCottage";
 
-bool cheatsEnabled = true;
+bool cheatsEnabled = false;
 
 //Intro Quest Booleans
 //Cottage
@@ -1236,8 +1236,14 @@ void Story::runCurrentTown() {
 		}
 
 		else if (i == "input arrived Arlan position CurrentTown.WestEnd") {
-			function.Transition("Arlan", "CurrentTown.WestEnd", "ForestPath2.EastEnd");
-			currentLocation = "ForestPath2";
+			if (MathiasFlashback || ArchieFlashback) {
+				function.Transition("Arlan", "CurrentTown.WestEnd", "ForestPath2.EastEnd");
+				currentLocation = "ForestPath2";
+			}
+			else {
+				function.Action("SetNarration(A thick mist blocks your path. You can make out a forest path just beyond the fog. Maybe you should return later.)", true);
+				function.Action("ShowNarration()", true);
+			}
 		}
 
 		else if (i == "input Enter Blacksmith Foundry CurrentTown.RedHouseDoor") {
@@ -1569,18 +1575,18 @@ void Story::runCurrentRuins() {
 				function.Action("SetLeft(Arlan)", true);
 				function.Action("EnableInput()", true);
 				if (sword_taken && spellbook_taken) {
-					function.Action("SetDialog(You hear a whisper. \"Place the tribute to see the past.\" Place your item? [placeMathiasSword|Place Mathias Sword.] [placeArchieSpellbook|Place Archie Spellbook.])", true);
+					function.Action("SetDialog(You hear a whisper. \"Place the tribute to see the past.\" Place your item?\\n[placeMathiasSword|Place Mathias Sword.]\\n[placeArchieSpellbook|Place Archie Spellbook.])", true);
 				}
 				else if (sword_taken) {
-					function.Action("SetDialog(You hear a whisper. \"Place the tribute to see the past.\" Place your item? [placeMathiasSword|Place Mathias Sword.])", true);
+					function.Action("SetDialog(You hear a whisper. \"Place the tribute to see the past.\" Place your item?\\n[placeMathiasSword|Place Mathias Sword.])", true);
 				}
 				else if (spellbook_taken) {
-					function.Action("SetDialog(You hear a whisper. \"Place the tribute to see the past.\" Place your item? [placeArchieSpellbook|Place Archie Spellbook.])", true);
+					function.Action("SetDialog(You hear a whisper. \"Place the tribute to see the past.\" Place your item?\\n[placeArchieSpellbook|Place Archie Spellbook.])", true);
 				}
 			}
 		}
 
-		else if (i == "input Selected placeMathiasSword ") {
+		else if (i == "input Selected placeMathiasSword") {
 			MathiasFlashback = true;
 			function.Action("HideDialog()", true);
 			if (sword_taken) {
@@ -1600,7 +1606,7 @@ void Story::runCurrentRuins() {
 			}
 		}
 
-		else if (i == "input Selected placeArchieSpellbook ") {
+		else if (i == "input Selected placeArchieSpellbook") {
 			ArchieFlashback = true;
 			function.Action("HideDialog()", true);
 			if (spellbook_taken) {
@@ -2011,7 +2017,7 @@ void Story::runCurrentGreatHall() {
 			}
 			//CurrentStorage
 			else if (i == "input Enter Basement Door CurrentGreatHall.BasementDoor") {
-				if (!hasGreenPotion /* && mathiasBranch */) {
+				if (!hasGreenPotion && MathiasFlashback) {
 					function.Transition("Arlan", "CurrentGreatHall.BasementDoor", "CurrentStorage.Door");
 					currentLocation = "CurrentStorage";
 				}
@@ -2024,10 +2030,10 @@ void Story::runCurrentGreatHall() {
 					}
 					function.Action("ShowNarration()", true);
 				}
-				/*else if (!mathiasBranch) {
+				else if (!MathiasFlashback) {
 					function.Action("SetNarration(An ominous force repels you from this room.)", true);
 					function.Action("ShowNarration()", true);
-				}*/
+				}
 			}
 
 			else if (i == "input TakeCoin5 Coin5") {
@@ -2873,8 +2879,6 @@ void Story::runCurrentStorage() {
 }
 
 void Story::runCurrentPrison() {
-
-
 	while (currentLocation == "CurrentPrison") {
 		string i;
 		getline(cin, i);
@@ -3049,8 +3053,23 @@ void Story::runLeftHallway() {
 
 		//CurrentPrison
 		if (i == "input arrived Arlan position LeftHallway.BackDoor") {
-			function.Transition("Arlan", "LeftHallway.BackDoor", "CurrentPrison.Door");
-			currentLocation = "CurrentPrison";
+			if (!ArchieFlashback) {
+				function.Action("SetNarration(You may not enter)", true);
+				function.Action("ShowNarration()", true);
+			}
+			else if (hasRedPotion || hasPurpleBook || hasPurplePotion) {
+				if (hasRedPotion) {
+					function.Action("SetNarration(You have already reaped the rewards of this room)", true);
+				}
+				else if (hasPurpleBook || hasPurplePotion) {
+					function.Action("SetNarration(Your purple artifact repels you from this room)", true);
+				}
+				function.Action("ShowNarration()", true);
+			}
+			else if (ArchieFlashback && !hasRedPotion && !hasPurpleBook && !hasPurplePotion) {
+				function.Transition("Arlan", "LeftHallway.BackDoor", "CurrentPrison.Door");
+				currentLocation = "CurrentPrison";
+			}
 		}
 		//CurrentDiningRoom
 		else if (i == "input arrived Arlan position LeftHallway.Stairs") {
@@ -3117,16 +3136,32 @@ void Story::runRightHallway() {
 
 		//CurrentCastleBedroom
 		if (i == "input arrived Arlan position RightHallway.BackDoor") {
-			function.Transition("Arlan", "RightHallway.BackDoor", "CurrentCastleBedroom.Door");
-			currentLocation = "CurrentCastleBedroom";
+			if (!ArchieFlashback) {
+				function.Action("SetNarration(You may not enter)", true);
+				function.Action("ShowNarration()", true);
+			}
+			else if (hasRedPotion || hasRedBook || hasPurplePotion) {
+				if (hasPurplePotion) {
+					function.Action("SetNarration(You have already reaped the rewards of this room)", true);
+				}
+				else if (hasRedBook || hasRedPotion) {
+					function.Action("SetNarration(Your red artifact repels you from this room)", true);
+				}
+				function.Action("ShowNarration()", true);
+			}
+			else if (ArchieFlashback && !hasRedPotion && !hasPurplePotion && !hasRedBook) {
+				function.Transition("Arlan", "RightHallway.BackDoor", "CurrentCastleBedroom.Door");
+				currentLocation = "CurrentCastleBedroom";
+			}
 		}
+		//CurrentGreatHall
 		else if (i == "input arrived Arlan position RightHallway.Door") {
 			function.Transition("Arlan", "RightHallway.Door", "CurrentGreatHall.RightDoor");
 			currentLocation = "CurrentGreatHall";
 		}
 		//CurrentLibrary
 		else if (i == "input arrived Arlan position RightHallway.Stairs") {
-			if (!hasGreenBook /* && mathiasBranch */) {
+			if (!hasGreenBook && MathiasFlashback) {
 				function.Transition("Arlan", "RightHallway.Stairs", "CurrentLibrary.Door");
 				currentLocation = "CurrentLibrary";
 			}
@@ -3139,10 +3174,10 @@ void Story::runRightHallway() {
 				}
 				function.Action("ShowNarration()", true);
 			}
-			/*else if (!mathiasBranch) {
+			else if (!MathiasFlashback) {
 					function.Action("SetNarration(An ominous force repels you from this room.)", true);
 					function.Action("ShowNarration()", true);
-			}*/
+			}
 		}
 
 		else if (i == "input Selected end") {
