@@ -763,6 +763,7 @@ bool Story::setupLeftHallway(string name) {
 	function.Action("CreateItem(Potion of Healing, PurplePotion)", true);
 	//icons
 	LeftHallway.icons.push_back(Icon("Talk_To_Guard", "talk", "PrisonGuard", "Talk To Guard", "true"));
+	LeftHallway.icons.push_back(Icon("Enter Door", "Hand", "LeftHallway.Door", "Enter", "true"));
 	function.SetupIcons(LeftHallway.icons);
 
 	return true;
@@ -776,6 +777,8 @@ bool Story::setupRightHallway(string name) {
 	//items
 
 	//icons
+	RightHallway.icons.push_back(Icon("Enter Door", "Hand", "RightHallway.Door", "Enter", "true"));
+	function.SetupIcons(RightHallway.icons);
 
 	return true;
 }
@@ -1130,8 +1133,11 @@ void Story::runCurrentTown() {
 							function.SetupDialogText("Go get your fortune from the fortuneteller!", "end", "ok.");
 						}
 					}
-					else if (completedErrand == true) {
+					else if (completedErrand == true && !ArchieFlashback && !MathiasFlashback) {
 						function.SetupDialogText("You should look around for an ancient artifact and take it to the ruins past the forest path.", "end", "Okay! Thanks!");
+					}
+					else if (ArchieFlashback || MathiasFlashback) {
+						function.SetupDialogText("You saw what? Oh my... the storybook did have some additional information. It said to stop the corruption you must locate 2 ancient artifacts and bring them to the region beyond the courtyard at the north end of the town.", "end", "Okay! Thanks!");
 					}
 				}
 
@@ -1647,6 +1653,7 @@ void Story::runCurrentRuins() {
 
 //Chractercheck is sword_taken
 void Story::runPastCottage(bool CharacterCheck) {
+	function.Action("SetPosition(LeaderFlashPotion)", true);
 	currentLocation = "PastCottage";
 	bool LetterCheck = false;
 	bool inputWasCommon;
@@ -2462,7 +2469,7 @@ void Story::runCurrentLibrary() {
 			else if (libraryPuzzleSolved && !hasGreenBook) {
 				function.Action("SetNarration(This book speaks of a powerful incantation used for removing corrupting spirits from their vessels. Book Of Incantations Added To Inventory.)", true);
 				function.Action("ShowNarration()", true);
-				//function.Action("DisableEffect(Book Of Incantations, Resurrection)", true);
+				function.Action("DisableEffect(Book Of Incantations)", true);
 				function.Action("SetPosition(Book Of Incantations)", true);
 				playerInv.push_back("Book Of Incantations");
 				hasGreenBook = true;
@@ -2697,6 +2704,7 @@ void Story::runCurrentStorage() {
 			else if (i == "input Interact With Potion Of Cleansing Potion Of Cleansing") {
 				function.Action("SetNarration(This potion can cleanse the evil spirits from the heart of men. Potion Of Cleansing Added To Inventory.)", true);
 				function.Action("ShowNarration()", true);
+				function.Action("DisableEffect(Potion Of Cleansing)", true);
 				function.Action("SetPosition(Potion Of Cleansing)", true);
 				playerInv.push_back("Potion Of Cleansing");
 				hasGreenPotion = true;
@@ -3090,7 +3098,7 @@ void Story::runLeftHallway() {
 				currentLocation = "CurrentDiningRoom";
 			}
 		}
-		else if (i == "input arrived Arlan position LeftHallway.Door") {
+		else if (i == "input Enter Door LeftHallway.Door") {
 			function.Transition("Arlan", "LeftHallway.Door", "CurrentGreatHall.LeftDoor");
 			currentLocation = "CurrentGreatHall";
 		}
@@ -3155,7 +3163,7 @@ void Story::runRightHallway() {
 			}
 		}
 		//CurrentGreatHall
-		else if (i == "input arrived Arlan position RightHallway.Door") {
+		else if (i == "input Enter Door RightHallway.Door") {
 			function.Transition("Arlan", "RightHallway.Door", "CurrentGreatHall.RightDoor");
 			currentLocation = "CurrentGreatHall";
 		}
