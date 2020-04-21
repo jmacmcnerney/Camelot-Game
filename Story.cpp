@@ -836,7 +836,7 @@ void Story::runCurrentCottage() {
 			}
 
 			else if (modified_I == "Open_Door") {
-				int test = 7;
+				int test = 4;
 				if (hasStorybook) {
 					//testing
 					if (test == 0) {
@@ -1430,7 +1430,7 @@ void Story::runCurrentRuins() {
 			}
 		}
 
-		else if (i == "input Selected placeMathiasSword") {
+		else if (i == "input Selected placeMathiasSword ") {
 			MathiasFlashback = true;
 			function.Action("HideDialog()", true);
 			if (sword_taken) {
@@ -1450,7 +1450,7 @@ void Story::runCurrentRuins() {
 			}
 		}
 
-		else if (i == "input Selected placeArchieSpellbook") {
+		else if (i == "input Selected placeArchieSpellbook ") {
 			ArchieFlashback = true;
 			function.Action("HideDialog()", true);
 			if (spellbook_taken) {
@@ -2746,7 +2746,7 @@ void Story::runCurrentDiningRoom() {
 					if (item.substr(0, 6) == "Dining") {
 						function.Action("AddToList(" + item + ")", true);
 						function.Action("EnableIcon(Place, Hand, " + item + ", Place, true)", true);
-						function.Action("DisableIcon(PickUp, " + item + ")", true);
+						//function.Action("DisableIcon(PickUp, " + item + ")", true);
 					}
 				}
 				function.Action("ShowList(Arlan)", true);
@@ -2765,7 +2765,9 @@ void Story::runCurrentDiningRoom() {
 				modified_I = function.splitInput(i, 0, true);
 
 				for (string item : playerInv) {
-					function.Action("DisableIcon(Place, " + item + ")", true);
+					if (item.substr(0, 6) == "Dining") {
+						function.Action("DisableIcon(Place, " + item + ")", true);
+					}
 				}
 
 				function.Action("HideList()", true);
@@ -2843,10 +2845,16 @@ void Story::runCurrentDiningRoom() {
 			}
 
 			else if (modified_I == "Inspect") {
-				if (fireDoused) {
+				//function.Action("WalkTo(Arlan, CurrentDiningRoom.Fireplace)", true);
+				if (hasBluePotion) {
+					function.Action("SetNarration(The hidden compartment is empty. You think you should check out that potion.)", true);
+					function.Action("ShowNarration()", true);
+				}
+				else if (fireDoused) {
 					function.Action("SetNarration(You reach back and retrieve a Potion of Power from a hidden compartment in the fireplace.)", true);
 					function.Action("ShowNarration()", true);
 					playerInv.push_back("PotionOfPower");
+					hasBluePotion = true;
 				}
 				else {
 					bool hasCup = false;
@@ -2870,7 +2878,7 @@ void Story::runCurrentDiningRoom() {
 				function.Action("ClearList()", true);
 				function.Action("Unpocket(Arlan, PotionOfPower)", true);
 				function.Action("Drink(Arlan)", true);
-				function.Action("SetNarration(You take a sip of the potion. Suddenly, images of a mysterious book adorned with a skull flash before your eyes. You feel stronger as the book calls out to you. You get the feeling should save to the rest of the potion.)", true);
+				function.Action("SetNarration(You take a sip of the potion. Sudden images of a mysterious book adorned with a skull flash before your eyes. You feel stronger as the book calls out to you. You get the feeling should save to the rest of the potion.)", true);
 				function.Action("ShowNarration()", true);
 				function.Action("DisableIcon(Drink, PotionOfPower)", true);
 
