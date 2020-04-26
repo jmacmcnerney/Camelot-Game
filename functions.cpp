@@ -213,8 +213,10 @@ void functions::CloseList() {
 
 //Transition to other areas
 void functions::Transition(string character, string exit, string entrance) {
+	Action("DisableInput()", true);
 	Action("Exit(" + character + ", " + exit + ", true)", true);
 	Action("Enter(" + character + ", " + entrance + ", true)", true);
+	Action("EnableInput()", true);
 }
 
 //Start option

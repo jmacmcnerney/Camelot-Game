@@ -16,7 +16,7 @@ vector<string> playerInv;
 //location boolean
 string currentLocation = "ArlanCottage";
 
-bool cheatsEnabled = false;
+bool cheatsEnabled = true;
 
 //Intro Quest Booleans
 //Cottage
@@ -37,7 +37,7 @@ bool item_placed = false;
 //Flashback Booleans
 bool ArchieEnemy = false;
 bool MathiasFlashback = false;
-bool ArchieFlashback = false;
+bool ArchieFlashback = true;
 
 //Green Puzzle Booleans
 //Potion
@@ -160,7 +160,7 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	setupLeftHallway("LeftHallway");
 	setupRightHallway("RightHallway");
 	//setupDiningRoom("CurrentDiningRoom");
-	//setupStorage("CurrentStorage");
+	setupStorage("CurrentStorage");
 	function.Action("ShowMenu()", true);
 
 	return true;
