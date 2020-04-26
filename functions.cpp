@@ -412,3 +412,52 @@ void functions::ItemCheats(string itemname, bool &hasItem, vector<string> &inven
 		hasItem = false;
 	}
 }
+
+void functions::ItemHandler(string itemname, string action, string position, string location, vector<string>& inventory, bool& inventoryErrorCheck, string& onLeft, string& onRight, string& onCenter) {
+	int substrCounter = 0;
+	string substrWord;
+	string placementLocation;
+	if (location == "BobsHouse") { substrCounter = 5; substrWord = "Shelf"; placementLocation = "Shelf"; }
+	if (location == "CurrentLibrary") { substrCounter = 7; substrWord = "Library"; placementLocation = "AlchemistTable"; }
+	if (action == "ShowPlaceInventory") {
+		if (((onLeft == "") && (position == "Left")) || ((onRight == "") && (position == "Right"))) {
+			for (string item : playerInv) {
+				if (item.substr(0, substrCounter) == "Shelf") {
+					if (!inventoryErrorCheck) { Action("DisableIcon(PlaceItem, " + item + ")"); }
+					Action("AddToList(" + item + ")");
+					Action("EnableIcon(PlaceItem, Hand, " + item + ", Place, true)");
+				}
+			}
+			Action("ShowList(Bob)");
+			inventoryErrorCheck = false;
+		}
+		else {
+			Action("SetNarration(Space Occupied)");
+			Action("ShowNarration()");
+		}
+	}
+	else if (action == "PlaceItem") {
+		inventoryErrorCheck = true;
+		for (string item : playerInv) {
+			if (item.substr(0, substrCounter) == "Shelf") {
+				Action("DisableIcon(PlaceItem, " + item + ")");
+			}
+		}
+		Action("HideList()");
+		Action("ClearList()");
+		RemoveItem(itemname, playerInv);
+		Action("SetPosition(" + itemname + ", " + location + "." + placementLocation + "." + position + ")");
+		Action("EnableIcon(PickUp, Hand, " + itemname + ", Pick up, true)");
+		if (position == "Left") { onLeft = itemname; }
+		if (position == "Right") { onRight = itemname; }
+		if (position == "Center") { onCenter = itemname; }
+	}
+	else if (action == "PickUp") {
+		Action("SetPosition(" + itemname + ")");
+		playerInv.push_back(itemname);
+		Action("DisableIcon(PickUp, " + itemname + ")");
+		if (onLeft == itemname) { onLeft = ""; }
+		if (onRight == itemname) { onRight = ""; }
+		if (onCenter == itemname) { onCenter = ""; }
+	}
+}
