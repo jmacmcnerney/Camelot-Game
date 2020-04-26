@@ -417,12 +417,12 @@ void functions::ItemHandler(string itemname, string action, string position, str
 	int substrCounter = 0;
 	string substrWord;
 	string placementLocation;
-	if (location == "BobsHouse") { substrCounter = 5; substrWord = "Shelf"; placementLocation = "Shelf"; }
-	if (location == "CurrentLibrary") { substrCounter = 7; substrWord = "Library"; placementLocation = "AlchemistTable"; }
+	if (location == "BobsHouse") { substrWord = "Shelf"; substrCounter = substrWord.length(); placementLocation = "Shelf"; }
+	if (location == "CurrentLibrary") { substrWord = "Library"; substrCounter = substrWord.length(); placementLocation = "AlchemistTable"; }
 	if (action == "ShowPlaceInventory") {
 		if (((onLeft == "") && (position == "Left")) || ((onRight == "") && (position == "Right"))) {
 			for (string item : inventory) {
-				if (item.substr(0, substrCounter) == "Shelf") {
+				if (item.substr(0, substrCounter) == substrWord) {
 					if (!inventoryErrorCheck) { Action("DisableIcon(PlaceItem, " + item + ")", true); }
 					Action("AddToList(" + item + ")", true);
 					Action("EnableIcon(PlaceItem, Hand, " + item + ", Place, true)", true);
@@ -437,12 +437,12 @@ void functions::ItemHandler(string itemname, string action, string position, str
 		}
 	}
 	else if (action == "PlaceItem") {
-		inventoryErrorCheck = true;
 		for (string item : inventory) {
-			if (item.substr(0, substrCounter) == "Shelf") {
+			if (item.substr(0, substrCounter) == substrWord) {
 				Action("DisableIcon(PlaceItem, " + item + ")", true);
 			}
 		}
+		inventoryErrorCheck = true;
 		Action("HideList()", true);
 		Action("ClearList()", true);
 		RemoveItem(itemname, inventory);
