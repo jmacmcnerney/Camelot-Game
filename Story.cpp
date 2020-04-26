@@ -1024,7 +1024,7 @@ void Story::runCurrentCottage() {
 			//function.Action("ClearDialog()", true);
 			//function.Action("SetDialog(Category\\n[teleportCheats|Teleport Cheats]\\n[itemCheats][Item Cheats])", true);
 			function.Action("HideList()", true);
-			function.SetupDialogText("Category", "teleportCheats", "Teleport Cheats", "itemCheats", "ItemCheats");
+			function.SetupDialogText("Category", "teleportCheats", "Teleport Cheats", "itemCheats", "ItemCheats", "booleanCheats", "Boolean Cheats");
 			function.Action("ShowDialog()", true);
 		}
 
@@ -1084,6 +1084,19 @@ void Story::runCurrentCottage() {
 		//else if (i == "input Selected addRedBookCheat") { function.ItemCheats("Translated Book", hasRedBook, playerInv); }
 		//else if (i == "input Selected addPurplePotionCheat") { function.ItemCheats("Potion of Healing", hasPurplePotion, playerInv); }
 		//else if (i == "input Selected addPurpleBookCheat") { function.ItemCheats("Book of Tactics", hasPurplebook, playerInv); }
+
+		else if (i == "input Selected booleancheats") {
+			function.Action("ClearDialog()", true);
+			function.Action("SetDialog(Pick One.\\n[visitedFortuneTeller|visitedFortuneteller]\\n[visitedTownElder|visitedTownElder]\\n[completedErrand|completedErrand]\\n[itemPlaced|itemPlaced]\\n[ArchieEnemy|ArchieEnemy]\\n[MathiasFlashback|MathiasFlashback]\\n[ArchieFlashback|ArchieFlashback]\\n[end|Exit])", true);
+		}
+
+		else if (i == "input Selected visitedFortuneteller") { visitedFortuneteller = true; }
+		else if (i == "input Selected visitedTownElder") { visitedTownElder = true; }
+		else if (i == "input Selected completedErrand") { completedErrand = true; }
+		else if (i == "input Selected itemPlaced") { item_placed = true; }
+		else if (i == "input Selected ArchieEnemy") { ArchieEnemy = true; }
+		else if (i == "input Selected MathiasFlashback") { MathiasFlashback = true; }
+		else if (i == "input Selected ArchieFlashback") { ArchieFlashback = true; }
 		/*-------------------CHEATS-------------------*/
 	}
 }
@@ -1280,6 +1293,7 @@ void Story::runCurrentTown() {
 			function.Action("ShowNarration()", true);
 			playerInv.push_back("MathiasSword");
 			sword_taken = true;
+			function.Action("DisableIcon(Look Inside Barrel, CurrentTown.Barrel)", true);
 		}
 
 		else if (i == "input TakeCoin1 CurrentTown.Fountain") {
@@ -1550,6 +1564,7 @@ void Story::runCurrentForestPath() {
 			function.Action("ShowNarration()", true);
 			playerInv.push_back("ArchieSpellbook");
 			spellbook_taken = true;
+			function.Action("DisableIcon(Look Inside Dirt Pile, CurrentForestPath.DirtPile)", true);
 		}
 	}
 }
