@@ -1024,7 +1024,7 @@ void Story::runCurrentCottage() {
 			//function.Action("ClearDialog()", true);
 			//function.Action("SetDialog(Category\\n[teleportCheats|Teleport Cheats]\\n[itemCheats][Item Cheats])", true);
 			function.Action("HideList()", true);
-			function.SetupDialogText("Category", "teleportCheats", "Teleport Cheats", "itemCheats", "ItemCheats", "booleanCheats", "Boolean Cheats");
+			function.SetupDialogText("Category", "teleportCheats", "Teleport Cheats", "itemCheats", "Item Cheats", "booleanCheats", "Boolean Cheats");
 			function.Action("ShowDialog()", true);
 		}
 
@@ -1085,7 +1085,7 @@ void Story::runCurrentCottage() {
 		//else if (i == "input Selected addPurplePotionCheat") { function.ItemCheats("Potion of Healing", hasPurplePotion, playerInv); }
 		//else if (i == "input Selected addPurpleBookCheat") { function.ItemCheats("Book of Tactics", hasPurplebook, playerInv); }
 
-		else if (i == "input Selected booleancheats") {
+		else if (i == "input Selected booleanCheats") {
 			function.Action("ClearDialog()", true);
 			function.Action("SetDialog(Pick One.\\n[visitedFortuneTeller|visitedFortuneteller]\\n[visitedTownElder|visitedTownElder]\\n[completedErrand|completedErrand]\\n[itemPlaced|itemPlaced]\\n[ArchieEnemy|ArchieEnemy]\\n[MathiasFlashback|MathiasFlashback]\\n[ArchieFlashback|ArchieFlashback]\\n[end|Exit])", true);
 		}
