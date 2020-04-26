@@ -421,41 +421,41 @@ void functions::ItemHandler(string itemname, string action, string position, str
 	if (location == "CurrentLibrary") { substrCounter = 7; substrWord = "Library"; placementLocation = "AlchemistTable"; }
 	if (action == "ShowPlaceInventory") {
 		if (((onLeft == "") && (position == "Left")) || ((onRight == "") && (position == "Right"))) {
-			for (string item : playerInv) {
+			for (string item : inventory) {
 				if (item.substr(0, substrCounter) == "Shelf") {
-					if (!inventoryErrorCheck) { Action("DisableIcon(PlaceItem, " + item + ")"); }
-					Action("AddToList(" + item + ")");
-					Action("EnableIcon(PlaceItem, Hand, " + item + ", Place, true)");
+					if (!inventoryErrorCheck) { Action("DisableIcon(PlaceItem, " + item + ")", true); }
+					Action("AddToList(" + item + ")", true);
+					Action("EnableIcon(PlaceItem, Hand, " + item + ", Place, true)", true);
 				}
 			}
-			Action("ShowList(Bob)");
+			Action("ShowList(Bob)", true);
 			inventoryErrorCheck = false;
 		}
 		else {
-			Action("SetNarration(Space Occupied)");
-			Action("ShowNarration()");
+			Action("SetNarration(Space Occupied)", true);
+			Action("ShowNarration()", true);
 		}
 	}
 	else if (action == "PlaceItem") {
 		inventoryErrorCheck = true;
-		for (string item : playerInv) {
+		for (string item : inventory) {
 			if (item.substr(0, substrCounter) == "Shelf") {
-				Action("DisableIcon(PlaceItem, " + item + ")");
+				Action("DisableIcon(PlaceItem, " + item + ")", true);
 			}
 		}
-		Action("HideList()");
-		Action("ClearList()");
-		RemoveItem(itemname, playerInv);
-		Action("SetPosition(" + itemname + ", " + location + "." + placementLocation + "." + position + ")");
-		Action("EnableIcon(PickUp, Hand, " + itemname + ", Pick up, true)");
+		Action("HideList()", true);
+		Action("ClearList()", true);
+		RemoveItem(itemname, inventory);
+		Action("SetPosition(" + itemname + ", " + location + "." + placementLocation + "." + position + ")", true);
+		Action("EnableIcon(PickUp, Hand, " + itemname + ", Pick up, true)", true);
 		if (position == "Left") { onLeft = itemname; }
 		if (position == "Right") { onRight = itemname; }
 		if (position == "Center") { onCenter = itemname; }
 	}
 	else if (action == "PickUp") {
-		Action("SetPosition(" + itemname + ")");
-		playerInv.push_back(itemname);
-		Action("DisableIcon(PickUp, " + itemname + ")");
+		Action("SetPosition(" + itemname + ")", true);
+		inventory.push_back(itemname);
+		Action("DisableIcon(PickUp, " + itemname + ")", true);
 		if (onLeft == itemname) { onLeft = ""; }
 		if (onRight == itemname) { onRight = ""; }
 		if (onCenter == itemname) { onCenter = ""; }
