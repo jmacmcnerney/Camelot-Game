@@ -16,7 +16,7 @@ vector<string> playerInv;
 //location boolean
 string currentLocation = "ArlanCottage";
 
-bool cheatsEnabled = true;
+bool cheatsEnabled = false;
 
 //Intro Quest Booleans
 //Cottage
@@ -37,7 +37,7 @@ bool item_placed = false;
 //Flashback Booleans
 bool ArchieEnemy = false;
 bool MathiasFlashback = false;
-bool ArchieFlashback = true;
+bool ArchieFlashback = false;
 
 //Green Puzzle Booleans
 //Potion
