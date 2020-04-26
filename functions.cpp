@@ -413,14 +413,13 @@ void functions::ItemCheats(string itemname, bool &hasItem, vector<string> &inven
 	}
 }
 
-void functions::ItemHandler(string itemname, string action, string position, string location, vector<string>& inventory, bool& inventoryErrorCheck, string& onLeft, string& onRight, string& onCenter) {
+void functions::ItemHandler(string itemname, string action, string position, string location, vector<string>& inventory, bool& inventoryErrorCheck, string& onLeft, string& onRight, string& onCenter, bool& correctLeft, bool& correctRight, bool& correctCenter) {
 	int substrCounter = 0;
-	string substrWord;
-	string placementLocation;
+	string substrWord, placementLocation, leftItem, rightItem, centerItem = "";
 	if (location == "BobsHouse") { substrWord = "Shelf"; substrCounter = substrWord.length(); placementLocation = "Shelf"; }
-	if (location == "CurrentLibrary") { substrWord = "Library"; substrCounter = substrWord.length(); placementLocation = "AlchemistTable"; }
+	if (location == "CurrentLibrary") { substrWord = "Library"; substrCounter = substrWord.length(); placementLocation = "AlchemistTable"; leftItem = "Library Apple"; rightItem = "Library GreenKey"; centerItem = "Library GoldCup"; }
 	if (action == "ShowPlaceInventory") {
-		if (((onLeft == "") && (position == "Left")) || ((onRight == "") && (position == "Right"))) {
+		if (((onLeft == "") && (position == "Left")) || ((onRight == "") && (position == "Right")) || ((onCenter == "") && (position == "Center"))) {
 			for (string item : inventory) {
 				if (item.substr(0, substrCounter) == substrWord) {
 					if (!inventoryErrorCheck) { Action("DisableIcon(PlaceItem, " + item + ")", true); }
@@ -428,7 +427,7 @@ void functions::ItemHandler(string itemname, string action, string position, str
 					Action("EnableIcon(PlaceItem, Hand, " + item + ", Place, true)", true);
 				}
 			}
-			Action("ShowList(Bob)", true);
+			Action("ShowList(Arlan)", true);
 			inventoryErrorCheck = false;
 		}
 		else {
@@ -448,16 +447,25 @@ void functions::ItemHandler(string itemname, string action, string position, str
 		RemoveItem(itemname, inventory);
 		Action("SetPosition(" + itemname + ", " + location + "." + placementLocation + "." + position + ")", true);
 		Action("EnableIcon(PickUp, Hand, " + itemname + ", Pick up, true)", true);
-		if (position == "Left") { onLeft = itemname; }
-		if (position == "Right") { onRight = itemname; }
-		if (position == "Center") { onCenter = itemname; }
+		if (position == "Left") { 
+			onLeft = itemname;
+			if (itemname == leftItem) { correctLeft = true; }
+		}
+		if (position == "Right") { 
+			onRight = itemname;
+			if (itemname == rightItem) { correctRight = true; }
+		}
+		if (position == "Center") { 
+			onCenter = itemname; 
+			if (itemname == centerItem) { correctCenter = true; }
+		}
 	}
 	else if (action == "PickUp") {
 		Action("SetPosition(" + itemname + ")", true);
 		inventory.push_back(itemname);
 		Action("DisableIcon(PickUp, " + itemname + ")", true);
-		if (onLeft == itemname) { onLeft = ""; }
-		if (onRight == itemname) { onRight = ""; }
-		if (onCenter == itemname) { onCenter = ""; }
+		if (onLeft == itemname) { onLeft = ""; correctLeft = false; }
+		if (onRight == itemname) { onRight = ""; correctRight = false; }
+		if (onCenter == itemname) { onCenter = ""; correctCenter = false; }
 	}
 }

@@ -75,5 +75,5 @@ public:
 	void ItemCheats(string itemname, bool &hasItem, vector<string>& inventory);
 
 	//Item Handler
-	void ItemHandler(string itemname, string action, string position, string location, vector<string>& inventory, bool& inventoryErrorCheck, string& onLeft, string& onRight, string& onCenter);
+	void ItemHandler(string itemname, string action, string position, string location, vector<string>& inventory, bool& inventoryErrorCheck, string& onLeft, string& onRight, string& onCenter, bool& correctLeft, bool& correctRight, bool& correctCenter);
 };
