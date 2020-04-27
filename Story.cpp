@@ -18,6 +18,7 @@ ofstream myfile;
 //location boolean
 string currentLocation = "ArlanCottage";
 
+bool fileWritten = false;
 bool cheatsEnabled = true;
 
 //Intro Quest Booleans
@@ -136,8 +137,6 @@ Story::~Story() {
 }
 
 bool Story::runSetup() { // runs initial setup for chapter 2. returns true if setup was successful.
-
-	ofstream myfile("log.txt");
 
 	//location setup calls
 	setupCurrentCottage("ArlanCottage");
@@ -657,8 +656,8 @@ bool Story::setupLibrary(string name) {
 	CurrentLibrary.icons.push_back(Icon("Library Table", "Hand", "CurrentLibrary.Table", "Interact With Table", "true"));
 	CurrentLibrary.icons.push_back(Icon("Library Spellbook", "Hand", "CurrentLibrary.SpellBook", "Read Spellbook", "true"));
 	CurrentLibrary.icons.push_back(Icon("PlaceLibraryItemCenter", "Hand", "CurrentLibrary.AlchemistTable", "Place An Item Center", "false"));
-	CurrentLibrary.icons.push_back(Icon("PlaceLibraryItemLeft", "Hand", "CurrentLibrary.AlchemistTable", "Place An Item Left", "false"));
 	CurrentLibrary.icons.push_back(Icon("PlaceLibraryItemRight", "Hand", "CurrentLibrary.AlchemistTable", "Place An Item Right", "false"));
+	CurrentLibrary.icons.push_back(Icon("PlaceLibraryItemLeft", "Hand", "CurrentLibrary.AlchemistTable", "Place An Item Left", "false"));
 	CurrentLibrary.icons.push_back(Icon("PickUp", "Hand", "Library Apple", "Pick Up", "true"));
 	CurrentLibrary.icons.push_back(Icon("PickUp", "Hand", "Library GoldCup", "Pick Up", "true"));
 	CurrentLibrary.icons.push_back(Icon("PickUp", "Hand", "Library GreenKey", "Pick Up", "true"));
@@ -2492,6 +2491,12 @@ void Story::runCurrentPort() {
 }
 
 void Story::runCurrentLibrary() {
+	if (!fileWritten) {
+		myfile.open("log.txt");
+		myfile << "writing" << endl;
+		fileWritten = true;
+	}
+	myfile << "2nd writing" << endl;
 	/*bool libraryLeftOccupied = true;
 	bool libraryCenterOccupied = true;
 	bool libraryRightOccupied = true;
@@ -2722,7 +2727,7 @@ void Story::runCurrentLibrary() {
 
 		}
 
-		if (correctLeft && correctCenter && correctRight && !hasGreenBook) {
+		if (correctLeft && correctCenter && correctRight && !hasGreenBook && !libraryPuzzleSolved) {
 			libraryPuzzleSolved = true;
 			function.Action("SetPosition(Book Of Incantations, CurrentLibrary.Table)", true);
 			function.Action("CreateEffect(Book Of Incantations, Resurrection)", true);
@@ -2734,10 +2739,14 @@ void Story::runCurrentLibrary() {
 
 		//RightHallway
 		if (i == "input arrived Arlan position CurrentLibrary.Door") {
+			myfile << "step4" << endl;
 			if (!libraryPuzzleSolved) {
+				myfile << "step5" << endl;
 				function.Action("SetNarration(The puzzle resets...)", true);
+				myfile << "step6" << endl;
 				for (string item : playerInv) {
-					myfile << item << endl;
+					myfile << "step7" << endl;
+					myfile << "ITEM: " << item << endl;
 					if (item.substr(0, 7) == "Library") {
 						if (!inventoryErrorCheck) {
 							function.Action("DisableIcon(PlaceItem, " + item + ")", true);
@@ -2807,6 +2816,7 @@ void Story::runCurrentLibrary() {
 		}
 
 		else if ((modified_I == "PlaceLibraryItemLeft") || (modified_I == "PlaceLibraryItemCenter") || (modified_I == "PlaceLibraryItemRight")) {
+			myfile << "step1" << endl;
 			//function.Action("SetRight(null)", true);
 			position = modified_I.substr(16);
 			function.WalkToPlace("Arlan", "CurrentLibrary.AlchemistTable");
@@ -2820,11 +2830,13 @@ void Story::runCurrentLibrary() {
 		}
 
 		else if (modified_I == "PlaceItem") {
+			myfile << "step2" << endl;
 			modified_I = function.splitInput(i, 0, true);
 			function.ItemHandler("Library " + modified_I, "PlaceItem", position, "CurrentLibrary", playerInv, inventoryErrorCheck, onLeft, onRight, onCenter, correctLeft, correctRight, correctCenter);
 		}
 
 		else if (modified_I == "PickUp") {
+			myfile << "step3" << endl;
 			modified_I = function.splitInput(i, 0, true);
 			function.ItemHandler("Library " + modified_I, "PickUp", position, "CurrentLibrary", playerInv, inventoryErrorCheck, onLeft, onRight, onCenter, correctLeft, correctRight, correctCenter);
 		}
@@ -3403,6 +3415,7 @@ void Story::runRightHallway() {
 		else if (i == "input arrived Arlan position RightHallway.Stairs") {
 			if (!hasGreenBook && MathiasFlashback) {
 				function.Transition("Arlan", "RightHallway.Stairs", "CurrentLibrary.Door");
+				myfile.close();
 				currentLocation = "CurrentLibrary";
 			}
 			else if (hasGreenBook || hasBlueBook || hasBluePotion) {
