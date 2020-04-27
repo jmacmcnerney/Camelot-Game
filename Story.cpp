@@ -164,7 +164,7 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	setupLeftHallway("LeftHallway");
 	setupRightHallway("RightHallway");
 	//setupDiningRoom("CurrentDiningRoom");
-	setupStorage("CurrentStorage");
+	//setupStorage("CurrentStorage");
 	function.Action("ShowMenu()", true);
 
 	return true;
@@ -1587,7 +1587,7 @@ void Story::runCurrentRuins() {
 			//if the player is in the CurrentRuins
 			else if (currentLocation == "CurrentRuins") {
 				if (modified_I == "Take") {
-					function.Action("Take(Arlan, LeaderFlashPotion)", true);
+					function.Action("Take(Arlan, LeaderFlashPotion, CurrentRuins.Altar)", true);
 					flashback1();
 				}
 			}
@@ -3212,7 +3212,7 @@ void Story::runCurrentPrison() {
 				}
 				else if (modified_I == "RiddleOne") {
 					//Run some kind of spell animation here
-					function.SetupDialogText("In a sarcophagus of wood, you won't have to look far to find this suit of armor", "DialogEnd", "Hmmm");
+					function.SetupDialogText("In a sarcophagus of wood you won't have to look far to find this suit of armor", "DialogEnd", "Hmmm");
 					firstTalkPris = false;
 				}
 				else if (modified_I == "RiddleThree") {
