@@ -445,8 +445,9 @@ void functions::ItemHandler(string itemname, string action, string position, str
 		Action("HideList()", true);
 		Action("ClearList()", true);
 		RemoveItem(itemname, inventory);
-		Action("SetPosition(" + itemname + ", " + location + "." + placementLocation + "." + position + ")", true);
-		Action("EnableIcon(PickUp, Hand, " + itemname + ", Pick up, true)", true);
+		//Action("SetPosition(" + itemname + ", " + location + "." + placementLocation + "." + position + ")", true);
+		Action("Put(Arlan, " + itemname + ", " + location + "." + placementLocation + "." + position + ")", true);
+		Action("EnableIcon(PickUp, Hand, " + itemname + ", Pick Up, true)", true);
 		if (position == "Left") { 
 			onLeft = itemname;
 			if (itemname == leftItem) { correctLeft = true; }
@@ -461,7 +462,9 @@ void functions::ItemHandler(string itemname, string action, string position, str
 		}
 	}
 	else if (action == "PickUp") {
-		Action("SetPosition(" + itemname + ")", true);
+		Action("Take(Arlan, " + itemname + ")", true);
+		Action("Pocket(Arlan, " + itemname + ")", true);
+		//Action("SetPosition(" + itemname + ")", true);
 		inventory.push_back(itemname);
 		Action("DisableIcon(PickUp, " + itemname + ")", true);
 		if (onLeft == itemname) { onLeft = ""; correctLeft = false; }

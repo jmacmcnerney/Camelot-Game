@@ -9,9 +9,11 @@
 #include <thread>
 #include <vector>
 #include <string>
+#include <fstream>
 using namespace std;
 
 vector<string> playerInv;
+ofstream myfile;
 
 //location boolean
 string currentLocation = "ArlanCottage";
@@ -134,6 +136,9 @@ Story::~Story() {
 }
 
 bool Story::runSetup() { // runs initial setup for chapter 2. returns true if setup was successful.
+
+	ofstream myfile("log.txt");
+
 	//location setup calls
 	setupCurrentCottage("ArlanCottage");
 	setupCurrentTown("CurrentTown");
@@ -651,8 +656,8 @@ bool Story::setupLibrary(string name) {
 	//CurrentLibrary.icons.push_back(Icon("Library Alchemist Table", "Hand", "CurrentLibrary.AlchemistTable", "Interact With Alchemist Table", "true"));
 	CurrentLibrary.icons.push_back(Icon("Library Table", "Hand", "CurrentLibrary.Table", "Interact With Table", "true"));
 	CurrentLibrary.icons.push_back(Icon("Library Spellbook", "Hand", "CurrentLibrary.SpellBook", "Read Spellbook", "true"));
-	CurrentLibrary.icons.push_back(Icon("PlaceLibraryItemLeft", "Hand", "CurrentLibrary.AlchemistTable", "Place An Item Left", "false"));
 	CurrentLibrary.icons.push_back(Icon("PlaceLibraryItemCenter", "Hand", "CurrentLibrary.AlchemistTable", "Place An Item Center", "false"));
+	CurrentLibrary.icons.push_back(Icon("PlaceLibraryItemLeft", "Hand", "CurrentLibrary.AlchemistTable", "Place An Item Left", "false"));
 	CurrentLibrary.icons.push_back(Icon("PlaceLibraryItemRight", "Hand", "CurrentLibrary.AlchemistTable", "Place An Item Right", "false"));
 	CurrentLibrary.icons.push_back(Icon("PickUp", "Hand", "Library Apple", "Pick Up", "true"));
 	CurrentLibrary.icons.push_back(Icon("PickUp", "Hand", "Library GoldCup", "Pick Up", "true"));
@@ -2722,32 +2727,42 @@ void Story::runCurrentLibrary() {
 			function.Action("SetPosition(Book Of Incantations, CurrentLibrary.Table)", true);
 			function.Action("CreateEffect(Book Of Incantations, Resurrection)", true);
 			function.Action("EnableEffect(Book Of Incantations, Resurrection)", true);
+			function.Action("DisableIcon(PickUp, Library Apple)", true);
+			function.Action("DisableIcon(PickUp, Library GoldCup)", true);
+			function.Action("DisableIcon(PickUp, Library GreenKey)", true);
 		}
 
 		//RightHallway
 		if (i == "input arrived Arlan position CurrentLibrary.Door") {
-			function.Action("SetNarration(The puzzle resets...)", true);
-			for (string item : playerInv) {
-				if (item.substr(0, 7) == "Library") {
-					if (!inventoryErrorCheck) {
-						function.Action("DisableIcon(PlaceItem, " + item + ")", true);
+			if (!libraryPuzzleSolved) {
+				function.Action("SetNarration(The puzzle resets...)", true);
+				for (string item : playerInv) {
+					myfile << item << endl;
+					if (item.substr(0, 7) == "Library") {
+						if (!inventoryErrorCheck) {
+							function.Action("DisableIcon(PlaceItem, " + item + ")", true);
+						}
+						function.Action("EnableIcon(PickUp, Hand, " + item + ", Pick Up, true)", true);
+						function.RemoveItem(item, playerInv);
 					}
-					function.Action("EnableIcon(PickUp, Hand, " + item + ", Pick Up, true)", true);
-					function.RemoveItem(item, playerInv);
 				}
+				//function.RemoveItem("Library Apple", playerInv);
+				//function.RemoveItem("Library GoldCup", playerInv);
+				//function.RemoveItem("Library GreenKey", playerInv);
+				function.Action("SetPosition(Library GoldCup)", true);
+				function.Action("SetPosition(Library GreenKey)", true);
+				function.Action("SetPosition(Library Apple)", true);
+				function.Action("SetPosition(Library GoldCup, CurrentLibrary.AlchemistTable.Right)", true);
+				function.Action("SetPosition(Library GreenKey, CurrentLibrary.AlchemistTable.Left)", true);
+				function.Action("SetPosition(Library Apple, CurrentLibrary.AlchemistTable.Center)", true);
+				function.Transition("Arlan", "CurrentLibrary.Door", "RightHallway.Stairs");
+				function.Action("ShowNarration()", true);
+				currentLocation = "RightHallway";
 			}
-			//function.RemoveItem("Library Apple", playerInv);
-			//function.RemoveItem("Library GoldCup", playerInv);
-			//function.RemoveItem("Library GreenKey", playerInv);
-			function.Action("SetPosition(Library GoldCup)", true);
-			function.Action("SetPosition(Library GreenKey)", true);
-			function.Action("SetPosition(Library Apple)", true);
-			function.Action("SetPosition(Library GoldCup, CurrentLibrary.AlchemistTable.Right)", true);
-			function.Action("SetPosition(Library GreenKey, CurrentLibrary.AlchemistTable.Left)", true);
-			function.Action("SetPosition(Library Apple, CurrentLibrary.AlchemistTable.Center)", true);
-			function.Transition("Arlan", "CurrentLibrary.Door", "RightHallway.Stairs");
-			function.Action("ShowNarration()", true);
-			currentLocation = "RightHallway";
+			else {
+				function.Transition("Arlan", "CurrentLibrary.Door", "RightHallway.Stairs");
+				currentLocation = "RightHallway";
+			}
 		}
 
 		else if (i == "input Library Table CurrentLibrary.Table") {
@@ -2818,13 +2833,13 @@ void Story::runCurrentLibrary() {
 			function.Action("HideDialog()", true);
 		}
 
-		else if (i == "input Key Inventory") {
+		/*else if (i == "input Key Inventory") {
 			function.Action("ClearList()", true);
 			for (string item : playerInv) {
 				function.Action("AddToList(" + item + ")", true);
 			}
 			function.Action("ShowList(Arlan)", true);
-		}
+		}*/
 
 		else if (i == "input Close List") {
 			function.Action("HideList()", true);
