@@ -2403,7 +2403,7 @@ void Story::runCurrentPort() {
 
 					if (modified_I == "Fire") {
 						function.Action("SetExpression(ShipTrader, Scared)", true);
-						function.SetupDialogText("What!...How?", "Distraction", "You should probably put go get help.");
+						function.SetupDialogText("What!...How?", "Distraction", "You should probably go get help.");
 					}
 					else if (modified_I == "Ask") {
 						function.SetupDialogText("That right there is a rare item called a Translating Glass.", "Question", "How much for it?", "end", "Leave");
@@ -3096,21 +3096,20 @@ void Story::runCurrentStorage() {
 					function.Action("DisableIcon(Take_Cloth, Purple Cloth)", true);
 					playerInv.push_back("Purple Cloth");
 					hasCloth = true;
-				}
+				}								
+			}
+			//CurrentGreatHall
+			if (i == "input arrived Arlan position CurrentStorage.Door") {
+				function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
+				currentLocation = "CurrentGreatHall";
+			}
 
-				//CurrentGreatHall
-				if (i == "input arrived Arlan position CurrentStorage.Door") {
-					function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
-					currentLocation = "CurrentGreatHall";
-				}
-
-				//closing chest animation when exiting chestInv
-				else if (isChestOpened && modified_I == "Close") {
-					function.Action("DisableInput()", true);
-					function.Action("CloseFurniture(Arlan, CurrentStorage.Chest)", true);
-					function.Action("EnableInput()", true);
-					isChestOpened = false;
-				}
+			//closing chest animation when exiting chestInv
+			else if (isChestOpened && modified_I == "Close") {
+				function.Action("DisableInput()", true);
+				function.Action("CloseFurniture(Arlan, CurrentStorage.Chest)", true);
+				function.Action("EnableInput()", true);
+				isChestOpened = false;
 			}
 		}
 	}
