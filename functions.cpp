@@ -462,7 +462,7 @@ void functions::ItemHandler(string itemname, string action, string position, str
 		}
 	}
 	else if (action == "PickUp") {
-		Action("Take(Arlan, " + itemname + ")", true);
+		Action("Take(Arlan, " + itemname + ", " + location + "." + placementLocation + "." + position + ")", true);
 		Action("Pocket(Arlan, " + itemname + ")", true);
 		//Action("SetPosition(" + itemname + ")", true);
 		inventory.push_back(itemname);
