@@ -274,18 +274,10 @@ void functions::SetupDialogText(string message, string responseKey1, string resp
 	}
 }
 
-/*void functions::RemoveItem(string itemname, vector<string> &inventory) {
+void functions::RemoveItem(string itemname, vector<string> &inventory) {
 	for (size_t i = 0; i < inventory.size(); i++) {
 		if (inventory[i] == itemname) {
 			inventory.erase(inventory.begin() + i);
-		}
-	}
-}*/
-
-void functions::RemoveItem(string itemname, vector<string>& inventory) {
-	for (auto currentItem = inventory.begin(); currentItem < inventory.end(); currentItem++) {
-		if (*currentItem == itemname) {
-			inventory.erase(currentItem);
 		}
 	}
 }

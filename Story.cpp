@@ -2491,12 +2491,6 @@ void Story::runCurrentPort() {
 }
 
 void Story::runCurrentLibrary() {
-	if (!fileWritten) {
-		myfile.open("log.txt");
-		myfile << "writing" << endl;
-		fileWritten = true;
-	}
-	myfile << "2nd writing" << endl;
 	/*bool libraryLeftOccupied = true;
 	bool libraryCenterOccupied = true;
 	bool libraryRightOccupied = true;
@@ -2739,22 +2733,22 @@ void Story::runCurrentLibrary() {
 
 		//RightHallway
 		if (i == "input arrived Arlan position CurrentLibrary.Door") {
-			myfile << "step4" << endl;
 			if (!libraryPuzzleSolved) {
-				myfile << "step5" << endl;
 				function.Action("SetNarration(The puzzle resets...)", true);
-				myfile << "step6" << endl;
+				vector<string> tempInv;
 				for (string item : playerInv) {
-					myfile << "step7" << endl;
-					myfile << "ITEM: " << item << endl;
 					if (item.substr(0, 7) == "Library") {
 						if (!inventoryErrorCheck) {
 							function.Action("DisableIcon(PlaceItem, " + item + ")", true);
 						}
 						function.Action("EnableIcon(PickUp, Hand, " + item + ", Pick Up, true)", true);
-						function.RemoveItem(item, playerInv);
+						//function.RemoveItem(item, playerInv);
+					}
+					else {
+						tempInv.push_back(item);
 					}
 				}
+				playerInv = tempInv;
 				//function.RemoveItem("Library Apple", playerInv);
 				//function.RemoveItem("Library GoldCup", playerInv);
 				//function.RemoveItem("Library GreenKey", playerInv);
@@ -2816,7 +2810,6 @@ void Story::runCurrentLibrary() {
 		}
 
 		else if ((modified_I == "PlaceLibraryItemLeft") || (modified_I == "PlaceLibraryItemCenter") || (modified_I == "PlaceLibraryItemRight")) {
-			myfile << "step1" << endl;
 			//function.Action("SetRight(null)", true);
 			position = modified_I.substr(16);
 			function.WalkToPlace("Arlan", "CurrentLibrary.AlchemistTable");
@@ -2830,13 +2823,11 @@ void Story::runCurrentLibrary() {
 		}
 
 		else if (modified_I == "PlaceItem") {
-			myfile << "step2" << endl;
 			modified_I = function.splitInput(i, 0, true);
 			function.ItemHandler("Library " + modified_I, "PlaceItem", position, "CurrentLibrary", playerInv, inventoryErrorCheck, onLeft, onRight, onCenter, correctLeft, correctRight, correctCenter);
 		}
 
 		else if (modified_I == "PickUp") {
-			myfile << "step3" << endl;
 			modified_I = function.splitInput(i, 0, true);
 			function.ItemHandler("Library " + modified_I, "PickUp", position, "CurrentLibrary", playerInv, inventoryErrorCheck, onLeft, onRight, onCenter, correctLeft, correctRight, correctCenter);
 		}
