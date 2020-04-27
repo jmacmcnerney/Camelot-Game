@@ -2829,7 +2829,9 @@ void Story::runCurrentLibrary() {
 
 		else if (modified_I == "PickUp") {
 			modified_I = function.splitInput(i, 0, true);
-			//if ()
+			if (onLeft == "Library " + modified_I) { position = "Left"; }
+			if (onCenter == "Library " + modified_I) { position = "Center"; }
+			if (onRight == "Library " + modified_I) { position = "Right"; }
 			function.ItemHandler("Library " + modified_I, "PickUp", position, "CurrentLibrary", playerInv, inventoryErrorCheck, onLeft, onRight, onCenter, correctLeft, correctRight, correctCenter);
 		}
 
