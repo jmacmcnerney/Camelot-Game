@@ -855,15 +855,20 @@ bool Story::setupStorage(string name) {
 		//items
 		function.Action("CreateItem(Potion Of Cleansing, GreenPotion)", true);
 		function.Action("CreateItem(Storage Bottle, Bottle)", true);
-		function.Action("SetPosition(Storage Bottle, CurrentStorage.Chest)", true);
+		CurrentStorage.chestInv.push_back("Storage Bottle");
+		//function.Action("SetPosition(Storage Bottle, CurrentStorage.Chest)", true);
 		function.Action("CreateItem(Storage InkAndQuill, InkAndQuill)", true);
-		function.Action("SetPosition(Storage InkAndQuill, CurrentStorage.Chest)", true);
+		CurrentStorage.chestInv.push_back("Storage InkAndQuill");
+		//function.Action("SetPosition(Storage InkAndQuill, CurrentStorage.Chest)", true);
 		function.Action("CreateItem(Storage Bread, Bread)", true);
-		function.Action("SetPosition(Storage Bread, CurrentStorage.Chest)", true);
+		CurrentStorage.chestInv.push_back("Storage Bread");
+		//function.Action("SetPosition(Storage Bread, CurrentStorage.Chest)", true);
 		function.Action("CreateItem(Storage Bag, Bag)", true);
-		function.Action("SetPosition(Storage Bag, CurrentStorage.Chest)", true);
+		CurrentStorage.chestInv.push_back("Storage Bag");
+		//function.Action("SetPosition(Storage Bag, CurrentStorage.Chest)", true);
 		function.Action("CreateItem(Storage Helmet, Helmet)", true);
-		function.Action("SetPosition(Storage Helmet, CurrentStorage.Chest)", true);
+		CurrentStorage.chestInv.push_back("Storage Helmet");
+		//function.Action("SetPosition(Storage Helmet, CurrentStorage.Chest)", true);
 		function.Action("CreateItem(Storage OpenScroll, OpenScroll)", true);
 		function.Action("SetPosition(Storage OpenScroll, CurrentStorage.Barrel)", true);
 
@@ -871,6 +876,11 @@ bool Story::setupStorage(string name) {
 
 		//icons
 		CurrentStorage.icons.push_back(Icon("Storage Chest", "Hand", "CurrentStorage.Chest", "Take All Storage Items", "true"));
+		CurrentStorage.icons.push_back(Icon("TakeStorageBottleFromStorageChest", "Hand", "Storage Bottle", "Take Storage Bottle", "true"));
+		CurrentStorage.icons.push_back(Icon("TakeStorageInkAndQuillFromStorageChest", "Hand", "Storage InkAndQuill", "Take Storage InkAndQuill", "true"));
+		CurrentStorage.icons.push_back(Icon("TakeStorageBreadFromStorageChest", "Hand", "Storage Bread", "Take Storage Bread", "true"));
+		CurrentStorage.icons.push_back(Icon("TakeStorageBagFromStorageChest", "Hand", "Storage Bag", "Take Storage Bag", "true"));
+		CurrentStorage.icons.push_back(Icon("TakeStorageHelmetFromStorageChest", "Hand", "Storage Helmet", "Take Storage Helmet", "true"));
 		CurrentStorage.icons.push_back(Icon("Read Storage OpenScroll", "Hand", "Storage OpenScroll", "Read The Scroll", "true"));
 		CurrentStorage.icons.push_back(Icon("Interact With Potion Of Cleansing", "Hand", "Potion Of Cleansing", "Take The Potion", "true"));
 		CurrentStorage.icons.push_back(Icon("Place Items On Shelf", "Hand", "CurrentStorage.Shelf", "Place An Item On The Shelf", "true"));
