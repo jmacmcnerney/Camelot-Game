@@ -29,6 +29,121 @@
 
 using namespace std;
 
+extern vector<string> playerInv;
+
+//location boolean
+extern string currentLocation;
+
+extern bool fileWritten;
+extern bool cheatsEnabled;
+
+//Intro Quest Booleans
+//Cottage
+extern bool hasStorybook;
+//City
+extern bool hasBrokenLock;
+extern bool hasFixedLock;
+extern bool hasAppleMoney;
+extern bool hasElderApple;
+extern bool visitedFortuneteller;
+extern bool visitedTownElder;
+extern bool completedErrand;
+//Ruins
+extern bool sword_taken;
+extern bool spellbook_taken;
+extern bool item_placed;
+
+//Flashback Booleans
+extern bool ArchieEnemy;
+extern bool MathiasFlashback;
+extern bool ArchieFlashback;
+
+//Green Puzzle Booleans
+//Potion
+extern bool hasGreenPotion;
+extern bool hasStorageBottle;
+extern bool hasStorageBread;
+extern bool hasStorageHelmet;
+extern bool hasStorageInkAndQuill;
+extern bool hasStorageBag;
+extern bool storageBreadPositionCorrect;
+extern bool storageBottlePositionCorrect;
+extern bool storagePuzzleSolved;
+//Book
+extern bool hasGreenBook;
+extern bool hasLibraryGoldCup;
+extern bool hasLibraryApple;
+extern bool hasLibraryGreenKey;
+extern bool libraryApplePositionCorrect;
+extern bool libraryGoldCupPositionCorrect;
+extern bool libraryGreenKeyPositionCorrect;
+extern bool libraryPuzzleSolved;
+
+//Blue Puzzle Booleans
+//Potion
+extern bool hasBluePotion;
+extern bool visitedDiningRoom;
+//Book
+extern bool hasBlueBook;
+extern bool spokenWithMerchant;
+extern bool hasStrangeElixir;
+extern bool drankStangeElixir;
+//extern bool spokenWithSailor;
+extern bool canWorkForBlacksmith;
+extern bool hasCompass;
+extern bool hasRedPotion;
+//Book
+extern bool hasRedBook;
+extern bool hasLitTorch;
+extern bool torchUnpocketed;
+extern bool boatOnFire;
+extern bool merchantDistracted;
+extern bool hasTranslatingGlass;
+extern bool iconEnabled;
+extern bool isChestOpened;
+
+//Purple Puzzle Booleans
+//Potion
+extern bool hasPurplePotion;
+//Book
+extern bool hasPurpleBook;
+extern bool hasLegofTwo;
+extern bool hasCloth;
+extern bool givenRiddle;
+
+extern bool camptest;
+
+extern bool hasFirstPrisItem;
+extern bool hasSecondPrisItem;
+extern bool hasThirdPrisItem;
+extern bool firstPrisRiddle;
+extern bool secondPrisRiddle;
+extern bool thirdPrisRiddle;
+extern bool firstTalkPris;
+
+extern bool firstTalkGuard;
+extern bool hasBedroomAnswer;
+extern bool hasReadBedroomNote;
+extern bool hasSearchedBedroomCloset;
+
+extern bool BedroomSpot1Full;
+extern bool BedroomSpot2Full;
+extern bool BedroomSpot3Full;
+extern bool BedroomSpot4Full;
+extern bool BedroomSpot5Full;
+extern bool BedroomSpot6Full;
+
+extern bool BedroomSpot1Correct;
+extern bool BedroomSpot2Correct;
+extern bool BedroomSpot3Correct;
+extern bool BedroomSpot4Correct;
+extern bool BedroomSpot5Correct;
+extern bool BedroomSpot6Correct;
+
+extern bool BedroomPuzzleFin;
+
+extern int numCoins;
+
 class Story {
 public:
 	Story();

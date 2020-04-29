@@ -6,6 +6,7 @@
 -- File Description: The primary execution location of the experience manager.
 */
 
+#pragma once
 #include <iostream>
 #include <string>
 #include "Story.h"

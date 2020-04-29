@@ -11,8 +11,12 @@
 #include <vector>
 #include "icon.h"
 #include "functions.h"
+#include "Story.h"
+#include <fstream>
 
 using namespace std;
+
+ofstream myfile;
 
 // Wait for given input before continueing
 void functions::WaitFor(string message) {
@@ -151,6 +155,7 @@ bool functions::checkCommonKeywords(string input, string modifiedInput, string p
 		modifiedInput = splitInput(input, 0, true);
 
 		if (modifiedInput == "Start") {
+			//myfile.open("log.txt");
 			StartOption(playerName);
 			Action("EnableInput()", true);
 		}
@@ -164,11 +169,83 @@ bool functions::checkCommonKeywords(string input, string modifiedInput, string p
 			Action("ShowNarration()", true);
 		}
 		else if (modifiedInput == "Quit") {
+			//myfile.close();
 			Action("Quit()", true);
 		}
 		else if (modifiedInput == "end") {
 			Action("HideDialog()", true);
 		}
+
+		else if (modifiedInput == "teleportCheats") {
+			//function.Action("FadeOut()", true);
+			Action("ClearDialog()", true);
+			Action("SetDialog(Where?\\n[teleportToArlanCottage|Arlan Cottage]\\n[teleportToCurrentTown|Current Town]\\n[teleportToBlacksmithFoundry|Blacksmith Foundry]\\n[teleportToAlchemyShop|Alchemy Shop]\\n[teleportToCurrentForestPath|Current Forest Path]\\n[teleportToCurrentRuins|Current Ruins]\\n[teleportToPastCottage|Past Cottage]\\n[teleportToPastCity|Past City]\\n[teleportToPastForestPath|Past Forest Path]\\n[teleportToPastRuins|Past Ruins]\\n[teleportToForestPath2|Forest Path 2]\\n[teleportToCurrentCastleCrossroads|Current Castle Crossroads]\\n[teleportToCurrentPort|Current Port]\\n[teleportToCurrentGreatHall|Current Great Hall]\\n[teleportToCurrentStorage|Current Storage]\\n[teleportToRightHallway|Right Hallway]\\n[teleportToCurrentLibrary|Current Library]\\n[teleportToCurrentCastleBedroom|Current Castle Bedroom]\\n[teleportToLeftHallway|Left Hallway]\\n[teleportToCurrentDiningRoom|Current Dining Room]\\n[teleportToCurrentPrison|Current Prison]\\n[teleportToCurrentCourtyard|Current Courtyard]\\n[end|Exit Menu])", true);
+		}
+
+		else if (modifiedInput == "teleportToArlanCottage") { Action("HideDialog()", true); Action("SetPosition(Arlan, ArlanCottage)", true); currentLocation = "ArlanCottage"; }
+		else if (modifiedInput == "teleportToCurrentTown") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentTown)", true); currentLocation = "CurrentTown"; }
+		else if (modifiedInput == "teleportToAlchemyShop") { Action("HideDialog()", true); Action("SetPosition(Arlan, AlchemyShop)", true); currentLocation = "AlchemyShop"; }
+		else if (modifiedInput == "teleportToCurrentForestPath") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentForestPath)", true); currentLocation = "CurrentForestPath"; }
+		else if (modifiedInput == "teleportToCurrentRuins") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentRuins)", true); currentLocation = "CurrentRuins"; }
+		else if (modifiedInput == "teleportToPastCottage") { Action("HideDialog()", true); Action("SetPosition(Arlan, PastCottage)", true); currentLocation = "PastCottage"; }
+		else if (modifiedInput == "teleportToPastCity") { Action("HideDialog()", true); Action("SetPosition(Arlan, PastCity)", true); currentLocation = "PastCity"; }
+		else if (modifiedInput == "teleportToPastForestPath") { Action("HideDialog()", true); Action("SetPosition(Arlan, PastForestPath)", true); currentLocation = "PastForestPath"; }
+		else if (modifiedInput == "teleportToPastRuins") { Action("HideDialog()", true); Action("SetPosition(Arlan, PastRuins)", true); currentLocation = "PastRuins"; }
+		else if (modifiedInput == "teleportToForestPath2") { Action("HideDialog()", true); Action("SetPosition(Arlan, ForestPath2)", true); currentLocation = "ForestPath2"; }
+		else if (modifiedInput == "teleportToCurrentCastleCrossroads") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentCastleCrossroads)", true); currentLocation = "CurrentCastleCrossroads"; }
+		else if (modifiedInput == "teleportToCurrentPort") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentPort)", true); currentLocation = "CurrentPort"; }
+		else if (modifiedInput == "teleportToCurrentGreatHall") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentGreatHall)", true); currentLocation = "CurrentGreatHall"; }
+		else if (modifiedInput == "teleportToCurrentStorage") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentStorage)", true); currentLocation = "CurrentStorage"; }
+		else if (modifiedInput == "teleportToRightHallway") { Action("HideDialog()", true); Action("SetPosition(Arlan, RightHallway)", true); currentLocation = "RightHallway"; }
+		else if (modifiedInput == "teleportToCurrentLibrary") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentLibrary)", true); currentLocation = "CurrentLibrary"; }
+		else if (modifiedInput == "teleportToCurrentCastleBedroom") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentCastleBedroom)", true); currentLocation = "CurrentCastleBedroom"; }
+		else if (modifiedInput == "teleportToLeftHallway") { Action("HideDialog()", true); Action("SetPosition(Arlan, LeftHallway)", true); currentLocation = "LeftHallway"; }
+		else if (modifiedInput == "teleportToCurrentDiningRoom") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentDiningRoom)", true); currentLocation = "CurrentDiningRoom"; }
+		else if (modifiedInput == "teleportToCurrentPrison") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentPrison)", true); currentLocation = "CurrentPrison"; }
+		else if (modifiedInput == "teleportToCurrentCourtyard") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentCourtyard)", true); currentLocation = "CurrentCourtyard"; }
+
+		else if (modifiedInput == "itemCheats") {
+			Action("ClearDialog()", true);
+			Action("SetDialog(Which Item?\\n[addStorybookCheat|Storybook]\\n[addBrokenLockCheat|BrokenLock]\\n[addFixedLockCheat|FixedLock]\\n[addAppleMoneyCheat|AppleMoney]\\n[addElderAppleCheat|ElderApple]\\n[addMathiasSwordCheat|MathiasSword]\\n[addArchieSpellbookCheat|ArchieSpellbook]\\n[addGreenPotionCheat|GreenPotion]\\n[addStorageBottleCheat|StorageBottle]\\n[addStorageBreadCheat|StorageBread]\\n[addStorageHelmetCheat|StorageHelmet]\\n[addStorageInkAndQuillCheat|StorageInkAndQuill]\\n[addStorageBagCheat|StorageBag]\\n[addGreenBookCheat|GreenBook]\\n[addLibraryGoldCupCheat|LibraryGoldCup]\\n[addLibraryAppleCheat|LibraryApple]\\n[addLibraryGreenKeyCheat|LibraryGreenKey]\\n[addBluePotionCheat|BluePotion]\\n[addBlueBookCheat|BlueBook]\\n[addRedPotionCheat|RedPotion]\\n[addRedBookCheat|RedBook]\\n[addPurplePotionCheat|PurplePotion]\\n[addPurpleBookCheat|PurpleBook]\\n[end|Exit])", true);
+		}
+
+		else if (modifiedInput == "addStorybookCheat") { ItemCheats("Storybook", hasStorybook); }
+		else if (modifiedInput == "addBrokenLockCheat") { ItemCheats("Broken Lock", hasBrokenLock); }
+		else if (modifiedInput == "addFixedLockCheat") { ItemCheats("Fixed Lock", hasFixedLock); }
+		else if (modifiedInput == "addAppleMoneyCheat") { ItemCheats("Apple Money", hasAppleMoney); }
+		else if (modifiedInput == "addElderAppleCheat") { ItemCheats("Elder Apple", hasElderApple); }
+		else if (modifiedInput == "addMathiasSwordCheat") { ItemCheats("MathiasSword", sword_taken); }
+		else if (modifiedInput == "addArchieSpellbookCheat") { ItemCheats("ArchieSpellbook", spellbook_taken); }
+		else if (modifiedInput == "addGreenPotionCheat") { ItemCheats("Potion Of Cleansing", hasGreenPotion); }
+		else if (modifiedInput == "addStorageBottleCheat") { ItemCheats("Storage Bottle", hasStorageBottle); }
+		else if (modifiedInput == "addStorageBreadCheat") { ItemCheats("Storage Bread", hasStorageBread); }
+		else if (modifiedInput == "addStorageHelmetCheat") { ItemCheats("Storage Helmet", hasStorageHelmet); }
+		else if (modifiedInput == "addStorageInkAndQuillCheat") { ItemCheats("Storage InkAndQuill", hasStorageInkAndQuill); }
+		else if (modifiedInput == "addStorageBagCheat") { ItemCheats("Storage Bag", hasStorageBag); }
+		else if (modifiedInput == "addGreenBookCheat") { ItemCheats("Book Of Incantations", hasGreenBook); }
+		else if (modifiedInput == "addLibraryGoldCupCheat") { ItemCheats("Library GoldCup", hasLibraryGoldCup); }
+		else if (modifiedInput == "addLibraryAppleCheat") { ItemCheats("Library Apple", hasLibraryApple); }
+		else if (modifiedInput == "addLibraryGreenKeyCheat") { ItemCheats("Library GreenKey", hasLibraryGreenKey); }
+		//else if (i == "addBluePotionCheat") { ItemCheats("BluePotion", hasBluePotion); }
+		//else if (i == "addBlueBookCheat") { ItemCheats("BlueBook", hasBlueBook); }
+		//else if (i == "addRedPotionCheat") { ItemCheats("RedPotion", hasRedPotion); }
+		//else if (i == "addRedBookCheat") { ItemCheats("Translated Book", hasRedBook); }
+		//else if (i == "addPurplePotionCheat") { ItemCheats("Potion of Healing", hasPurplePotion); }
+		//else if (i == "addPurpleBookCheat") { ItemCheats("Book of Tactics", hasPurplebook); }
+
+		else if (modifiedInput == "booleanCheats") {
+			Action("ClearDialog()", true);
+			Action("SetDialog(Pick One.\\n[visitedFortuneTeller|visitedFortuneteller]\\n[visitedTownElder|visitedTownElder]\\n[completedErrand|completedErrand]\\n[itemPlaced|itemPlaced]\\n[ArchieEnemy|ArchieEnemy]\\n[MathiasFlashback|MathiasFlashback]\\n[ArchieFlashback|ArchieFlashback]\\n[end|Exit])", true);
+		}
+
+		else if (modifiedInput == "visitedFortuneteller") { visitedFortuneteller = true; }
+		else if (modifiedInput == "visitedTownElder") { visitedTownElder = true; }
+		else if (modifiedInput == "completedErrand") { completedErrand = true; }
+		else if (modifiedInput == "itemPlaced") { item_placed = true; }
+		else if (modifiedInput == "ArchieEnemy") { ArchieEnemy = true; }
+		else if (modifiedInput == "MathiasFlashback") { MathiasFlashback = true; }
+		else if (modifiedInput == "ArchieFlashback") { ArchieFlashback = true; }
+
 		else keywordFound = false;
 	}
 	//If it's under the "Key" keyword
@@ -199,6 +276,16 @@ bool functions::checkCommonKeywords(string input, string modifiedInput, string p
 			CloseList();
 		}
 	}
+
+	/*-------------------CHEATS-------------------*/
+	else if (modifiedInput == "accessCheatMenu") {
+			//function.Action("ClearDialog()", true);
+			//function.Action("SetDialog(Category\\n[teleportCheats|Teleport Cheats]\\n[itemCheats][Item Cheats])", true);
+			Action("HideList()", true);
+			SetupDialogText("Category", "teleportCheats", "Teleport Cheats", "itemCheats", "Item Cheats", "booleanCheats", "Boolean Cheats");
+			Action("ShowDialog()", true);
+	}
+	/*-------------------CHEATS-------------------*/
 	else keywordFound = false;
 
 	return keywordFound;
@@ -402,13 +489,13 @@ void functions::PuzzleItem(string action, string itemname, string position, bool
 	Action("ShowNarration()", true);
 }
 
-void functions::ItemCheats(string itemname, bool &hasItem, vector<string> &inventory) {
+void functions::ItemCheats(string itemname, bool &hasItem) {
 	if (!hasItem) {
-		inventory.push_back(itemname);
+		playerInv.push_back(itemname);
 		hasItem = true;
 	}
 	else if (hasItem) {
-		RemoveItem(itemname, inventory);
+		RemoveItem(itemname, playerInv);
 		hasItem = false;
 	}
 }
