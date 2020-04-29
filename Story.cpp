@@ -19,7 +19,6 @@ vector<string> playerInv;
 //location boolean
 string currentLocation = "ArlanCottage";
 
-bool fileWritten = false;
 bool cheatsEnabled = true;
 
 //Intro Quest Booleans
@@ -1145,7 +1144,7 @@ void Story::runCurrentTown() {
 				}
 
 				else if (modified_I == "whatRuins") {
-					function.SetupDialogText("Take the eastern forest path just beyond the fortune tellers shop and you will find them.", "completedErrand", "Okay! Thanks!");
+					function.SetupDialogText("Take the eastern forest path just beyond the fortune tellers shop and you will find them.", "completedErrand", "Okay. Thanks.");
 				}
 
 				else if (modified_I == "completedErrand") {

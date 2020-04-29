@@ -235,16 +235,16 @@ bool functions::checkCommonKeywords(string input, string modifiedInput, string p
 
 		else if (modifiedInput == "booleanCheats") {
 			Action("ClearDialog()", true);
-			Action("SetDialog(Pick One.\\n[visitedFortuneTeller|visitedFortuneteller]\\n[visitedTownElder|visitedTownElder]\\n[completedErrand|completedErrand]\\n[itemPlaced|itemPlaced]\\n[ArchieEnemy|ArchieEnemy]\\n[MathiasFlashback|MathiasFlashback]\\n[ArchieFlashback|ArchieFlashback]\\n[end|Exit])", true);
+			Action("SetDialog(Pick One.\\n[visitedFortunetellerBoolCheat|visitedFortuneteller]\\n[visitedTownElderBoolCheat|visitedTownElder]\\n[completedErrandBoolCheat|completedErrand]\\n[itemPlacedBoolCheat|itemPlaced]\\n[ArchieEnemyBoolCheat|ArchieEnemy]\\n[MathiasFlashbackBoolCheat|MathiasFlashback]\\n[ArchieFlashbackBoolCheat|ArchieFlashback]\\n[end|Exit])", true);
 		}
 
-		else if (modifiedInput == "visitedFortuneteller") { visitedFortuneteller = true; }
-		else if (modifiedInput == "visitedTownElder") { visitedTownElder = true; }
-		else if (modifiedInput == "completedErrand") { completedErrand = true; }
-		else if (modifiedInput == "itemPlaced") { item_placed = true; }
-		else if (modifiedInput == "ArchieEnemy") { ArchieEnemy = true; }
-		else if (modifiedInput == "MathiasFlashback") { MathiasFlashback = true; }
-		else if (modifiedInput == "ArchieFlashback") { ArchieFlashback = true; }
+		else if (modifiedInput == "visitedFortunetellerBoolCheat") { visitedFortuneteller = true; }
+		else if (modifiedInput == "visitedTownElderBoolCheat") { visitedTownElder = true; }
+		else if (modifiedInput == "completedErrandBoolCheat") { completedErrand = true; }
+		else if (modifiedInput == "itemPlacedBoolCheat") { item_placed = true; }
+		else if (modifiedInput == "ArchieEnemyBoolCheat") { ArchieEnemy = true; }
+		else if (modifiedInput == "MathiasFlashbackBoolCheat") { MathiasFlashback = true; }
+		else if (modifiedInput == "ArchieFlashbackBoolCheat") { ArchieFlashback = true; }
 
 		else keywordFound = false;
 	}

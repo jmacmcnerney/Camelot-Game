@@ -34,7 +34,6 @@ extern vector<string> playerInv;
 //location boolean
 extern string currentLocation;
 
-extern bool fileWritten;
 extern bool cheatsEnabled;
 
 //Intro Quest Booleans
