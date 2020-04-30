@@ -75,6 +75,9 @@ bool drankStangeElixir = false;
 //bool spokenWithSailor = false;
 bool canWorkForBlacksmith = false;
 bool hasCompass = false;
+
+//Red Puzzle Booleans
+//Potion
 bool hasRedPotion = false;
 //Book
 bool hasRedBook = false;
@@ -912,6 +915,7 @@ bool Story::setupStorage(string name) {
 		CurrentStorage.icons.push_back(Icon("Open_Chest", "Hand", "CurrentStorage.Chest", "Open Chest", "true"));
 		CurrentStorage.icons.push_back(Icon("Take_Torch", "Hand", "Torch", "Take LitTorch", "true"));
 		CurrentStorage.icons.push_back(Icon("Take_Cloth", "Open", "Purple Cloth", "Take Cloth", "true"));
+		CurrentStorage.icons.push_back(Icon("Leave_Storage", "Hand", "CurrentStorage.Door", "Leave", "true"));
 		function.SetupIcons(CurrentStorage.icons);
 	}
 
@@ -1406,13 +1410,16 @@ void Story::runAlchemyShop() {
 					function.Action("Face(Fortuneteller, AlchemyShop.Cauldron)", false);
 					function.Action("Face(Arlan, Fortuneteller)", true);
 					function.Action("EnableEffect(AlchemyShop.Fireplace, Campfire)", true);
+					function.Action("PlaySound(Brew, AlchemyShop.Cauldron)", false);
 					function.Action("Unpocket(Fortuneteller, Leg of Two)", true);
 					function.Action("PutDown(Fortuneteller, Leg of Two)", true);
 					function.Action("Unpocket(Fortuneteller, Purple Cloth)", true);
 					function.Action("PutDown(Fortuneteller, Purple Cloth)", true);
 					function.Action("Unpocket(Fortuneteller, Potion of Healing)", true);
 					function.Action("PutDown(Fortuneteller, Potion of Healing)", true);
-					function.Action("CreateEffect(AlchemyShop.Cauldron, Brew)", true);
+					function.Action("CreateEffect(AlchemyShop.Cauldron, Brew)", false);
+					function.Action("StopSound(Brew, AlchemyShop.Cauldron)", false);
+					function.Action("PlaySound(Spell, AlchemyShop.Cauldron)", true);
 					function.Action("DisableEffect(AlchemyShop.Fireplace)", true);
 					this_thread::sleep_for(chrono::milliseconds(1500));
 					function.WalkToPlace("Fortuneteller", "AlchemyShop.AlchemistTable");
@@ -2026,6 +2033,7 @@ void Story::runCurrentGreatHall() {
 
 			if (!inputWasCommon) {
 				if (modified_I == "Read_Book") {
+					function.Action("PlaySound(Book, Translated Book)", true);
 					function.WalkToPlace("Arlan", "CurrentGreatHall.Table");
 					if (hasPurplePotion || hasPurpleBook) {
 						function.Action("SetNarration(The pages are blank. I guess this book is of no use to me.)", true);
@@ -2305,6 +2313,7 @@ void Story::runCurrentPort() {
 		}
 		else {
 			function.Action("EnableEffect(CurrentPort.SmallShip, WildFire)", true);
+			function.Action("PlaySound(Fireplace, CurrentPort.SmallShip, true)", true);
 		}
 		function.Action("EnableEffect(Translating Glass, Diamond)", true);
 
@@ -2390,7 +2399,8 @@ void Story::runCurrentPort() {
 						//function.WalkToPlace("Arlan", "CurrentPort.SmallShip");
 						function.Action("Unpocket(Arlan, Torch)", true);
 						function.Action("PutDown(Arlan, Torch)", true);
-						function.Action("EnableEffect(CurrentPort.SmallShip, WildFire)", true);
+						function.Action("EnableEffect(CurrentPort.SmallShip, WildFire)", false);
+						function.Action("PlaySound(Fireplace, CurrentPort.SmallShip, true)", false);
 						function.Action("DisableIcon(Intract_Ship, CurrentPort.SmallShip)", true);
 						boatOnFire = true;
 						function.Action("EnableInput()", true);
@@ -2407,11 +2417,13 @@ void Story::runCurrentPort() {
 			if (i == "input arrived Arlan position CurrentPort.Exit") {
 				function.Action("DisableEffect(CurrentPort.SmallShip)", false);
 				function.Action("DisableEffect(Translating Glass)", false);
+				if (boatOnFire){ function.Action("StopSound(Fireplace, CurrentPort.SmallShip)", false); }
 				function.Transition("Arlan", "CurrentPort.Exit", "CurrentCastleCrossroads.WestEnd");
 				currentLocation = "CurrentCastleCrossroads";
 			}
 			else if (i == "input Selected end" && hasTranslatingGlass) {
 				function.Action("DisableEffect(CurrentPort.SmallShip)", false);
+				if (boatOnFire) { function.Action("StopSound(Fireplace, CurrentPort.SmallShip)", false); }
 				function.Transition("Arlan", "CurrentPort.Exit", "CurrentCastleCrossroads.WestEnd");
 				currentLocation = "CurrentCastleCrossroads";
 			}
@@ -3025,16 +3037,21 @@ void Story::runCurrentStorage() {
 					function.Action("DisableIcon(Take_Cloth, Purple Cloth)", true);
 					playerInv.push_back("Purple Cloth");
 					hasCloth = true;
-				}								
+				}
+				else if (modified_I == "Leave_Storage"){
+					function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
+					currentLocation = "CurrentGreatHall";
+				}
 			}
 			//CurrentGreatHall
-			if (i == "input arrived Arlan position CurrentStorage.Door") {
+			/*if (i == "input arrived Arlan position CurrentStorage.Door") {
 				function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
 				currentLocation = "CurrentGreatHall";
 			}
 
 			//closing chest animation when exiting chestInv
-			else if (isChestOpened && modified_I == "Close") {
+			else */
+			if (isChestOpened && modified_I == "Close") {
 				function.Action("DisableInput()", true);
 				function.Action("CloseFurniture(Arlan, CurrentStorage.Chest)", true);
 				function.Action("EnableInput()", true);
