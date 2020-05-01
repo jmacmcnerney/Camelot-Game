@@ -503,8 +503,9 @@ void functions::ItemCheats(string itemname, bool &hasItem) {
 void functions::ItemHandler(string itemname, string action, string position, string location, vector<string>& inventory, bool& inventoryErrorCheck, string& onLeft, string& onRight, string& onCenter, bool& correctLeft, bool& correctRight, bool& correctCenter) {
 	int substrCounter = 0;
 	string substrWord, placementLocation, leftItem, rightItem, centerItem = "";
-	if (location == "BobsHouse") { substrWord = "Shelf"; substrCounter = substrWord.length(); placementLocation = "Shelf"; }
+	//if (location == "BobsHouse") { substrWord = "Shelf"; substrCounter = substrWord.length(); placementLocation = "Shelf"; }
 	if (location == "CurrentLibrary") { substrWord = "Library"; substrCounter = substrWord.length(); placementLocation = "AlchemistTable"; leftItem = "Library Apple"; rightItem = "Library GreenKey"; centerItem = "Library GoldCup"; }
+	if (location == "CurrentStorage") { substrWord = "Storage"; substrCounter = substrWord.length(); placementLocation = "Shelf"; leftItem = "Storage Bread"; rightItem = "Storage Bottle"; }
 	if (action == "ShowPlaceInventory") {
 		if (((onLeft == "") && (position == "Left")) || ((onRight == "") && (position == "Right")) || ((onCenter == "") && (position == "Center"))) {
 			for (string item : inventory) {
