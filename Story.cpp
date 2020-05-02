@@ -175,7 +175,7 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	setupRightHallway("RightHallway");
 	//setupDiningRoom("CurrentDiningRoom");
 	//FOR TESTING PURPOSES
-	setupStorage("CurrentStorage");
+	//setupStorage("CurrentStorage");
 	function.Action("ShowMenu()", true);
 
 	return true;
@@ -394,6 +394,7 @@ bool Story::setupCurrentRuins(string name) {
 
 	//icons
 	currentRuins.icons.push_back(Icon("Take", "Hand", "LeaderFlashPotion", "Take the Potion", "true"));
+	currentRuins.icons.push_back(Icon("Examine_Altar", "Magnifyingglass", "CurrentRuins.Altar", "Examine the Altar", "true"));
 	function.SetupIcons(currentRuins.icons);
 
 
@@ -1562,7 +1563,8 @@ void Story::runCurrentRuins() {
 			currentLocation = "CurrentForestPath";
 		}
 
-		else if (i == "input arrived Arlan position CurrentRuins.Altar") {
+		else if (i == "input Examine_Altar CurrentRuins.Altar") {
+			function.WalkToPlace("Arlan", "CurrentRuins.Altar");
 			function.Action("SetRight(null)", true);
 			if (!item_placed && (sword_taken || spellbook_taken)) {
 				function.Action("DisableInput()", true);
@@ -1583,11 +1585,15 @@ void Story::runCurrentRuins() {
 		}
 
 		else if (i == "input Selected placeMathiasSword") {
+			function.Action("DisableIcon(Examine_Altar, CurrentRuins.Altar)", true);
 			MathiasFlashback = true;
 			function.Action("HideDialog()", true);
 			if (sword_taken) {
 				function.RemoveItem("MathiasSword", playerInv);
-				function.Action("SetPosition(MathiasSword, CurrentRuins.Altar.Top)", true);
+				if (spellbook_taken) { function.RemoveItem("ArchieSpellbook", playerInv); }
+				//function.Action("SetPosition(MathiasSword, CurrentRuins.Altar.Top)", true);
+				function.Action("Unpocket(Arlan, MathiasSword)", true);
+				function.Action("Put(Arlan, MathiasSword, CurrentRuins.Altar)", true);
 				ArchieEnemy = true;
 				item_placed = true;
 				function.Action("CreateEffect(CurrentRuins.Altar, Resurrection)", true);
@@ -1603,11 +1609,15 @@ void Story::runCurrentRuins() {
 		}
 
 		else if (i == "input Selected placeArchieSpellbook") {
+			function.Action("DisableIcon(Examine_Altar, CurrentRuins.Altar)", true);
 			ArchieFlashback = true;
 			function.Action("HideDialog()", true);
 			if (spellbook_taken) {
 				function.RemoveItem("ArchieSpellbook", playerInv);
-				function.Action("SetPosition(ArchieSpellbook, CurrentRuins.Altar.Top)", true);
+				if (sword_taken) { function.RemoveItem("MathiasSword", playerInv); }
+				//function.Action("SetPosition(ArchieSpellbook, CurrentRuins.Altar.Top)", true);
+				function.Action("Unpocket(Arlan, ArchieSpellbook)", true);
+				function.Action("Put(Arlan, ArchieSpellbook, CurrentRuins.Altar)", true);
 				ArchieEnemy = false;
 				item_placed = true;
 				function.Action("CreateEffect(CurrentRuins.Altar, Resurrection)", true);
@@ -1882,6 +1892,7 @@ void Story::runPastRuins(bool CharacterCheck) {
 					function.Action("WalkTo(Arlan, CurrentRuins.Altar)", false);
 					function.Action("SetNarration(What an odd vision...)", true);
 					function.Action("ShowNarration()", true);
+					function.Action("EnableInput()", true);
 				}
 			}
 		}
