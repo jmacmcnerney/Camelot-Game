@@ -501,6 +501,7 @@ void functions::ItemCheats(string itemname, bool &hasItem) {
 }
 
 void functions::ItemHandler(string itemname, string action, string position, string location, vector<string>& inventory, bool& inventoryErrorCheck, string& onLeft, string& onRight, string& onCenter, bool& correctLeft, bool& correctRight, bool& correctCenter) {
+	bool puzzleItemsInInv = false;
 	int substrCounter = 0;
 	string substrWord, placementLocation, leftItem, rightItem, centerItem = "";
 	//if (location == "BobsHouse") { substrWord = "Shelf"; substrCounter = substrWord.length(); placementLocation = "Shelf"; }
@@ -508,15 +509,17 @@ void functions::ItemHandler(string itemname, string action, string position, str
 	if (location == "CurrentStorage") { substrWord = "Storage"; substrCounter = substrWord.length(); placementLocation = "Shelf"; leftItem = "Storage Bread"; rightItem = "Storage Bottle"; }
 	if (action == "ShowPlaceInventory") {
 		if (((onLeft == "") && (position == "Left")) || ((onRight == "") && (position == "Right")) || ((onCenter == "") && (position == "Center"))) {
+			Action("ClearList()", true);
 			for (string item : inventory) {
 				if (item.substr(0, substrCounter) == substrWord) {
 					if (!inventoryErrorCheck) { Action("DisableIcon(PlaceItem, " + item + ")", true); }
 					Action("AddToList(" + item + ")", true);
 					Action("EnableIcon(PlaceItem, Hand, " + item + ", Place, true)", true);
+					puzzleItemsInInv = true;
 				}
 			}
 			Action("ShowList(Arlan)", true);
-			inventoryErrorCheck = false;
+			if (puzzleItemsInInv) { inventoryErrorCheck = false; }
 		}
 		else {
 			Action("SetNarration(Space Occupied)", true);

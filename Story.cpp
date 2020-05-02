@@ -39,7 +39,8 @@ bool item_placed = false;
 
 //Flashback Booleans
 bool ArchieEnemy = false;
-bool MathiasFlashback = false;
+//FOR TESTING PURPOSES
+bool MathiasFlashback = true;
 bool ArchieFlashback = false;
 
 //Green Puzzle Booleans
@@ -173,7 +174,8 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	setupLeftHallway("LeftHallway");
 	setupRightHallway("RightHallway");
 	//setupDiningRoom("CurrentDiningRoom");
-	//setupStorage("CurrentStorage");
+	//FOR TESTING PURPOSES
+	setupStorage("CurrentStorage");
 	function.Action("ShowMenu()", true);
 
 	return true;
@@ -3027,7 +3029,7 @@ void Story::runCurrentStorage() {
 
 			//CurrentGreatHall
 			if (i == "input Leave Storage CurrentStorage.Door") {
-				function.Action("SetNarration(The puzzle resets...)", true);
+				/*function.Action("SetNarration(The puzzle resets...)", true);
 				function.RemoveItem("Storage Bottle", playerInv);
 				function.RemoveItem("Storage Bread", playerInv);
 				function.RemoveItem("Storage Helmet", playerInv);
@@ -3038,14 +3040,38 @@ void Story::runCurrentStorage() {
 				function.Action("SetPosition(Storage Helmet, CurrentStorage.Chest)", true);
 				function.Action("SetPosition(Storage InkAndQuill, CurrentStorage.Chest)", true);
 				function.Action("SetPosition(Storage Bag, CurrentStorage.Chest)", true);
-				hasStorageBottle = false;
-				hasStorageBread = false;
-				hasStorageHelmet = false;
-				hasStorageInkAndQuill = false;
-				hasStorageBag = false;
 				function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
 				function.Action("ShowNarration()", true);
-				currentLocation = "CurrentGreatHall";
+				currentLocation = "CurrentGreatHall";*/
+				if (!storagePuzzleSolved) {
+					function.Action("SetNarration(The puzzle resets...)", true);
+					vector<string> tempInv;
+					for (string item : playerInv) {
+						if (item.substr(0, 7) == "Storage") {
+							if (!inventoryErrorCheck) {
+								function.Action("DisableIcon(PlaceItem, " + item + ")", true);
+							}
+							function.Action("EnableIcon(TakeStorageItemFromChest, Hand, " + item + ", Pick Up, true)", true);
+							CurrentStorage.chestInv.push_back(item);
+						}
+						else {
+							tempInv.push_back(item);
+						}
+					}
+					playerInv = tempInv;
+					function.Action("SetPosition(Storage Bottle)", true);
+					function.Action("SetPosition(Storage Bread)", true);
+					function.Action("SetPosition(Storage Helmet)", true);
+					function.Action("SetPosition(Storage InkAndQuill)", true);
+					function.Action("SetPosition(Storage Bag)", true);
+					function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
+					function.Action("ShowNarration()", true);
+					currentLocation = "CurrentGreatHall";
+				}
+				else {
+					function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
+					currentLocation = "CurrentGreatHall";
+				}
 			}
 
 			if (correctLeft && correctRight && !hasGreenPotion && !storagePuzzleSolved) {
@@ -3054,8 +3080,8 @@ void Story::runCurrentStorage() {
 				function.Action("SetPosition(Potion Of Cleansing, CurrentStorage.Barrel)", true);
 				function.Action("CreateEffect(Potion Of Cleansing, Resurrection)", true);
 				function.Action("EnableEffect(Potion Of Cleansing, Resurrection)", true);
-				function.Action("DisableIcon(PickUp, Storage Bread", true);
-				function.Action("DisableIcon(PickUp, Storage Bottle", true);
+				function.Action("DisableIcon(PickUp, Storage Bread)", true);
+				function.Action("DisableIcon(PickUp, Storage Bottle)", true);
 				function.RemoveItem("Storage InkAndQuill", playerInv);
 				function.RemoveItem("Storage InkAndQuill", CurrentStorage.chestInv);
 				function.RemoveItem("Storage Helmet", playerInv);
@@ -3100,6 +3126,7 @@ void Story::runCurrentStorage() {
 			else if (modified_I == "TakeStorageItemFromChest") {
 				chestItem = i.substr(39);
 				function.RemoveItem("Storage " + chestItem, CurrentStorage.chestInv);
+				function.Action("RemoveFromList(Storage " + chestItem + ")", true);
 				playerInv.push_back("Storage " + chestItem);
 				function.Action("DisableIcon(TakeStorageItemFromChest, Storage " + chestItem + ")", true);
 			}
@@ -3135,7 +3162,7 @@ void Story::runCurrentStorage() {
 				function.Action("ShowDialog()", true);
 			}
 
-			else if (i == "input Selected end") {
+			/*else if (i == "input Selected end") {
 				function.Action("HideDialog()", true);
 			}
 
@@ -3150,6 +3177,13 @@ void Story::runCurrentStorage() {
 			else if (i == "input Close List") {
 				function.Action("HideList()", true);
 				function.Action("EnableInput()", true);
+			}*/
+
+			if (isChestOpened && modified_I == "Close") {
+				function.Action("DisableInput()", true);
+				function.Action("CloseFurniture(Arlan, CurrentStorage.Chest)", true);
+				function.Action("EnableInput()", true);
+				isChestOpened = false;
 			}
 		}
 	}
