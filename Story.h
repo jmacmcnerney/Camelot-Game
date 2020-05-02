@@ -82,6 +82,7 @@ extern bool libraryPuzzleSolved;
 //Potion
 extern bool hasBluePotion;
 extern bool visitedDiningRoom;
+extern bool isPlacingItem;
 //Book
 extern bool hasBlueBook;
 extern bool spokenWithMerchant;
@@ -90,6 +91,7 @@ extern bool drankStangeElixir;
 //extern bool spokenWithSailor;
 extern bool canWorkForBlacksmith;
 extern bool hasCompass;
+extern bool boughtCompass;
 extern bool hasRedPotion;
 //Book
 extern bool hasRedBook;
