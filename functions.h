@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include "icon.h"
+
 using namespace std;
 class functions {
 public:
@@ -72,5 +73,8 @@ public:
 	void PuzzleItem(string action, string itemname, string position, bool& positionOccupied, bool& hasItem, bool& correctPosition, vector<string>& inventory);
 
 	//Cheat Item Menu
-	void ItemCheats(string itemname, bool &hasItem, vector<string>& inventory);
+	void ItemCheats(string itemname, bool &hasItem);
+
+	//Item Handler
+	void ItemHandler(string itemname, string action, string position, string location, vector<string>& inventory, bool& inventoryErrorCheck, string& onLeft, string& onRight, string& onCenter, bool& correctLeft, bool& correctRight, bool& correctCenter);
 };
