@@ -69,6 +69,7 @@ bool libraryPuzzleSolved = false;
 bool hasBluePotion = false;
 bool visitedDiningRoom = false;
 bool isPlacingItem = false;
+bool drankBluePotion = false;
 //Book
 bool hasBlueBook = false;
 bool spokenWithMerchant = false;
@@ -839,6 +840,9 @@ bool Story::setupDiningRoom(string name) {
 		CurrentDiningRoom.icons.push_back(Icon("Drink", "Potion", "PotionOfPower", "Drink the potion", "true"));
 
 		function.SetupIcons(CurrentDiningRoom.icons);
+
+		function.Action("EnableEffect(CurrentDiningRoom.Fireplace, Campfire)", true);
+		function.Action("PlaySound(Fireplace, CurrentDiningRoom.Fireplace, true)", true);
 	}
 	else if (ArchieFlashback) {
 		//character setup
@@ -3764,7 +3768,7 @@ void Story::runCurrentDiningRoom() {
 				}
 
 				else if (modified_I == "Inspect") {
-					function.Action("WalkTo(Arlan, CurrentDiningRoom.Fireplace)", true);
+					//function.Action("WalkTo(Arlan, CurrentDiningRoom.Fireplace)", true);
 					if (hasBluePotion) {
 						function.Action("SetNarration(The hidden compartment is empty. You think you should check out that potion.)", true);
 						function.Action("ShowNarration()", true);
@@ -3782,6 +3786,8 @@ void Story::runCurrentDiningRoom() {
 						}
 						if (hasCup) {
 							function.Action("SetNarration(You pour some water out of the servants cup and onto the flames to cool them off a bit.)", true);
+							function.Action("DisableEffect(CurrentDiningRoom.Fireplace)", true);
+							function.Action("StopSound(Fireplace, CurrentDiningRoom.Fireplace)", true);
 							function.Action("ShowNarration()", true);
 							fireDoused = true;
 						}
@@ -3800,6 +3806,7 @@ void Story::runCurrentDiningRoom() {
 					function.Action("SetNarration(You take a sip of the potion. Sudden images of a mysterious book adorned with a skull flash before your eyes. You feel stronger as the book calls out to you. You get the feeling should save the rest of the potion.)", true);
 					function.Action("ShowNarration()", true);
 					function.Action("DisableIcon(Drink, PotionOfPower)", true);
+					drankBluePotion = true;
 
 					function.Action("FadeOut()", true);
 					function.Action("SetPosition(Arlan, LeftHallway)", true);
@@ -3811,8 +3818,14 @@ void Story::runCurrentDiningRoom() {
 
 			//LeftHallway
 			if (i == "input Open CurrentDiningRoom.Door") {
-				function.Transition("Arlan", "CurrentDiningRoom.Door", "LeftHallway.BackDoor");
-				currentLocation = "LeftHallway";
+				if (hasBluePotion && !drankBluePotion) {
+					function.Action("SetNarration(You feel like you should probably check out that potion before you leave.)", true);
+					function.Action("ShowNarration()", true);
+				}
+				else {
+					function.Transition("Arlan", "CurrentDiningRoom.Door", "LeftHallway.BackDoor");
+					currentLocation = "LeftHallway";
+				}
 			}
 
 			// disable Place icon if player closes list before placing puzzle item

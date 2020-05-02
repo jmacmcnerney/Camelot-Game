@@ -83,6 +83,7 @@ extern bool libraryPuzzleSolved;
 extern bool hasBluePotion;
 extern bool visitedDiningRoom;
 extern bool isPlacingItem;
+extern bool drankBluePotion;
 //Book
 extern bool hasBlueBook;
 extern bool spokenWithMerchant;
