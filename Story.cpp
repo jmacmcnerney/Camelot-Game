@@ -2241,7 +2241,7 @@ void Story::runCurrentPort() {
 					}
 
 					else if (modified_I == "askCoins") {
-						function.SetupDialogText("Well... I do have an imported elixir from overseas... It is said to induce strange visions and abilities. I could part with it for say... 5 coins?", "buyElixir", "Sure.", "end", "*No thanks.");
+						function.SetupDialogText("Well... I do have an imported elixir from overseas... It is said to induce strange visions and abilities. I could part with it for say... 4 coins?", "buyElixir", "Sure.", "end", "*No thanks.");
 					}
 
 					else if (modified_I == "buyElixir") {
@@ -2260,11 +2260,11 @@ void Story::runCurrentPort() {
 						function.RemoveItem("Coin2", playerInv);
 						function.RemoveItem("Coin3", playerInv);
 						function.RemoveItem("Coin4", playerInv);
-						function.RemoveItem("Coin5", playerInv);
+						//function.RemoveItem("Coin5", playerInv);
 						numCoins = 0;
 						playerInv.push_back("StrangeElixir");
 						hasStrangeElixir = true;
-						function.Action("SetNarration(A strange elixir has been added to your inventory. 5 coins have been removed.)", true);
+						function.Action("SetNarration(A strange elixir has been added to your inventory. 4 coins have been removed.)", true);
 						function.Action("ShowNarration()", true);
 					}
 
