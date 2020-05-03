@@ -40,7 +40,7 @@ bool item_placed = false;
 //Flashback Booleans
 bool ArchieEnemy = false;
 //FOR TESTING PURPOSES
-bool MathiasFlashback = true;
+bool MathiasFlashback = false;
 bool ArchieFlashback = false;
 
 //Green Puzzle Booleans
@@ -503,8 +503,6 @@ bool Story::setupCastleBedroom(string name) {
 	CurrentCastleBedroom = CastleBedroom(name);
 
 	//character setup
-	//CurrentCastleBedroom.enableRightChair(false);
-	//CurrentCastleBedroom.enableLeftChair(true);
 	function.Action("HideFurniture(CurrentCastleBedroom.LeftChair)", true);
 	function.Action("HideFurniture(CurrentCastleBedroom.RightChair)", true);
 
@@ -517,21 +515,8 @@ bool Story::setupCastleBedroom(string name) {
 	function.Action("CreateItem(CastleBedroomGoldCup, GoldCup)", true);
 	function.Action("CreateItem(CastleBedroomPuzzle, OpenScroll)", true);
 	function.Action("CreateItem(CastleBedroomCrime, OpenScroll)", true);
-	//function.Action("CreateItem(CastleBedroomApple1, Apple)", true);
-	//function.Action("CreateItem(CastleBedroomApple2, Apple)", true);
-	//function.Action("CreateItem(CastleBedroomApple3, Apple)", true);
-	//function.Action("CreateItem(CastleBedroomApple4, Apple)", true);
-	//function.Action("CreateItem(CastleBedroomApple5, Apple)", true);
-	//function.Action("CreateItem(CastleBedroomApple6, Apple)", true);
-	//function.Action("CreateItem(CastleBedroom, RedPotion)", true);
 
 	function.Action("SetPosition(CastleBedroomPuzzle, CurrentCastleBedroom.SmallTable)", true);
-	//function.Action("SetPosition(CastleBedroomApple1, CurrentCastleBedroom.Table.FrontLeft)", true);
-	//function.Action("SetPosition(CastleBedroomApple2, CurrentCastleBedroom.Table.FrontRight)", true);
-	//function.Action("SetPosition(CastleBedroomApple3, CurrentCastleBedroom.Table.Right)", true);
-	//function.Action("SetPosition(CastleBedroomApple4, CurrentCastleBedroom.Table.BackRight)", true);
-	//function.Action("SetPosition(CastleBedroomApple5, CurrentCastleBedroom.Table.BackLeft)", true);
-	//function.Action("SetPosition(CastleBedroomApple6, CurrentCastleBedroom.Table.Left)", true);
 
 
 	//icons
@@ -544,14 +529,7 @@ bool Story::setupCastleBedroom(string name) {
 	CurrentCastleBedroom.icons.push_back(Icon("Pickup InkAndQuill", "hand", "CastleBedroomInkAndQuill", "Pickup Ink and Quill", "true"));
 	CurrentCastleBedroom.icons.push_back(Icon("Pickup JewelKey", "hand", "CastleBedroomJewelKey", "Pickup Jewel Key", "true"));
 	CurrentCastleBedroom.icons.push_back(Icon("Pickup GoldCup", "hand", "CastleBedroomGoldCup", "Pickup Gold Cup", "true"));
-	//CurrentCastleBedroom.icons.push_back(Icon("Search_Chest", "magnifyingglass", "CurrentCastleBedroom.Chest", "Search Chest", "true"));
 
-	//CurrentCastleBedroom.icons.push_back(Icon("Pickup Apple1", "hand", "CastleBedroomApple1", "Pickup Apple", "true"));
-	//CurrentCastleBedroom.icons.push_back(Icon("Pickup Apple2", "hand", "CastleBedroomApple2", "Pickup Apple", "true"));
-	//CurrentCastleBedroom.icons.push_back(Icon("Pickup Apple3", "hand", "CastleBedroomApple3", "Pickup Apple", "true"));
-	//CurrentCastleBedroom.icons.push_back(Icon("Pickup Apple4", "hand", "CastleBedroomApple4", "Pickup Apple", "true"));
-	//CurrentCastleBedroom.icons.push_back(Icon("Pickup Apple5", "hand", "CastleBedroomApple5", "Pickup Apple", "true"));
-	//CurrentCastleBedroom.icons.push_back(Icon("Pickup Apple6", "hand", "CastleBedroomApple6", "Pickup Apple", "true"));
 
 	CurrentCastleBedroom.icons.push_back(Icon("Swap Spot1", "hand", "CurrentCastleBedroom.Table", "Interact with Spot 1", "true"));
 	CurrentCastleBedroom.icons.push_back(Icon("Swap Spot2", "hand", "CurrentCastleBedroom.Table", "Interact with Spot 2", "true"));
@@ -3360,6 +3338,19 @@ void Story::runCurrentPrison() {
 				}
 				else if (modified_I == "RiddleOne") {
 					//Run some kind of spell animation here
+					function.Action("ClearDialog()", true);
+					function.Action("HideDialog()", true);
+
+					function.Action("SetCameraFocus(Prisoner)", true);
+					function.Action("SetCameraMode(follow)", true);
+
+					function.Action("CreateEffect(Prisoner, Force)", true);
+					this_thread::sleep_for(chrono::milliseconds(2500));
+
+					function.Action("SetCameraFocus(Arlan)", true);
+					function.Action("SetCameraMode(follow)", true);
+
+					function.SetupDialog("Arlan", "Prisoner", false);
 					function.SetupDialogText("In a sarcophagus of wood you won't have to look far to find this suit of armor", "DialogEnd", "Hmmm");
 					firstTalkPris = false;
 				}
@@ -3370,11 +3361,29 @@ void Story::runCurrentPrison() {
 					function.SetupDialogText("Rusting this mighty sword faces the elements day and night. Waiting for the day the metal lifeboat above comes down to help", "DialogEnd", "Hmmm");
 				}
 				else if (modified_I == "EndQuest") {
+
+					function.Action("DisableInput()", true);
+
 					function.Action("SetNarration(Potion of Invincibility added to Inventory!)", true);
 					function.Action("ShowNarration()", true);
+					this_thread::sleep_for(chrono::milliseconds(2500));
 					playerInv.push_back("Potion of Invincibility");
+					function.Action("HideNarration()", true);
 					function.Action("ClearDialog()", true);
 					function.Action("HideDialog()", true);
+
+					function.Action("SetCameraFocus(Prisoner)", true);
+
+					function.Action("OpenFurniture(Prisoner, CurrentPrison.CellDoor)", true);
+					function.Action("OpenFurniture(Prisoner, CurrentPrison.Door)", true);
+
+					function.Action("SetCameraFocus(Arlan)", true);
+
+					function.Action("Exit(Prisoner, CurrentPrison.Door, false)", true);
+					function.Action("SetPosition(Prisoner, PastCottage)", true);
+
+					function.Action("EnableInput()", true);
+
 
 					//function.Action("WalkTo(Prisoner, CurrentPrison.CellDoor)", true);
 					//function.Action("OpenFurniture(Prisoner, CurrentPrison.CellDoor)", true);
@@ -3416,7 +3425,7 @@ void Story::runLeftHallway() {
 		bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
 
 		if (!inputWasCommon) {
-			if (modified_I == "Talk_To_Guard") {
+			if (modified_I == "Talk_To_Guard" && !(hasRedBook || hasRedPotion) ) {
 				function.Action("WalkTo(Arlan, PrisonGuard)", true);
 
 				if (firstTalkGuard == true) {
@@ -3433,6 +3442,11 @@ void Story::runLeftHallway() {
 					playerInv.push_back("Potion of Healing");
 					hasPurplePotion = true;
 				}
+			}
+			else if (modified_I == "Talk_To_Guard" && (hasRedBook || hasRedPotion)) {
+				function.Action("WalkTo(Arlan, PrisonGuard)", true);
+				function.SetupDialog("Arlan", "PrisonGuard", false);
+				function.SetupDialogText("Sorry I do not have anything for you to do", "DialogEnd", "Oh...");
 			}
 		}
 
@@ -3549,6 +3563,8 @@ void Story::runRightHallway() {
 		}
 		//CurrentGreatHall
 		//else if (i == "input Enter RightHallway Door RightHallway.Door") {
+		//RightHallway.icons.push_back(Icon("Enter RightHallway Door", "Hand", "RightHallway.Door", "Enter", "true"));
+		//(i == "input Open Door CurrentPrison.Door")
 		else if (i == "input arrived Arlan position RightHallway.Door") {
 			function.Transition("Arlan", "RightHallway.Door", "CurrentGreatHall.RightDoor");
 			currentLocation = "CurrentGreatHall";
@@ -3976,17 +3992,20 @@ void Story::runCurrentCastleBedroom() {
 
 		if (modified_I == "Search_Chest") {
 			function.Action("WalkTo(Arlan, CastleBedroomPuzzle)", true);
+			function.Action("DisableInput()", true);
 			function.Action("OpenFurniture(Arlan, CurrentCastleBedroom.Chest)", true);
 			function.Action("SetNarration(You found the note the Guard was looking for! You take it)", true);
 			function.Action("ShowNarration()", true);
+			this_thread::sleep_for(chrono::milliseconds(2500));
 			playerInv.push_back("CastleBedroomCrime");
+			function.Action("DisableEffect(CurrentCastleBedroom.Chest)", true);
+			function.Action("DisableIcon(Search_Chest, CurrentCastleBedroom.Chest)", true);
+			function.Action("HideNarration()", true);
+			function.Action("EnableInput()", true);
 			hasBedroomAnswer = true;
 		}
 
 		if (modified_I == "Search_Bedroom_Closet") {
-			//	function.Action("WalkTo(Arlan, CurrentCastleBedroom.Closet)", true);
-			//	function.Action("OpenFurniture(Arlan, CurrentCastleBedroom.Closet)", true);
-			//	function.WalkToPlace("Arlan", "CurrentCastleBedroom.Closet");  Might be a bug here
 			function.Action("SetNarration(There are some items hidden in the closet! You take them)", true);
 			function.Action("ShowNarration()", true);
 			playerInv.push_back("CastleBedroomJewelKey");
@@ -3996,38 +4015,30 @@ void Story::runCurrentCastleBedroom() {
 			playerInv.push_back("CastleBedroomSkull");
 			playerInv.push_back("CastleBedroomGoldCup");
 			hasSearchedBedroomCloset = true;
+			function.Action("DisableIcon(Search_Bedroom_Closet, CurrentCastleBedroom.Closet)", true);
 		}
 
 		if (modified_I == "Swap" && hasSearchedBedroomCloset && hasReadBedroomNote) {
-			//modified_I = function.splitInput(i, 0, true);
-
-			//function.Action("WalkTo(Arlan, " + modified_I + ")", true);
 
 			modified_I = function.splitInput(i, 11, false);
 
 			if (modified_I == "Spot1" && !BedroomSpot1Full) {
 				currentPosition = "CurrentCastleBedroom.Table.FrontLeft";
-				//BedroomSpot1Full = true;
 			}
 			else if (modified_I == "Spot2" && !BedroomSpot2Full) {
 				currentPosition = "CurrentCastleBedroom.Table.FrontRight";
-				//BedroomSpot2Full = true;
 			}
 			else if (modified_I == "Spot3" && !BedroomSpot3Full) {
 				currentPosition = "CurrentCastleBedroom.Table.Right";
-				//BedroomSpot3Full = true;
 			}
 			else if (modified_I == "Spot4" && !BedroomSpot4Full) {
 				currentPosition = "CurrentCastleBedroom.Table.BackRight";
-				//BedroomSpot4Full = true;
 			}
 			else if (modified_I == "Spot5" && !BedroomSpot5Full) {
 				currentPosition = "CurrentCastleBedroom.Table.BackLeft";
-				//BedroomSpot5Full = true;
 			}
 			else if (modified_I == "Spot6" && !BedroomSpot6Full) {
 				currentPosition = "CurrentCastleBedroom.Table.Left";
-				//BedroomSpot6Full = true;
 			}
 
 			if (currentPosition != "") {
@@ -4035,15 +4046,6 @@ void Story::runCurrentCastleBedroom() {
 				function.SetupDialogText("Which item would you like to put in this spot?", "CastleBedroomLock", "Lock", "CastleBedroomBag", "Bag", "CastleBedroomSkull", "Skull", "CastleBedroomJewelKey", "Jewel Key", "CastleBedroomInkAndQuill", "Ink and Quill", "CastleBedroomGoldCup", "Gold Cup");
 			}
 
-			//function.Action("Take(Arlan, " + modified_I + ")", true);
-			//playerInv.push_back(modified_I);
-			//function.Action("Pocket(Arlan, " + modified_I + ")", true);
-
-			//function.Action("ShowDialog()", true);
-			//function.Action("ClearDialog()", true);
-
-			//function.Action("SetLeft(Arlan)", true);
-			//function.SetupDialogText("Which item would you like to put in this spot?", "Lock", "Lock", "Bag", "Bag", "Skull", "Skull", "JewelKey", "Jewel Key", "InkAndQuill", "Ink and Quill", "GoldCup", "Gold Cup", "Apple", "Apple");
 		}
 
 		if (modified_I == "Swap" && !(hasSearchedBedroomCloset && hasReadBedroomNote)) {
@@ -4053,8 +4055,7 @@ void Story::runCurrentCastleBedroom() {
 
 		if (modified_I == "Selected") {
 			modified_I = function.splitInput(i, 0, true);
-			//function.Action("SetNarration(" + modified_I + ")", true);
-			//function.Action("ShowNarration()", true);
+
 			if (modified_I == "CastleBedroomLock" || modified_I == "CastleBedroomBag" || modified_I == "CastleBedroomSkull" || modified_I == "CastleBedroomJewelKey" || modified_I == "CastleBedroomGoldCup" || modified_I == "CastleBedroomInkAndQuill") {
 				function.Action("ClearDialog()", true);
 				function.Action("HideDialog()", true);
@@ -4112,7 +4113,17 @@ void Story::runCurrentCastleBedroom() {
 
 		if (BedroomSpot1Full && BedroomSpot2Full && BedroomSpot3Full && BedroomSpot4Full && BedroomSpot5Full && BedroomSpot6Full && !BedroomPuzzleFin) {
 			if (BedroomSpot1Correct && BedroomSpot2Correct && BedroomSpot3Correct && BedroomSpot4Correct && BedroomSpot5Correct && BedroomSpot6Correct) {
+
+				function.Action("DisableInput()", true);
 				function.Action("EnableIcon(Search_Chest, magnifyingglass, CurrentCastleBedroom.Chest, Search Chest, true)", true);
+				function.Action("SetNarration(You hear something unlock...)", true);
+				function.Action("ShowNarration()", true);
+				function.Action("PlaySound(Unlock, CurrentCastleBedroom.Chest, false)", false);
+				this_thread::sleep_for(chrono::milliseconds(2500));
+				function.Action("EnableEffect(CurrentCastleBedroom.Chest, Diamond)", true);
+				function.Action("HideNarration()", true);
+				function.Action("EnableInput()", true);
+
 				BedroomPuzzleFin = true;
 			}
 			else {
