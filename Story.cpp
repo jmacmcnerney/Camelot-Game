@@ -3257,12 +3257,12 @@ void Story::runCurrentPrison() {
 				if (firstTalkPris == true) {
 					function.SetupDialog("Arlan", "Prisoner", false);
 					//function.Action("SetDialog(\"Oh hey nice to see you there! I have a question for you [Question|What is that?]\")", false);
-					function.SetupDialogText("Oh hey nice to see you there! I have a question for you", "Question", "What is that?");
+					function.SetupDialogText("Oh hey nice to finally see someone that's not a guard! I have a question for you.", "Question", "What is it?");
 				}
 				else if (hasFirstPrisItem || hasSecondPrisItem || hasThirdPrisItem) {
 					function.SetupDialog("Arlan", "Prisoner", false);
 					if (hasFirstPrisItem) {
-						function.SetupDialogText("Thank you for finding that outfit for me. Here is the next one", "RiddleTwo", "Hit me with it");
+						function.SetupDialogText("Thank you for finding that disguise for me. Here's the next vision", "RiddleTwo", "Hit me with it");
 						
 						function.RemoveItem("PrisonerOutfit", playerInv);
 						ForestPath2.icons.push_back(Icon("Search Well", "hand", "ForestPath2.Well", "Search Well", "true"));
@@ -3274,7 +3274,7 @@ void Story::runCurrentPrison() {
 						firstPrisRiddle = true;
 					}
 					if (hasSecondPrisItem) {
-						function.SetupDialogText("We are almost there! This is the last one", "RiddleThree", "I am ready");
+						function.SetupDialogText("We're almost there! This is the last one", "RiddleThree", "I'm ready");
 
 						function.RemoveItem("PrisonerSword", playerInv);
 						CurrentCourtyard.icons.push_back(Icon("Search Target", "hand", "CurrentCourtyard.Target", "Search Target", "true"));
@@ -3295,19 +3295,19 @@ void Story::runCurrentPrison() {
 
 						function.RemoveItem("PrisonerHammer", playerInv);
 
-						function.SetupDialogText("That seems to be everything! I can finally get out of here. Here take this potion like I promised", "EndQuest", "Sweet!");
+						function.SetupDialogText("That seems to be everything! Thanks for helping me get out of here. You can take this potion like I promised.", "EndQuest", "Sweet!");
 					}
 				}
 				else {
 					function.SetupDialog("Arlan", "Prisoner", false);
 					if (firstPrisRiddle == false) {
-						function.SetupDialogText("I see you have not found the previous item yet. Here is what I said again in case you need it", "RiddleOne", "Thanks");
+						function.SetupDialogText("I see you have not found the previous item yet. Here's what I said again in case you need it", "RiddleOne", "Thanks");
 					}
 					else if (secondPrisRiddle == false) {
-						function.SetupDialogText("I see you have not found the previous item yet. Here is what I said again in case you need it", "RiddleTwo", "Thanks");
+						function.SetupDialogText("I see you have not found the previous item yet. Here's what I said again in case you need it", "RiddleTwo", "Thanks");
 					}
 					else if (thirdPrisRiddle == false) {
-						function.SetupDialogText("I see you have not found the previous item yet. Here is what I said again in case you need it", "RiddleThree", "Thanks");
+						function.SetupDialogText("I see you have not found the previous item yet. Here's what I said again in case you need it", "RiddleThree", "Thanks");
 					}
 				}
 
@@ -3319,7 +3319,7 @@ void Story::runCurrentPrison() {
 
 				if (modified_I == "Question") {
 					function.Action("ClearDialog()", true);
-					function.SetupDialogText("Ah well see. I was wondering if you could help me escape from this place? I definitely did not do the crime and could pay you in some weird potion I found earlier if you help", "StartQuest", "A Potion? I am definitely in!", "DialogEnd", "Uh no you are a criminal");
+					function.SetupDialogText("Ah well see. I was wondering if you could help me escape from this place? I definitely didn't do whatever those guards are accusing me of and I could pay you back with this potion of invincibility if you'll help", "StartQuest", "A Potion? I'm definitely in!", "DialogEnd", "Uh no you're a criminal");
 					//	function.Action("SetDialog(\"Ah well see. I was wondering if you could help me escape from this place? I definitely did not do the crime and could pay you in some weird potion I found earlier if you help [StartQuest|A Potion? I am definitely in!][DenyQuest|Uh no you are a criminal]\")", false);
 				}
 				else if (modified_I == "DialogEnd") {
@@ -3327,7 +3327,7 @@ void Story::runCurrentPrison() {
 					function.Action("HideDialog()", true);
 				}
 				else if (modified_I == "StartQuest") {
-					function.SetupDialogText("Great thanks! So I need you to find me three things. A guard outfit and a sword as a disguise. And a key to get me out of this cage. Sound good?", "StartQuestCont", "Yeah so far");
+					function.SetupDialogText("Great thanks! So I need you to find me three things. A guard outfit and a sword as a disguise. And something to get me out of this cage. Sound good?", "StartQuestCont", "Yeah so far");
 				}
 				else if (modified_I == "StartQuestCont") {
 					function.SetupDialogText("Alright. Let me cast a location spell to give you a bit of guidance", "RiddleOne", "Wait what?");
@@ -3351,14 +3351,14 @@ void Story::runCurrentPrison() {
 					function.Action("SetCameraMode(follow)", true);
 
 					function.SetupDialog("Arlan", "Prisoner", false);
-					function.SetupDialogText("In a sarcophagus of wood you won't have to look far to find this suit of armor", "DialogEnd", "Hmmm");
+					function.SetupDialogText("This first one is hidden in a sarcophagus of wood. You won't have to look far to find this suit of armor.", "DialogEnd", "Hmmm");
 					firstTalkPris = false;
 				}
 				else if (modified_I == "RiddleThree") {
-					function.SetupDialogText("Your final destination is where this awaits. Bullseye! You are right on target", "DialogEnd", "Hmmm");
+					function.SetupDialogText("Your final destination is where this awaits. Bullseye! You're right on target.", "DialogEnd", "Hmmm");
 				}
 				else if (modified_I == "RiddleTwo") {
-					function.SetupDialogText("Rusting this mighty sword faces the elements day and night. Waiting for the day the metal lifeboat above comes down to help", "DialogEnd", "Hmmm");
+					function.SetupDialogText("Slowly rusting. This mighty sword faces the elements day and night. Waiting for the day the metal lifeboat above comes down to help.", "DialogEnd", "Hmmm");
 				}
 				else if (modified_I == "EndQuest") {
 
@@ -3446,7 +3446,7 @@ void Story::runLeftHallway() {
 			else if (modified_I == "Talk_To_Guard" && (hasRedBook || hasRedPotion)) {
 				function.Action("WalkTo(Arlan, PrisonGuard)", true);
 				function.SetupDialog("Arlan", "PrisonGuard", false);
-				function.SetupDialogText("Sorry I do not have anything for you to do", "DialogEnd", "Oh...");
+				function.SetupDialogText("Sorry I don't have anything for you to do", "DialogEnd", "Oh...");
 			}
 		}
 
@@ -3511,7 +3511,7 @@ void Story::runLeftHallway() {
 			}
 
 			if (modified_I == "Question") {
-				function.SetupDialogText("Oh great. That prisoner in there hid some valuables from the Kingdom and said they would only return it if we could solve her puzzle. But we can not figure it out! Can you help?", "Accept", "Sounds good to me", "Reject", "I am a little busy");
+				function.SetupDialogText("Oh thank goodness. That prisoner in there hid some valuables from the Kingdom and said they would only return them if we could solve her puzzle. But for the life of us we can't figure it out! Can you help?", "Accept", "Sure why not?", "Reject", "I'm a little busy");
 			}
 
 			if (modified_I == "Reject") {
@@ -3520,7 +3520,7 @@ void Story::runLeftHallway() {
 
 			if (modified_I == "Accept") {
 				firstTalkGuard = false;
-				function.SetupDialogText("Alright well you need to go to the Bedroom across the building. You can find the puzzle there. Come back and tell me once you figure it out. I can give you this weird potion I found as compensation", "DialogEnd", "A potion!");
+				function.SetupDialogText("Alright well you need to go to the Bedroom in the other wing of the castle. You can find the puzzle there. Come back and tell me once you figure it out. I can give you this weird potion I found as compensation", "DialogEnd", "A potion!");
 			}
 
 		}
@@ -4323,7 +4323,8 @@ void Story::runCurrentCamp() {
 					function.Action("WalkTo(Arlan, ArchieR, true)", true);
 
 					function.SetupDialog("Arlan", "ArchieR", true);
-					function.SetupDialogText("Ah you found me and brought along company I see. Guess it is time to deal with you once and for all Mathias", "Battle", "Don't fight!");
+					function.SetupDialogText("Ah I see you finally found me. Quickly let me explain what we'll have to do-", "Entrance", "*CLANK*");
+
 					// Then have dialog setting up scene more
 	//				if (i == "input Selected Battle") {
 	//				}
@@ -4332,12 +4333,16 @@ void Story::runCurrentCamp() {
 
 					modified_I = function.splitInput(i, 0, true);
 
-					if (modified_I == "ReadBook") {
-						function.SetupDialogText("Wait a minute who's that speaking?", "Continue", "**Continue Reading**");
+					if (modified_I == "Entrance") {
+						function.SetupDialogText("Oh no he's here already. Guess we have no choice but to fight. Wish me luck.", "Battle", "No wait!");
+					}
+
+					else if (modified_I == "ReadBook") {
+						function.SetupDialogText("Wait a minute who else is here?", "Continue", "**Continue Reading**");
 					}
 
 					else if (modified_I == "Continue") {
-						function.SetupDialogText("No! Don't say that!", "FinishSpell", "**Finish Spell**");
+						function.SetupDialogText("No! Don't say that! You don't know what you're doing!", "FinishSpell", "**Finish Spell**");
 					}
 
 					else if (modified_I == "Battle") {
@@ -4358,7 +4363,7 @@ void Story::runCurrentCamp() {
 						function.Action("EnableInput()", true);
 
 						function.SetupDialog("Arlan", "MathiasR", false);
-						function.SetupDialogText("Alright now that Archie is out of the way there's nothing stopping me from using the true power of this artifact", "ReadBook", "**I can't let that happen! Read Translated Book**");
+						function.SetupDialogText("Finally! Now that I don't have to worry about Archie anymore I can finally harness the full power of this artifact.", "ReadBook", "**I can't let that happen! Read Translated Book**");
 					}
 
 					else if (modified_I == "FinishSpell") {
@@ -4370,7 +4375,7 @@ void Story::runCurrentCamp() {
 						this_thread::sleep_for(chrono::milliseconds(2500));
 
 						function.SetupDialog("Arlan", "MathiasR", false);
-						function.SetupDialogText("Oh no this isn't good... It's about to explode!", "Drink", "**Drink Potion**");
+						function.SetupDialogText("Oh no this isn't good... we're all doomed", "Drink", "**Drink Potion of Invincibility**");
 					}
 
 					else if (modified_I == "Drink") {
@@ -4386,7 +4391,7 @@ void Story::runCurrentCamp() {
 
 						function.Action("SetNarration(This tastes strangely like water... You've been tricked!)", true);
 						function.Action("ShowNarration()", true);
-						this_thread::sleep_for(chrono::milliseconds(1500));
+						this_thread::sleep_for(chrono::milliseconds(2000));
 						function.Action("HideNarration()", true);
 
 						function.Action("SetCameraFocus(MathiasR)", true);
