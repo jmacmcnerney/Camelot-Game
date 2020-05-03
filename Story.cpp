@@ -1259,6 +1259,7 @@ void Story::runCurrentTown() {
 			function.WalkToPlace("Arlan", "CurrentTown.Fountain");
 			function.Action("SetNarration(Theres a gold coin in the fountain! You reach in and take it.)", true);
 			function.Action("ShowNarration()", true);
+			function.Action("PlaySound(Pocket)", true);
 			playerInv.push_back("Coin1");
 			numCoins++;
 			function.Action("DisableIcon(TakeCoin1, CurrentTown.Fountain)", true);
@@ -1320,6 +1321,7 @@ void Story::runBlacksmithFoundry() {
 					function.Action("FadeIn()", true);
 					function.Action("ShowDialog()", true);
 					function.SetupDialogText("Great work! Thanks for all your help! Heres a gold coin for your trouble.", "end", "Thanks!");
+					function.Action("PlaySound(Pocket)", true);
 					playerInv.push_back("Coin2");
 					numCoins++;
 					canWorkForBlacksmith = false;
@@ -1477,6 +1479,7 @@ void Story::runAlchemyShop() {
 			function.WalkToPlace("Arlan", "AlchemyShop.Table");
 			function.Action("SetNarration(You take the gold coin.)", true);
 			function.Action("ShowNarration()", true);
+			function.Action("PlaySound(Pocket)", true);
 			playerInv.push_back("Coin5");
 			numCoins++;
 			function.Action("SetPosition(Coin5)", true);
@@ -1927,6 +1930,7 @@ void Story::runForestPath2() {
 			function.WalkToPlace("Arlan", "ForestPath2.Well");
 			function.Action("SetNarration(Theres a gold coin on the edge of the well! You take it.)", true);
 			function.Action("ShowNarration()", true);
+			function.Action("PlaySound(Pocket)", true);
 			playerInv.push_back("Coin3");
 			numCoins++;
 			function.Action("DisableIcon(TakeCoin3, ForestPath2.Well)", true);
@@ -2246,6 +2250,8 @@ void Story::runCurrentPort() {
 						boughtCompass = true;
 						function.Action("SetNarration(A compass has been added to your inventory. 4 coins have been removed.)", true);
 						function.Action("ShowNarration()", true);
+						function.Action("PlaySound(Unpocket)", true);
+						function.Action("PlaySound(Pocket)", true);
 					}
 
 					else if (modified_I == "askCoins") {
@@ -2274,6 +2280,8 @@ void Story::runCurrentPort() {
 						hasStrangeElixir = true;
 						function.Action("SetNarration(A strange elixir has been added to your inventory. 4 coins have been removed.)", true);
 						function.Action("ShowNarration()", true);
+						function.Action("PlaySound(Unpocket)", true);
+						function.Action("PlaySound(Pocket)", true);
 					}
 
 					else if (modified_I == "askElixir") {
@@ -2282,6 +2290,7 @@ void Story::runCurrentPort() {
 
 					else if (modified_I == "giveCompass") {
 						function.SetupDialogText("Finally! I can sail again! Here. You can have this old book I found at sea. Seems valuable!", "endSailor", "Thanks!");
+						function.Action("PlaySound(Unpocket)", true);
 						function.RemoveItem("Compass", playerInv);
 						hasCompass = false;
 						hasBlueBook = true;
@@ -2296,6 +2305,7 @@ void Story::runCurrentPort() {
 						hasBlueBook = true;
 						function.Action("SetNarration(The Book of Lore has been added to your inventory. The compass has been removed.)", true);
 						function.Action("ShowNarration()", true);
+						function.Action("PlaySound(Pocket)", true);
 					}
 				}
 			}
@@ -2304,6 +2314,7 @@ void Story::runCurrentPort() {
 				function.WalkToPlace("Arlan", "CurrentPort.Barrel");
 				function.Action("SetNarration(Theres a gold coin in the barrel! You take it.)", true);
 				function.Action("ShowNarration()", true);
+				function.Action("PlaySound(Pocket)", true);
 				playerInv.push_back("Coin4");
 				numCoins++;
 				function.Action("DisableIcon(TakeCoin4, CurrentPort.Barrel)", true);
@@ -3628,6 +3639,7 @@ void Story::runCurrentDiningRoom() {
 						playerInv.push_back("DiningMeat");
 						playerInv.push_back("DiningCup");
 						function.Action("ShowNarration()", true);
+						function.Action("PlaySound(Pocket)", true);
 						function.SetupDialogText("Be sure to check the note on each chair--they will tell you what each patron wants. Dont mess up!", "chefEnd", "Sure...");
 					}
 
@@ -3680,6 +3692,7 @@ void Story::runCurrentDiningRoom() {
 					function.Action("HideList()", true);
 					function.Action("ClearList()", true);
 					function.RemoveItem(modified_I, playerInv);
+					function.Action("PlaySound(Unpocket)", true);
 					//function.Action("Unpocket(Arlan, " + modified_I + ")", true);
 					//function.Action("Put(Arlan, " + modified_I + ", CurrentDiningRoom.DiningTable." + currentChair + ")", true);
 					function.Action("SetPosition(" + modified_I + ", CurrentDiningRoom.DiningTable." + currentChair + ")", true);
@@ -3732,6 +3745,7 @@ void Story::runCurrentDiningRoom() {
 					//function.Action("Pocket(Arlan, " + modified_I + ")", true);
 					function.Action("SetPosition(" + modified_I + ")", true);
 					playerInv.push_back(modified_I);
+					function.Action("PlaySound(Pocket)", true);
 					function.Action("DisableIcon(PickUp, " + modified_I + ")", true);
 					//function.Action("EnableIcon(Place, Hand, " + modified_I + ", Place, true)", true);
 
