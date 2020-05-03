@@ -41,7 +41,7 @@ bool item_placed = false;
 bool ArchieEnemy = false;
 //FOR TESTING PURPOSES
 bool MathiasFlashback = false;
-bool ArchieFlashback = false;
+bool ArchieFlashback = true;
 
 //Green Puzzle Booleans
 //Potion
@@ -4142,11 +4142,22 @@ void Story::runCurrentCastleBedroom() {
 				BedroomSpot6Full = false;
 
 				function.Action("Take(Arlan, CastleBedroomLock)", true);
+				playerInv.push_back("CastleBedroomLock");
+
 				function.Action("Take(Arlan, CastleBedroomBag)", true);
+				playerInv.push_back("CastleBedroomBag");
+
 				function.Action("Take(Arlan, CastleBedroomSkull)", true);
+				playerInv.push_back("CastleBedroomSkull");
+
 				function.Action("Take(Arlan, CastleBedroomJewelKey)", true);
+				playerInv.push_back("CastleBedroomJewelKey");
+
 				function.Action("Take(Arlan, CastleBedroomGoldCup)", true);
+				playerInv.push_back("CastleBedroomGoldCup");
+
 				function.Action("Take(Arlan, CastleBedroomInkAndQuill)", true);
+				playerInv.push_back("CastleBedroomInkAndQuill");
 			}
 		}
 
@@ -4308,6 +4319,7 @@ void Story::runCurrentCamp() {
 					ActionSequence = false;
 
 					function.Action("DisableInput()", true);
+					function.Action("PlaySound(Danger1, RedCamp, true)", true);
 					function.Action("WalkTo(Arlan, ArchieR, true)", true);
 
 					function.SetupDialog("Arlan", "ArchieR", true);
@@ -4338,6 +4350,7 @@ void Story::runCurrentCamp() {
 						function.Action("Draw(MathiasR, Mathias_Sword)", true);
 						function.Action("WalkTo(MathiasR, ArchieR)", false);
 						function.Action("WalkTo(ArchieR, MathiasR)", true);
+						function.Action("Face(Arlan, MathiasR)", true);
 						function.Action("Attack(MathiasR, ArchieR, true)", true);
 						function.Action("Die(ArchieR)", true);
 						function.Action("Sheathe(MathiasR, Mathias_Sword)", true);
@@ -4351,9 +4364,9 @@ void Story::runCurrentCamp() {
 					else if (modified_I == "FinishSpell") {
 						function.Action("ClearDialog()", true);
 						function.Action("HideDialog()", true);
-						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetCameraFocus(Artifact)", true);
 						function.Action("SetCameraMode(focus)", true);
-						function.Action("CreateEffect(Artifact, Poison)", true);
+						function.Action("CreateEffect(Artifact, Spiralflame)", false);
 						this_thread::sleep_for(chrono::milliseconds(2500));
 
 						function.SetupDialog("Arlan", "MathiasR", false);
@@ -4361,6 +4374,7 @@ void Story::runCurrentCamp() {
 					}
 
 					else if (modified_I == "Drink") {
+						function.Action("DisableEffect(Artifact)", true);
 						function.Action("ClearDialog()", true);
 						function.Action("HideDialog()", true);
 
@@ -4378,15 +4392,20 @@ void Story::runCurrentCamp() {
 						function.Action("SetCameraFocus(MathiasR)", true);
 						function.Action("SetCameraMode(focus)", true);
 						this_thread::sleep_for(chrono::milliseconds(1000));
-						function.Action("CreateEffect(Artifact, Explosion)", true);
+						function.Action("CreateEffect(Artifact, Explosion)", false);
+						function.Action("PlaySound(Fireball, Artifact, false)", true);
 						this_thread::sleep_for(chrono::milliseconds(1000));
 
+						function.Action("SetCameraFocus(MathiasR)", true);
 						function.Action("SetCameraMode(track)", true);
 						function.Action("CreateEffect(MathiasR, Death)", true);
 						function.Action("Die(MathiasR)", true);
+						function.Action("SetCameraFocus(Arlan)", true);
+						function.Action("SetCameraMode(track)", true);
 						function.Action("CreateEffect(Arlan, Death)", true);
 						function.Action("Die(Arlan)", true);
 						function.Action("FadeOut()", true);
+						function.Action("StopSound(RedCamp)", true);
 					}
 
 				}
