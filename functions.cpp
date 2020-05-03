@@ -277,6 +277,15 @@ bool functions::checkCommonKeywords(string input, string modifiedInput, string p
 		}
 	}
 
+	else if (modifiedInput == "Inspect") {
+		modifiedInput = splitInput(input, 0, true);
+		if (modifiedInput == "PotionOfPower") {
+			Action("SetNarration(There is still quite a bit of the potion left. You feel like you should probably save it just in case.)", true);
+			Action("ShowNarration()", true);
+		}
+		else keywordFound = false;
+	}
+
 	/*-------------------CHEATS-------------------*/
 	else if (modifiedInput == "accessCheatMenu") {
 			//function.Action("ClearDialog()", true);

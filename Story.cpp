@@ -3471,7 +3471,7 @@ void Story::runLeftHallway() {
 				function.Action("ShowNarration()", true);
 			}
 			else if (hasBluePotion) {
-				function.Action("SetNarration(A mysterious force prevents you from entering. You feel your work here is completed. You should adventure elsewhere.)", true);
+				function.Action("SetNarration(A mysterious force prevents you from entering. You feel your work here is complete. You should adventure elsewhere.)", true);
 				function.Action("ShowNarration()", true);
 			}
 			else if (MathiasFlashback && !hasGreenBook && !hasGreenPotion && !hasBluePotion) {
@@ -3806,6 +3806,7 @@ void Story::runCurrentDiningRoom() {
 					function.Action("SetNarration(You take a sip of the potion. Sudden images of a mysterious book adorned with a skull flash before your eyes. You feel stronger as the book calls out to you. You get the feeling should save the rest of the potion.)", true);
 					function.Action("ShowNarration()", true);
 					function.Action("DisableIcon(Drink, PotionOfPower)", true);
+					function.Action("EnableIcon(Inspect, Potion, PotionOfPower, Inspect the Potion, true)", true);
 					drankBluePotion = true;
 
 					function.Action("FadeOut()", true);
