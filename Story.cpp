@@ -3855,6 +3855,11 @@ void Story::runCurrentDiningRoom() {
 				}
 			}
 
+			if (i == "input Open CurrentDiningRoom.BackDoor") {
+				function.Action("SetNarration(You can hear the Chef rummaging around behind the door. He seems to have locked it behind him.)", true);
+				function.Action("ShowNarration()", true);
+			}
+
 			// disable Place icon if player closes list before placing puzzle item
 			if (i == "input Close List") {
 
