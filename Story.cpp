@@ -17,9 +17,9 @@ vector<string> playerInv;
 //ofstream myfile;
 
 //location boolean
-string currentLocation = "CurrentCastleBedroom";
+string currentLocation = "ArlanCottage";
 
-bool cheatsEnabled = true;
+bool cheatsEnabled = false;
 
 //Intro Quest Booleans
 //Cottage
@@ -42,7 +42,7 @@ bool item_placed = false;
 bool ArchieEnemy = false;
 //FOR TESTING PURPOSES
 bool MathiasFlashback = false;
-bool ArchieFlashback = true;
+bool ArchieFlashback = false;
 
 //Green Puzzle Booleans
 //Potion
@@ -145,7 +145,7 @@ int numCoins = 0;
 
 Story::Story() {
 	runSetup();
-	function.Action("SetPosition(Arlan, CurrentCastleBedroom.Chest)", true);
+	//function.Action("SetPosition(Arlan, CurrentCastleBedroom.Chest)", true);
 	run();
 }
 
@@ -507,6 +507,8 @@ bool Story::setupCourtyard(string name) {
 	//items
 	function.Action("CreateItem(PrisonerHammer, Hammer)", true);
 	//icons
+	CurrentCourtyard.icons.push_back(Icon("Exit Courtyard", "Hand", "CurrentCourtyard.Gate", "Exit", "true"));
+	function.SetupIcons(CurrentCourtyard.icons);
 
 	return true;
 }
@@ -1226,8 +1228,14 @@ void Story::runCurrentTown() {
 		}
 
 		else if (i == "input arrived Arlan position CurrentTown.NorthEnd") {
-			function.Transition("Arlan", "CurrentTown.NorthEnd", "CurrentCourtyard.Exit");
-			currentLocation = "CurrentCourtyard";
+			if (MathiasFlashback || ArchieFlashback) {
+				function.Transition("Arlan", "CurrentTown.NorthEnd", "CurrentCourtyard.Exit");
+				currentLocation = "CurrentCourtyard";
+			}
+			else {
+				function.Action("SetNarration(A thick mist blocks your path. You can make out a forest path just beyond the fog. Maybe you should return later.)", true);
+				function.Action("ShowNarration()", true);
+			}
 		}
 
 		else if (i == "input arrived Arlan position CurrentTown.WestEnd") {
@@ -4006,7 +4014,7 @@ void Story::runCurrentCourtyard() {
 			currentLocation = "CurrentTown";
 		}
 
-		if (i == "input arrived Arlan position CurrentCourtyard.Gate") {
+		if (i == "input Exit Courtyard CurrentCourtyard.Gate") {
 			if ((hasBlueBook && hasBluePotion) || (hasGreenBook && hasGreenPotion) || (hasRedBook && hasRedPotion) || (hasPurpleBook && hasPurplePotion)) {
 				if (hasBlueBook && hasBluePotion) {
 					setupCamp("BlueCamp");
@@ -4028,6 +4036,10 @@ void Story::runCurrentCourtyard() {
 					currentLocation = "PurpleCamp";
 					function.Transition("Arlan", "CurrentCourtyard.Gate", "PurpleCamp.Exit");
 				}
+			}
+			else {
+				function.SetupDialogText("You do not possess the strength to proceed.", "end", "(Turn Back)");
+				function.Action("ShowDialog()", true);
 			}
 		}
 
