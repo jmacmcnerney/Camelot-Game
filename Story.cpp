@@ -771,7 +771,8 @@ bool Story::setupLeftHallway(string name) {
 	function.Action("CreateItem(Potion of Healing, PurplePotion)", true);
 	//icons
 	LeftHallway.icons.push_back(Icon("Talk_To_Guard", "talk", "PrisonGuard", "Talk To Guard", "true"));
-	//LeftHallway.icons.push_back(Icon("Enter LeftHallway Door", "Hand", "LeftHallway.Door", "Enter", "true"));
+	LeftHallway.icons.push_back(Icon("Enter LeftHallway Door", "Hand", "LeftHallway.Door", "Enter", "true"));
+	LeftHallway.icons.push_back(Icon("Enter LeftHallway BackDoor", "Hand", "LeftHallway.BackDoor", "Enter", "true"));
 	function.SetupIcons(LeftHallway.icons);
 
 	return true;
@@ -786,6 +787,7 @@ bool Story::setupRightHallway(string name) {
 
 	//icons
 	RightHallway.icons.push_back(Icon("Enter RightHallway Door", "Hand", "RightHallway.Door", "Enter", "true"));
+	RightHallway.icons.push_back(Icon("Enter RightHallway BackDoor", "Hand", "RightHallway.BackDoor", "Enter", "true"));
 	function.SetupIcons(RightHallway.icons);
 
 	return true;
@@ -3498,7 +3500,7 @@ void Story::runLeftHallway() {
 
 
 		//CurrentPrison
-		if (i == "input arrived Arlan position LeftHallway.BackDoor") {
+		if (i == "input Enter LeftHallway BackDoor LeftHallway.BackDoor") {
 			if (!ArchieFlashback) {
 				function.Action("SetNarration(You may not enter)", true);
 				function.Action("ShowNarration()", true);
@@ -3542,7 +3544,7 @@ void Story::runLeftHallway() {
 			}
 		}
 		//else if (i == "input Enter LeftHallway Door LeftHallway.Door") {
-		else if (i == "input arrived Arlan position LeftHallway.Door") {
+		else if (i == "input Enter LeftHallway Door LeftHallway.Door") {
 			function.Transition("Arlan", "LeftHallway.Door", "CurrentGreatHall.LeftDoor");
 			currentLocation = "CurrentGreatHall";
 		}
@@ -3587,7 +3589,7 @@ void Story::runRightHallway() {
 		}
 
 		//CurrentCastleBedroom
-		if (i == "input arrived Arlan position RightHallway.BackDoor") {
+		if (i == "input Enter RightHallway BackDoor RightHallway.BackDoor") {
 			if (!ArchieFlashback) {
 				function.Action("SetNarration(You may not enter)", true);
 				function.Action("ShowNarration()", true);
@@ -3610,7 +3612,7 @@ void Story::runRightHallway() {
 		//else if (i == "input Enter RightHallway Door RightHallway.Door") {
 		//RightHallway.icons.push_back(Icon("Enter RightHallway Door", "Hand", "RightHallway.Door", "Enter", "true"));
 		//(i == "input Open Door CurrentPrison.Door")
-		else if (i == "input arrived Arlan position RightHallway.Door") {
+		else if (i == "input Enter RightHallwayDoor RightHallway.Door") {
 			function.Transition("Arlan", "RightHallway.Door", "CurrentGreatHall.RightDoor");
 			currentLocation = "CurrentGreatHall";
 		}
@@ -4038,7 +4040,7 @@ void Story::runCurrentCourtyard() {
 				}
 			}
 			else {
-				function.SetupDialogText("You do not possess the strength to proceed.", "end", "(Turn Back)");
+				function.Action("SetNarration(You do not possess the strength to proceed.)", true);
 				function.Action("ShowDialog()", true);
 			}
 		}
