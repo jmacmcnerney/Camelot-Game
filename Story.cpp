@@ -179,11 +179,11 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	setupCastleBedroom("CurrentCastleBedroom");
 	setupCastleCrossroads("CurrentCastleCrossroads");
 	//setupPort("CurrentPort");	// need to disable this again. hopefully i don't forget -zac
-	setupGreatHall("CurrentGreatHall");
+	//setupGreatHall("CurrentGreatHall");
 	setupLibrary("CurrentLibrary");
 	setupFinalRuins("FinalRuins");
 	setupDungeon("CurrentPrison");
-	setupLeftHallway("LeftHallway");
+	//setupLeftHallway("LeftHallway");
 	setupRightHallway("RightHallway");
 	//setupDiningRoom("CurrentDiningRoom");	// need to disable this again. hopefully i don't forget -zac
 	//FOR TESTING PURPOSES
@@ -608,15 +608,18 @@ bool Story::setupGreatHall(string name) {
 	//character setup
 
 	//items
-	function.Action("CreateItem(Translated Book, RedBook)", true);
-	function.Action("SetPosition(Translated Book, CurrentGreatHall.Table)", true);
+	if (ArchieFlashback) {
+		function.Action("CreateItem(Translated Book, RedBook)", true);
+		function.Action("SetPosition(Translated Book, CurrentGreatHall.Table)", true);
+		CurrentGreatHall.icons.push_back(Icon("Read_Book", "Research", "Translated Book", "Read Book", "true"));
+	}
 
 	//icons
 	CurrentGreatHall.icons.push_back(Icon("Enter Right Door", "Hand", "CurrentGreatHall.RightDoor", "Enter", "true"));
 	CurrentGreatHall.icons.push_back(Icon("Enter Left Door", "Hand", "CurrentGreatHall.LeftDoor", "Enter", "true"));
 	CurrentGreatHall.icons.push_back(Icon("Enter Basement Door", "Hand", "CurrentGreatHall.BasementDoor", "Enter", "true"));
 	CurrentGreatHall.icons.push_back(Icon("Enter Gate", "Hand", "CurrentGreatHall.Gate", "Enter", "true"));
-	CurrentGreatHall.icons.push_back(Icon("Read_Book", "Research", "Translated Book", "Read Book", "true"));
+	
 	function.SetupIcons(CurrentGreatHall.icons);
 
 	return true;
@@ -766,11 +769,14 @@ bool Story::setupLeftHallway(string name) {
 	LeftHallway = Hallway(name);
 
 	//character setup
-	function.SetupCharacter("PrisonGuard", "E", "HeavyArmour", "Spiky", "Black", "LeftHallway.Door");
+	if (ArchieFlashback) {
+		function.SetupCharacter("PrisonGuard", "E", "HeavyArmour", "Spiky", "Black", "LeftHallway.Door");
+		LeftHallway.icons.push_back(Icon("Talk_To_Guard", "talk", "PrisonGuard", "Talk To Guard", "true"));
+	}
 	//items
 	function.Action("CreateItem(Potion of Healing, PurplePotion)", true);
 	//icons
-	LeftHallway.icons.push_back(Icon("Talk_To_Guard", "talk", "PrisonGuard", "Talk To Guard", "true"));
+	
 	LeftHallway.icons.push_back(Icon("Enter LeftHallway Door", "Hand", "LeftHallway.Door", "Enter", "true"));
 	LeftHallway.icons.push_back(Icon("Enter LeftHallway BackDoor", "Hand", "LeftHallway.BackDoor", "Enter", "true"));
 	function.SetupIcons(LeftHallway.icons);
@@ -1896,6 +1902,8 @@ void Story::runPastRuins(bool CharacterCheck) {
 					function.Action("SetPosition(" + Enemy + ")", true);
 					function.Action("WalkTo(" + CharacterName + ", PastRuins.Altar)", true);
 					function.Action("FadeOut()", true);
+					setupLeftHallway("LeftHallway");
+					setupGreatHall("CurrentGreatHall");
 					setupDiningRoom("CurrentDiningRoom");
 					setupPort("CurrentPort");
 					setupStorage("CurrentStorage");
