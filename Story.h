@@ -47,6 +47,7 @@ extern bool hasElderApple;
 extern bool visitedFortuneteller;
 extern bool visitedTownElder;
 extern bool completedErrand;
+extern bool finishedTalkingToElder;
 //Ruins
 extern bool sword_taken;
 extern bool spellbook_taken;

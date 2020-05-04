@@ -286,6 +286,16 @@ bool functions::checkCommonKeywords(string input, string modifiedInput, string p
 		else keywordFound = false;
 	}
 
+	else if (modifiedInput == "ReadBookOfLore") {
+		modifiedInput = splitInput(input, 0, true);
+		if (modifiedInput == "BookOfLore") {
+			Action("HideList()", true);
+			Action("ClearList()", true);
+			Action("SetNarration(The book describes an ancient tome that instills its owner with unimaginable power. Those who posess it are said to be destined to rule to world.)", true);
+			Action("ShowNarration()", true);
+		}
+	}
+
 	/*-------------------CHEATS-------------------*/
 	else if (modifiedInput == "accessCheatMenu") {
 			//function.Action("ClearDialog()", true);

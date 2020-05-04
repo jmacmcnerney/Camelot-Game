@@ -32,6 +32,7 @@ bool hasElderApple = false;
 bool visitedFortuneteller = false;
 bool visitedTownElder = false;
 bool completedErrand = false;
+bool finishedTalkingToElder = false;
 //Ruins
 bool sword_taken = false;
 bool spellbook_taken = false;
@@ -169,17 +170,17 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	setupCourtyard("CurrentCourtyard");
 	setupCastleBedroom("CurrentCastleBedroom");
 	setupCastleCrossroads("CurrentCastleCrossroads");
-	setupPort("CurrentPort");	// need to disable this again. hopefully i don't forget -zac
+	//setupPort("CurrentPort");	// need to disable this again. hopefully i don't forget -zac
 	setupGreatHall("CurrentGreatHall");
 	setupLibrary("CurrentLibrary");
 	setupFinalRuins("FinalRuins");
 	setupDungeon("CurrentPrison");
 	setupLeftHallway("LeftHallway");
 	setupRightHallway("RightHallway");
-	setupDiningRoom("CurrentDiningRoom");	// need to disable this again. hopefully i don't forget -zac
+	//setupDiningRoom("CurrentDiningRoom");	// need to disable this again. hopefully i don't forget -zac
 	//FOR TESTING PURPOSES
 	MathiasFlashback = true;
-	setupStorage("CurrentStorage");
+	//setupStorage("CurrentStorage");
 	function.Action("ShowMenu()", true);
 
 	return true;
@@ -1102,24 +1103,31 @@ void Story::runCurrentTown() {
 						function.SetupDialogText("You should look around for an ancient artifact and take it to the ruins past the forest path.", "end", "Okay! Thanks!");
 					}
 					else if (ArchieFlashback || MathiasFlashback) {
-						function.SetupDialogText("You saw what? Oh my... the storybook did have some additional information. It said to stop the corruption you must locate 2 ancient artifacts and bring them to the region beyond the courtyard at the north end of the town.", "end", "Okay! Thanks!");
+						if (finishedTalkingToElder) {
+							function.SetupDialogText("Hello again Arlan! Need something?", "askCoins", "Know where I can find any coins?");
+						}
+						else {
+							function.SetupDialogText("You saw what? Oh my... the storybook did have some additional information. It said to stop the corruption you must locate 2 ancient artifacts and bring them to the region beyond the courtyard at the north end of the town.", "end", "Okay! Thanks!");
 
-						//spawn coins in world 
-						function.Action("CreateItem(Coin1, Coin)", true);
-						function.Action("EnableIcon(TakeCoin1, Hand, CurrentTown.Fountain, Inspect the Fountain, true)", true);
+							//spawn coins in world 
+							function.Action("CreateItem(Coin1, Coin)", true);
+							function.Action("EnableIcon(TakeCoin1, Hand, CurrentTown.Fountain, Inspect the Fountain, true)", true);
 
-						function.Action("CreateItem(Coin2, Coin)", true);
-						canWorkForBlacksmith = true;
+							function.Action("CreateItem(Coin2, Coin)", true);
+							canWorkForBlacksmith = true;
 
-						function.Action("CreateItem(Coin3, Coin)", true);
-						function.Action("EnableIcon(TakeCoin3, Hand, ForestPath2.Well, Inspect the Well, true)", true);
+							function.Action("CreateItem(Coin3, Coin)", true);
+							function.Action("EnableIcon(TakeCoin3, Hand, ForestPath2.Well, Inspect the Well, true)", true);
 
-						function.Action("CreateItem(Coin4, Coin)", true);
-						function.Action("EnableIcon(TakeCoin4, Hand, CurrentPort.Barrel, Inspect the Barrel, true)", true);
+							function.Action("CreateItem(Coin4, Coin)", true);
+							function.Action("EnableIcon(TakeCoin4, Hand, CurrentPort.Barrel, Inspect the Barrel, true)", true);
 
-						function.Action("CreateItem(Coin5, Coin)", true);
-						function.Action("EnableIcon(TakeCoin5, Hand, Coin5, Take the Coin, true", true);
-						function.Action("SetPosition(Coin5, AlchemyShop.Table)", true);
+							/*function.Action("CreateItem(Coin5, Coin)", true);
+							function.Action("EnableIcon(TakeCoin5, Hand, Coin5, Take the Coin, true", true);
+							function.Action("SetPosition(Coin5, AlchemyShop.Table)", true);*/
+
+							finishedTalkingToElder = true;
+						}
 					}
 				}
 
@@ -1192,6 +1200,19 @@ void Story::runCurrentTown() {
 					function.Action("HideDialog()", true);
 					function.Action("SetNarration(The air shifts around you. You feel like you can go somewhere you couldnt before. You wonder where an ancient relic could be.)", true);
 					function.Action("ShowNarration()", true);
+				}
+
+				else if (modified_I == "askCoins") {
+					int coinHint = rand() % 3;
+					if (coinHint == 0) {
+						function.SetupDialogText("Coins? Hmm... perhaps try looking around a place of business such as the blacksmith.", "end", "Okay! Thanks!");
+					}
+					else if (coinHint == 1) {
+						function.SetupDialogText("Coins? Hmm... Many people toss coins into fountains or wells. Perhaps try looking there.", "end", "Okay! Thanks!");
+					}
+					else if (coinHint == 2) {
+						function.SetupDialogText("Coins? Hmm... There is much coin exhanged in the royal port. Perhaps try looking near the vendors there.", "end", "Okay! Thanks!");
+					}
 				}
 			}
 			else if (modified_I == "Enter_AlchemyShop") {
@@ -1474,16 +1495,6 @@ void Story::runAlchemyShop() {
 				function.Transition("Arlan", "AlchemyShop.Door", "CurrentTown.BrownHouseDoor");
 				currentLocation = "CurrentTown";
 			}
-		}
-		else if (i == "input TakeCoin5 Coin5") {
-			function.WalkToPlace("Arlan", "AlchemyShop.Table");
-			function.Action("SetNarration(You take the gold coin.)", true);
-			function.Action("ShowNarration()", true);
-			function.Action("PlaySound(Pocket)", true);
-			playerInv.push_back("Coin5");
-			numCoins++;
-			function.Action("SetPosition(Coin5)", true);
-			function.Action("DisableIcon(TakeCoin5, Coin5)", true);
 		}
 	}
 }
@@ -2320,12 +2331,12 @@ void Story::runCurrentPort() {
 				function.Action("DisableIcon(TakeCoin4, CurrentPort.Barrel)", true);
 			}
 
-			else if (i == "input ReadBookOfLore BookOfLore") {
+			/*else if (i == "input ReadBookOfLore BookOfLore") {
 				function.Action("HideList()", true);
 				function.Action("ClearList()", true);
 				function.Action("SetNarration(The book describes an ancient tome that instills its owner with unimaginable power. Those who posess it are said to be destined to rule to world.)", true);
 				function.Action("ShowNarration()", true);
-			}
+			}*/
 
 			else if (i == "input DrinkStrangeElixir StrangeElixir") {
 				function.Action("Unpocket(Arlan, StrangeElixir)", true);
@@ -3790,6 +3801,7 @@ void Story::runCurrentDiningRoom() {
 					else if (fireDoused) {
 						function.Action("SetNarration(You reach back and retrieve a Potion of Power from a hidden compartment in the fireplace.)", true);
 						function.Action("ShowNarration()", true);
+						function.Action("PlaySound(Pocket)", true);
 						playerInv.push_back("PotionOfPower");
 						hasBluePotion = true;
 					}
