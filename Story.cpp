@@ -178,15 +178,16 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	setupCourtyard("CurrentCourtyard");
 	setupCastleBedroom("CurrentCastleBedroom");
 	setupCastleCrossroads("CurrentCastleCrossroads");
-	//setupPort("CurrentPort");	// need to disable this again. hopefully i don't forget -zac
-	//setupGreatHall("CurrentGreatHall");
 	setupLibrary("CurrentLibrary");
 	setupFinalRuins("FinalRuins");
 	setupDungeon("CurrentPrison");
-	//setupLeftHallway("LeftHallway");
 	setupRightHallway("RightHallway");
+
+	//Areas where interactions are different based on Archie or Mathis Path for TESTING
+	//setupPort("CurrentPort");	// need to disable this again. hopefully i don't forget -zac
+	//setupGreatHall("CurrentGreatHall");
+	//setupLeftHallway("LeftHallway");
 	//setupDiningRoom("CurrentDiningRoom");	// need to disable this again. hopefully i don't forget -zac
-	//FOR TESTING PURPOSES
 	//setupStorage("CurrentStorage");
 	function.Action("ShowMenu()", true);
 
@@ -730,8 +731,8 @@ bool Story::setupCamp(string name) {
 		function.Action("CreateItem(SpareSword2, Sword)", true);
 
 		//icons
-		CurrentCamp.icons.push_back(Icon("Talk_Archie", "Talk", "Archie", "Talk to Archie", "true"));
-		function.SetupIcons(CurrentCamp.icons);
+		//CurrentCamp.icons.push_back(Icon("Talk_Archie", "Talk", "Archie", "Talk to Archie", "true"));
+		//function.SetupIcons(CurrentCamp.icons);
 	}
 	
 	return true;
@@ -1613,6 +1614,7 @@ void Story::runCurrentRuins() {
 			}
 			function.Action("DisableIcon(Examine_Altar, CurrentRuins.Altar)", true);
 			MathiasFlashback = true;
+			function.Action("DisableIcon(Talk_To_Guard, PrisonGuard)", true);
 			function.Action("HideDialog()", true);
 			if (sword_taken) {
 				function.RemoveItem("MathiasSword", playerInv);
@@ -3503,6 +3505,7 @@ void Story::runLeftHallway() {
 					function.SetupDialogText("You figured it out! The Kingdom is eternally thankful for your help. Have this weird potion I found laying around as a reward", "DialogEnd", "Accept the Potion");
 					playerInv.push_back("Potion of Healing");
 					hasPurplePotion = true;
+					function.RemoveItem("CastleBedroomCrime", playerInv);
 				}
 			}
 			else if (modified_I == "Talk_To_Guard" && (hasRedBook || hasRedPotion)) {
@@ -4575,6 +4578,11 @@ void Story::runCurrentCamp() {
 		function.Action("SetPosition(Archie, PurpleCamp.Log)", true);
 		function.Action("Face(Archie, PurpleCamp.Horse)", true);
 		function.Action("HideFurniture(PurpleCamp.Log)", true);
+		function.Action("Face(Archie, Arlan)", true);
+		function.SetupDialog("Arlan", "Archie", true);
+		function.Action("Face(Arlan, Archie)", true);
+		function.SetupDialogText("Who are you? What are you doing here? Nevermind. There is no time. You must hide and here take this sword.", "hide", "**Take sword and hide by the barrel**");
+
 		while (currentLocation == "PurpleCamp") {
 			string i;
 			getline(cin, i);
@@ -4585,12 +4593,7 @@ void Story::runCurrentCamp() {
 			bool inputWasCommon = function.checkCommonKeywords(i, modified_I, "Arlan", playerInv);
 
 			if (!inputWasCommon) {
-				if (modified_I == "Talk_Archie") {
-					function.Action("Face(Archie, Arlan)", true);
-					function.SetupDialog("Arlan", "Archie", "true");
-					function.SetupDialogText("Who are you? What are you doing here? Nevermind. There is no time. You must hide and here take this sword.", "hide", "**Take sword and hide by the barrel**");
-				}
-				else if (modified_I == "Selected") {
+				if (modified_I == "Selected") {
 					modified_I = function.splitInput(i, 0, true);
 
 					if (modified_I == "hide") {
@@ -4667,6 +4670,10 @@ void Story::runCurrentCamp() {
 						function.Action("FadeOut()", true);
 					}
 					else if (modified_I == "Potion") {
+						function.Action("HideDialog()", true);
+						function.Action("Face(Arlan, Archie)", true);
+						function.Action("Give(Arlan, Potion of Healing, Archie)", true);
+						function.Action("ShowDialog()", true);
 						function.SetupDialogText("Thank you kind stranger", "Armor2", "**Take Mathias' Armor**");
 					}
 				}
