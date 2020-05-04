@@ -323,7 +323,7 @@ bool Story::setupCurrentTown(string name) {
 	function.SetupCharacter("Town Elder", "H", "Noble", "Musketeer_Full", "Gray", "CurrentTown.Plant");
 
 	//items
-	function.Action("CreateItem(MathiasSword, Sword)", true);
+	function.Action("CreateItem(ArchieSpellbook, SpellBook)", true);
 	function.Action("CreateItem(Apple Money, Coin)", true);
 	function.Action("CreateItem(Elder Apple, Apple)", true);
 	function.Action("CreateItem(Broken Lock, Lock)", true);
@@ -336,7 +336,7 @@ bool Story::setupCurrentTown(string name) {
 	//Buy Apple
 	currentCity.icons.push_back(Icon("Buy Apple", "Coin", "Elder Apple", "Buy Elder Apple", "true"));
 	//Pick Up MathiasSword
-	currentCity.icons.push_back(Icon("Take_MathiasSword", "Hand", "MathiasSword", "Take the sword", "true"));
+	currentCity.icons.push_back(Icon("Take_ArchieSpellbook", "Hand", "ArchieSpellbook", "Take the spellbook", "true"));
 	//Enter BlacksmithFoundry
 	currentCity.icons.push_back(Icon("Enter Blacksmith Foundry", "Hand", "CurrentTown.RedHouseDoor", "Enter Blacksmith Foundry", "true"));
 	currentCity.icons.push_back(Icon("Enter_AlchemyShop", "Open", "CurrentTown.BrownHouseDoor", "Enter Alchemy Shop", "true"));
@@ -387,10 +387,11 @@ bool Story::setupCurrentForestPath(string name) {
 	//character setup
 
 	//items and their placement
-	function.Action("CreateItem(ArchieSpellbook, SpellBook)", true);
+	function.Action("CreateItem(MathiasSword, Sword)", true);
+
 
 	//icons
-	currentForestPath.icons.push_back(Icon("Take_ArchieSpellbook", "Hand", "ArchieSpellbook", "Take the spellbook", "true"));
+	currentForestPath.icons.push_back(Icon("Take_MathiasSword", "Hand", "MathiasSword", "Take the sword", "true"));
 	function.SetupIcons(currentForestPath.icons);
 
 	return true;
@@ -1271,10 +1272,10 @@ void Story::runCurrentTown() {
 
 		else if (i == "input Look Inside Barrel CurrentTown.Barrel") {
 			function.WalkToPlace("Arlan", "CurrentTown.Barrel");
-			function.Action("SetNarration(Theres a sword inside! You take it. It appears ancient and powerful. You wonder if this is the relic the elder mentioned.)", true);
+			function.Action("SetNarration(Theres a spellbook inside! You take it. It appears ancient and powerful. You wonder if this is the relic the elder mentioned.)", true);
 			function.Action("ShowNarration()", true);
-			playerInv.push_back("MathiasSword");
-			sword_taken = true;
+			playerInv.push_back("ArchieSpellbook");
+			spellbook_taken = true;
 			function.Action("DisableIcon(Look Inside Barrel, CurrentTown.Barrel)", true);
 		}
 
@@ -1547,10 +1548,10 @@ void Story::runCurrentForestPath() {
 
 		else if (i == "input Look Inside Dirt Pile CurrentForestPath.DirtPile") {
 			function.WalkToPlace("Arlan", "CurrentForestPath.DirtPile");
-			function.Action("SetNarration(There is a book inside! You take it. It appears ancient and unintelligable. And dirty. You wonder if this is the relic the elder mentioned.)", true);
+			function.Action("SetNarration(There is a sword inside! You take it. It appears ancient and dirty. You wonder if this is the relic the elder mentioned.)", true);
 			function.Action("ShowNarration()", true);
-			playerInv.push_back("ArchieSpellbook");
-			spellbook_taken = true;
+			playerInv.push_back("MathiasSword");
+			sword_taken = true;
 			function.Action("DisableIcon(Look Inside Dirt Pile, CurrentForestPath.DirtPile)", true);
 		}
 	}
@@ -1607,6 +1608,9 @@ void Story::runCurrentRuins() {
 		}
 
 		else if (i == "input Selected placeMathiasSword") {
+			if (spellbook_taken) {
+				function.Action("DisableIcon(Look Inside Barrel, CurrentTown.Barrel)", true);
+			}
 			function.Action("DisableIcon(Examine_Altar, CurrentRuins.Altar)", true);
 			MathiasFlashback = true;
 			function.Action("HideDialog()", true);
@@ -1631,6 +1635,9 @@ void Story::runCurrentRuins() {
 		}
 
 		else if (i == "input Selected placeArchieSpellbook") {
+			if (sword_taken) {
+				function.Action("DisableIcon(Look Inside Dirt Pile, CurrentForestPath.DirtPile)", true);
+			}
 			function.Action("DisableIcon(Examine_Altar, CurrentRuins.Altar)", true);
 			ArchieFlashback = true;
 			function.Action("HideDialog()", true);
