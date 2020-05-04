@@ -1610,7 +1610,7 @@ void Story::runCurrentRuins() {
 		}
 
 		else if (i == "input Selected placeMathiasSword") {
-			if (spellbook_taken) {
+			if (!spellbook_taken) {
 				function.Action("DisableIcon(Look Inside Barrel, CurrentTown.Barrel)", true);
 			}
 			function.Action("DisableIcon(Examine_Altar, CurrentRuins.Altar)", true);
@@ -1638,7 +1638,7 @@ void Story::runCurrentRuins() {
 		}
 
 		else if (i == "input Selected placeArchieSpellbook") {
-			if (sword_taken) {
+			if (!sword_taken) {
 				function.Action("DisableIcon(Look Inside Dirt Pile, CurrentForestPath.DirtPile)", true);
 			}
 			function.Action("DisableIcon(Examine_Altar, CurrentRuins.Altar)", true);
