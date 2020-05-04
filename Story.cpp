@@ -3612,7 +3612,7 @@ void Story::runRightHallway() {
 		//else if (i == "input Enter RightHallway Door RightHallway.Door") {
 		//RightHallway.icons.push_back(Icon("Enter RightHallway Door", "Hand", "RightHallway.Door", "Enter", "true"));
 		//(i == "input Open Door CurrentPrison.Door")
-		else if (i == "input Enter RightHallwayDoor RightHallway.Door") {
+		else if (i == "input Enter RightHallway Door RightHallway.Door") {
 			function.Transition("Arlan", "RightHallway.Door", "CurrentGreatHall.RightDoor");
 			currentLocation = "CurrentGreatHall";
 		}
