@@ -4041,7 +4041,7 @@ void Story::runCurrentCourtyard() {
 			}
 			else {
 				function.Action("SetNarration(You do not possess the strength to proceed.)", true);
-				function.Action("ShowDialog()", true);
+				function.Action("ShowNarration()", true);
 			}
 		}
 
