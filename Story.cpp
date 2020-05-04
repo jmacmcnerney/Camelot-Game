@@ -4686,17 +4686,17 @@ void Story::runCurrentCamp() {
 }
 
 void Story::runFinalRuins() {
-	function.Action("SetPosition(Archie, FinalRuins.Throne)", true);
-	function.Action("Sit(Archie, FinalRuins.Throne)", true);
+	function.Action("SetPosition(Archie, FinalRuins.Altar)", true);
+	//function.Action("Sit(Archie, FinalRuins.Throne)", true);
 	function.Action("Enter(Mathias, FinalRuins.Exit, false)", true);
-	function.Action("WalkTo(Mathias, FinalRuins.Altar)", false);
+	function.Action("WalkTo(Mathias, Archie)", false);
 	function.Action("Enter(Arlan, FinalRuins.Exit, true)", true);
 	function.Action("WalkTo(Arlan, FinalRuins.Plant)", false);
-	function.WaitFor("succeeded WalkTo(Mathias, FinalRuins.Altar)");
+	function.WaitFor("succeeded WalkTo(Mathias, Archie)");
 	function.Action("Face(Mathias, Archie)", false);
 	function.WaitFor("succeeded WalkTo(Arlan, FinalRuins.Plant)");
 	function.Action("Face(Arlan, Archie)", false);
-	function.Action("WalkTo(Archie, Mathias)", true);
+	function.Action("Face(Archie, Mathias)", true);
 	function.SetupDialog("Arlan", "Archie", false);
 	function.SetupDialogText("Ah... I see you two have met. You are bold to challenge me boy. But your courage is in vain. Not even my old rival Mathias can help you.", "beginFight", "We shall see. *Attack!*");
 	while (currentLocation == "FinalRuins") {
@@ -4717,7 +4717,7 @@ void Story::runFinalRuins() {
 			function.Action("HideDialog()", true);
 			function.Action("ClearDialog()", false);
 			function.Action("Draw(Mathias, MathiasSword2)", true);
-			//function.Action("Attack(Mathias, Archie, false)", true); camelot bug
+			function.Action("Attack(Mathias, Archie, false)", true); //camelot bug
 			function.Action("Cast(Archie, Mathias)", true);
 			function.Action("Kneel(Mathias)", true);
 			function.SetupDialog("Arlan", "Mathias", false);
@@ -4742,12 +4742,13 @@ void Story::runFinalRuins() {
 		else if (i == "input Selected attackArchie") {
 			function.Action("HideDialog()", true);
 			function.Action("ClearDialog()", false);
+			function.Action("WalkTo(Archie, Arlan)", true);
 			function.Action("Pocket(Arlan, PotionOfPower)", true);
 			function.Action("Draw(Arlan, MathiasSword)", true);
 			function.Action("Attack(Arlan, Archie, true)", true);
 			function.Action("Die(Archie)", true);
 			function.Action("Sheathe(Arlan, MathiasSword)", true);
-			function.Action("Face(Arlan, Mathias)", false);
+			function.Action("WalkTo(Arlan, Mathias)", false);
 			function.SetupDialog("Arlan", "Mathias", false);
 			function.SetupDialogText("Finally... it is over. Goodbye old friend... You did well Arlan. If you will excuse me I need a moment to recover.", "ofCourse", "Of course!");
 		}
@@ -4773,6 +4774,7 @@ void Story::runFinalRuins() {
 			function.Action("SetRight(Mathias)", true);
 			function.Action("Face(Mathias, Arlan)", false);
 			function.SetupDialogText("Arlan... what are you doing? That tome must be destroyed!", "finish", "HE MUST NOT BE ALLOWED TO TAKE IT.");
+			function.Action("ShowDialog()", true);
 		}
 
 		else if (i == "input Selected finish") {
