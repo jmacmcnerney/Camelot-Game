@@ -1609,6 +1609,7 @@ void Story::runCurrentRuins() {
 		else if (i == "input Selected placeMathiasSword") {
 			function.Action("DisableIcon(Examine_Altar, CurrentRuins.Altar)", true);
 			MathiasFlashback = true;
+			function.Action("DisableIcon(Talk_To_Guard, PrisonGuard)", true);
 			function.Action("HideDialog()", true);
 			if (sword_taken) {
 				function.RemoveItem("MathiasSword", playerInv);
