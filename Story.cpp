@@ -4201,14 +4201,13 @@ void Story::runCurrentCamp() {
 						function.Action("HideDialog()", true);
 						function.Action("Draw(Arlan, SpareSword)", true);
 						function.WalkToPlace("Arlan", "PurpleCamp.Barrel");
-						this_thread::sleep_for(chrono::milliseconds(2000));
+						this_thread::sleep_for(chrono::milliseconds(1000));
 						function.Action("Face(Arlan, Archie)", true);
 						this_thread::sleep_for(chrono::milliseconds(500));
-						//function.Action("Kneel(Arlan)", true);
 						function.Action("SetPosition(Mathias, PurpleCamp.Horse)", true);
 						function.Action("Draw(Mathias, SpareSword2)", true);
 						function.Action("Face(Archie, Mathias)", true);
-						function.SetupDialog("Mathias", "Archie", "true");
+						function.SetupDialog("Mathias", "Archie", true);
 						function.SetupDialogText("Mathias! This artifact has corrupted you. You need to be stopped.\\n**You feel the book call for you to wait.**", "Wait", "**Wait to strike**", "Confront", "**Confront Mathias**");
 					}
 					else if (modified_I == "Wait") {
@@ -4220,8 +4219,11 @@ void Story::runCurrentCamp() {
 					}
 					else if (modified_I == "Confront") {
 						function.Action("HideDialog()", true);
+						function.Action("DisableInput()", true);
+						function.Action("WalkToSpot(Arlan, 5999, 0, 4)", true);
 						function.Action("Face(Mathias, Arlan)", true);
-						function.SetupDialog("Arlan", "Mathias", true);
+						function.SetupDialog("Arlan", "Mathias", false);
+						function.Action("EnableInput()", true);
 						function.SetupDialogText("Who's this? No matter both of you will die here.", "Strike2", "**Strike down Mathias**");
 					}
 					else if (modified_I == "Strike1") {
@@ -4248,6 +4250,7 @@ void Story::runCurrentCamp() {
 						function.Action("Unpocket(Arlan, Potion of Healing)", true);
 						function.Action("SetCameraMode(Focus)", true);
 						function.Action("Drink(Arlan)", true);
+						function.Action("Pocket(Arlan, Potion of Healing)", true);
 						this_thread::sleep_for(chrono::milliseconds(500));
 						function.Action("SetCameraMode(Follow)", true);
 						function.Action("FadeOut()", true);
