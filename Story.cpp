@@ -2812,7 +2812,7 @@ void Story::runCurrentStorage() {
 			else if (i == "input Read Storage OpenScroll Storage OpenScroll") {
 				//function.WalkToPlace("Arlan", "CurrentStorage.Barrel");
 				function.Action("SetRight(null)", true);
-				function.SetupDialogText("In this storage some items reside in a chest.\\nSome are useless a red herring at its best.\\nSet a meal on the shelf for this particular test.\\nRemember that thirst is quenched from the right of the perspective of the guest.", "end", "**Walk Away**", "end", "reset");
+				function.SetupDialogText("In this storage some items reside in a chest.\\nSome are useless a red herring at its best.\\nSet a meal on the shelf for this particular test.\\nRemember that thirst is quenched from the right of the perspective of the guest.", "end", "**Walk Away**");
 				function.Action("ShowDialog()", true);
 			}
 
