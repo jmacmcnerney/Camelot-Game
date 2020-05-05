@@ -2060,7 +2060,7 @@ void Story::runCurrentGreatHall() {
 			}
 
 			//CurrentCastleCrossroads
-			if (i == "input arrived Arlan position CurrentGreatHall.Gate") {
+			if (i == "input Enter Gate CurrentGreatHall.Gate") {
 				function.Transition("Arlan", "CurrentGreatHall.Gate", "CurrentCastleCrossroads.Gate");
 				currentLocation = "CurrentCastleCrossroads";
 			}
