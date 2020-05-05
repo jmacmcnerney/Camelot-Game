@@ -4010,7 +4010,7 @@ void Story::runCurrentCamp() {
 				function.Action("HideDialog()", true);
 				function.Action("ClearDialog()", true);
 				function.Action("WalkTo(Mathias, BlueCamp.Exit)", false);
-				function.Action("WalkTo(Arlan, BlueCamp.Exit)", false);
+				function.Action("WalkTo(Arlan, BlueCamp.Exit)", false); // does not need to be WalkToPlace since input is disabled here
 				function.Action("FadeOut()", true);
 				currentLocation = "FinalRuins";
 			}
@@ -4403,7 +4403,7 @@ void Story::runFinalRuins() {
 	function.Action("Enter(Mathias, FinalRuins.Exit, false)", true);
 	function.Action("WalkTo(Mathias, Archie)", false);
 	function.Action("Enter(Arlan, FinalRuins.Exit, true)", true);
-	function.Action("WalkTo(Arlan, FinalRuins.Plant)", false);
+	function.Action("WalkTo(Arlan, FinalRuins.Plant)", false); // can't use WalkToPlace here because WaitFor needs to be used differently & input is already disabled
 	function.WaitFor("succeeded WalkTo(Mathias, Archie)");
 	function.Action("Face(Mathias, Archie)", false);
 	function.WaitFor("succeeded WalkTo(Arlan, FinalRuins.Plant)");
