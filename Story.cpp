@@ -19,7 +19,7 @@ vector<string> playerInv;
 //location boolean
 string currentLocation = "ArlanCottage";
 
-bool cheatsEnabled = false;
+bool cheatsEnabled = true;
 
 //Intro Quest Booleans
 //Cottage
@@ -4381,7 +4381,7 @@ void Story::runCurrentCamp() {
 				function.Action("HideDialog()", true);
 				function.Action("DisableInput()", true);
 				function.Action("WalkTo(Mathias, GreenCamp.Exit)", false);
-				function.Action("WalkTo(Archie, GreenCamp.Exit)", false);
+				function.Action("WalkTo(Archie, GreenCamp.Exit)", true);
 				function.Action("SetPosition(Mathias)", true);
 				function.Action("SetPosition(Archie)", true);
 				function.Action("FadeOut()", true);
