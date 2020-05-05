@@ -1103,27 +1103,34 @@ void Story::runCurrentTown() {
 					}
 					else if (ArchieFlashback || MathiasFlashback) {
 						if (finishedTalkingToElder) {
-							function.SetupDialogText("Hello again Arlan! Need something?", "askCoins", "Know where I can find any coins?");
+							if (MathiasFlashback) {
+								function.SetupDialogText("Hello again Arlan! Need something?", "askCoins", "Know where I can find any coins?", "askReminder", "What am I doing again?");
+							}
+							else if (ArchieFlashback) {
+								function.SetupDialogText("Hello again Arlan! Need something?", "askReminder", "What am I doing again?");
+							}
 						}
 						else {
 							function.SetupDialogText("You saw what? Oh my... the storybook did have some additional information. It said to stop the corruption you must locate 2 ancient artifacts and bring them to the region beyond the courtyard at the north end of the town.", "end", "Okay! Thanks!");
 
-							//spawn coins in world 
-							function.Action("CreateItem(Coin1, Coin)", true);
-							function.Action("EnableIcon(TakeCoin1, Hand, CurrentTown.Fountain, Inspect the Fountain, true)", true);
+							if (MathiasFlashback) {
+								//spawn coins in world 
+								function.Action("CreateItem(Coin1, Coin)", true);
+								function.Action("EnableIcon(TakeCoin1, Hand, CurrentTown.Fountain, Inspect the Fountain, true)", true);
 
-							function.Action("CreateItem(Coin2, Coin)", true);
-							canWorkForBlacksmith = true;
+								function.Action("CreateItem(Coin2, Coin)", true);
+								canWorkForBlacksmith = true;
 
-							function.Action("CreateItem(Coin3, Coin)", true);
-							function.Action("EnableIcon(TakeCoin3, Hand, ForestPath2.Well, Inspect the Well, true)", true);
+								function.Action("CreateItem(Coin3, Coin)", true);
+								function.Action("EnableIcon(TakeCoin3, Hand, ForestPath2.Well, Inspect the Well, true)", true);
 
-							function.Action("CreateItem(Coin4, Coin)", true);
-							function.Action("EnableIcon(TakeCoin4, Hand, CurrentPort.Barrel, Inspect the Barrel, true)", true);
+								function.Action("CreateItem(Coin4, Coin)", true);
+								function.Action("EnableIcon(TakeCoin4, Hand, CurrentPort.Barrel, Inspect the Barrel, true)", true);
 
-							/*function.Action("CreateItem(Coin5, Coin)", true);
-							function.Action("EnableIcon(TakeCoin5, Hand, Coin5, Take the Coin, true", true);
-							function.Action("SetPosition(Coin5, AlchemyShop.Table)", true);*/
+								/*function.Action("CreateItem(Coin5, Coin)", true);
+								function.Action("EnableIcon(TakeCoin5, Hand, Coin5, Take the Coin, true", true);
+								function.Action("SetPosition(Coin5, AlchemyShop.Table)", true);*/
+							}
 
 							finishedTalkingToElder = true;
 						}
@@ -1212,6 +1219,10 @@ void Story::runCurrentTown() {
 					else if (coinHint == 2) {
 						function.SetupDialogText("Coins? Hmm... There is much coin exhanged in the royal port. Perhaps try looking near the vendors there.", "end", "Okay! Thanks!");
 					}
+				}
+
+				else if (modified_I == "askReminder") {
+					function.SetupDialogText("That storybook of yours said that to stop the corruption you must locate 2 ancient artifacts and bring them to the region beyond the courtyard at the north end of the town. Perhaps you should seek those artifacts?", "end", "Okay! Thanks!");
 				}
 			}
 			else if (modified_I == "Enter_AlchemyShop") {
