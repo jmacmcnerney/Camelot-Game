@@ -2702,8 +2702,8 @@ void Story::runCurrentStorage() {
 
 			//CurrentGreatHall
 			if (i == "input Leave Storage CurrentStorage.Door") {
-				function.Action("StopSound(Tavern, CurrentStorage)", true);
 				if (!storagePuzzleSolved && (onLeft == "") && (onRight == "")) {
+					function.Action("StopSound(Tavern, CurrentStorage)", true);
 					function.Action("SetNarration(The puzzle resets...)", true);
 					vector<string> tempInv;
 					for (string item : playerInv) {
@@ -2733,6 +2733,7 @@ void Story::runCurrentStorage() {
 					function.Action("ShowNarration()", true);
 				}
 				else {
+					function.Action("StopSound(Tavern, CurrentStorage)", true);
 					function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
 					currentLocation = "CurrentGreatHall";
 				}
