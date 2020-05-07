@@ -308,6 +308,10 @@ bool Story::setupCurrentCottage(string name) {
 	currentCottage.icons.push_back(Icon("Talk_To_Dad", "Talk", "Dad", "Talk to Dad", "true"));
 	currentCottage.icons.push_back(Icon("Open_Door", "Open", "ArlanCottage.Door", "Exit the Cottage", "true"));
 	function.SetupIcons(currentCottage.icons);
+
+	//Furniture
+	function.Action("HideFurniture(ArlanCottage.Chest)", true);
+
 	return true;
 }
 
@@ -357,6 +361,9 @@ bool Story::setupBlacksmithFoundry(string name) {
 	BlacksmithFoundry.icons.push_back(Icon("Exit Blacksmith Foundry", "Hand", "BlacksmithFoundry.Door", "Exit Blacksmith Foundry", "true"));
 	function.SetupIcons(BlacksmithFoundry.icons);
 
+	//Furniture
+	function.Action("HideFurniture(BlacksmithFoundry.Chest)", true);
+
 	return true;
 }
 
@@ -373,6 +380,9 @@ bool Story::setupAlchemyShop(string name) {
 	Alchemy.icons.push_back(Icon("Talk_To_FortuneTeller", "Talk", "Fortuneteller", "Talk to Fortune Teller", "true"));
 	Alchemy.icons.push_back(Icon("Exit_Shop", "Open", "AlchemyShop.Door", "Exit Alchemy Shop", "true"));
 	function.SetupIcons(Alchemy.icons);
+
+	//Furniture
+	function.Action("HideFurniture(AlchemyShop.Chest)", true);
 
 	return true;
 }
@@ -406,6 +416,9 @@ bool Story::setupCurrentRuins(string name) {
 	currentRuins.icons.push_back(Icon("Examine_Altar", "Magnifyingglass", "CurrentRuins.Altar", "Examine the Altar", "true"));
 	function.SetupIcons(currentRuins.icons);
 
+	//Furniture
+	function.Action("HideFurniture(CurrentRuins.Chest)", true);
+
 
 	return true;
 }
@@ -422,6 +435,9 @@ bool Story::setupPastCottage(string name) {
 	pastCottage.icons.push_back(Icon("Open", "Exit", "PastCottage.Door", "Leave the Room", "true"));
 	pastCottage.icons.push_back(Icon("Read", "Research", "Letter", "Read the Letter", "true"));
 	function.SetupIcons(pastCottage.icons);
+
+	//Furniture
+	function.Action("HideFurniture(PastCottage.Chest)", true);
 
 
 	return true;
@@ -480,6 +496,9 @@ bool Story::setupPastRuins(string name, bool Enemy) {
 	function.Action("SetPosition(MysteriousSkull, " + name + ".Altar)", true);
 	function.Action("Face(" + EnemyName + ", MysteriousSkull)", true);
 	function.Action("Kneel(" + EnemyName + ")", true);
+
+	//Furniture
+	function.Action("HideFurniture(PastRuins.Chest)", true);
 
 	return true;
 }
@@ -703,7 +722,8 @@ bool Story::setupCamp(string name) {
 	}
 	if (name == "RedCamp") {
 		//character setup
-		function.SetupCharacter("ArchieR", "D", "Warlock", "Mage_Full", "Red", name + ".Stall");
+		function.Action("SetPosition(Archie, RedCamp.Stall)", true);
+		//function.SetupCharacter("Archie", "D", "Warlock", "Mage_Full", "Red", name + ".Stall");
 		//function.SetupCharacter("MathiasR", "F", "HeavyArmour", "Short_Full", "Brown", name + ".Log");
 		//items
 		function.Action("CreateItem(Mathias_Sword, Sword)", true);
@@ -720,6 +740,7 @@ bool Story::setupCamp(string name) {
 		function.Action("HideFurniture(PurpleCamp.Firepit)", true);
 		function.Action("HideFurniture(PurpleCamp.Stall)", true);
 		function.Action("HideFurniture(PurpleCamp.LeftLog)", true);
+		function.Action("HideFurniture(PurpleCamp.Chest)", true);
 		function.Action("CreateItem(SpareSword, Sword)", true);
 		function.Action("CreateItem(SpareSword2, Sword)", true);
 
@@ -2759,8 +2780,7 @@ void Story::runCurrentPrison() {
 						function.SetupDialogText("We're almost there! This is the last one", "RiddleThree", "I'm ready");
 
 						function.RemoveItem("PrisonerSword", playerInv);
-						CurrentCourtyard.icons.push_back(Icon("Search Target", "hand", "CurrentCourtyard.Target", "Search Target", "true"));
-						function.SetupIcons(CurrentCourtyard.icons);
+						function.Action("EnableIcon(Search Target, hand, CurrentCourtyard.Target, Search Target, true)", true);
 
 						function.Action("Draw(Prisoner, GuardSword)", true);
 
@@ -3039,6 +3059,10 @@ void Story::runRightHallway() {
 				else if (hasRedBook || hasRedPotion) {
 					function.Action("SetNarration(Your red artifact repels you from this room)", true);
 				}
+				function.Action("ShowNarration()", true);
+			}
+			else if (firstTalkGuard == true) {
+				function.Action("SetNarration(You feel as if you need to talk to someone before coming in here)", true);
 				function.Action("ShowNarration()", true);
 			}
 			else if (ArchieFlashback && !hasRedPotion && !hasPurplePotion && !hasRedBook) {
@@ -3865,9 +3889,9 @@ void Story::runCurrentCamp() {
 
 					function.Action("DisableInput()", true);
 					//function.Action("PlaySound(Danger1, RedCamp, true)", true);
-					function.Action("WalkTo(Arlan, ArchieR, true)", true);
+					function.Action("WalkTo(Arlan, Archie, true)", true);
 
-					function.SetupDialog("Arlan", "ArchieR", true);
+					function.SetupDialog("Arlan", "Archie", true);
 					function.SetupDialogText("Ah I see you finally found me. Quickly let me explain what we'll have to do-", "Entrance", "*CLANK*");
 
 					// Then have dialog setting up scene more
@@ -3893,21 +3917,21 @@ void Story::runCurrentCamp() {
 					else if (modified_I == "Battle") {
 						function.Action("ClearDialog()", true);
 						function.Action("HideDialog()", true);
-						function.SetupCharacter("MathiasR", "F", "HeavyArmour", "Short_Full", "Brown", "RedCamp.Exit");
-						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetPosition(Mathias, RedCamp.Exit)", true);
+						function.Action("SetCameraFocus(Mathias)", true);
 
 						function.Action("DisableInput()", true);
-						function.Action("Draw(MathiasR, Mathias_Sword)", true);
-						function.Action("WalkTo(MathiasR, ArchieR)", false);
-						function.Action("WalkTo(ArchieR, MathiasR)", true);
-						function.Action("Face(Arlan, MathiasR)", true);
-						function.Action("Attack(MathiasR, ArchieR, true)", true);
-						function.Action("Die(ArchieR)", true);
-						function.Action("Sheathe(MathiasR, Mathias_Sword)", true);
-						function.Action("Draw(MathiasR, Artifact)", true);
+						function.Action("Draw(Mathias, Mathias_Sword)", true);
+						function.Action("WalkTo(Mathias, Archie)", false);
+						function.Action("WalkTo(Archie, Mathias)", true);
+						function.Action("Face(Arlan, Mathias)", true);
+						function.Action("Attack(Mathias, Archie, true)", true);
+						function.Action("Die(Archie)", true);
+						function.Action("Sheathe(Mathias, Mathias_Sword)", true);
+						function.Action("Draw(Mathias, Artifact)", true);
 						function.Action("EnableInput()", true);
 
-						function.SetupDialog("Arlan", "MathiasR", false);
+						function.SetupDialog("Arlan", "Mathias", false);
 						function.SetupDialogText("Finally! Now that I don't have to worry about Archie anymore I can finally harness the full power of this artifact.", "ReadBook", "**I can't let that happen! Read Translated Book**");
 					}
 
@@ -3919,7 +3943,7 @@ void Story::runCurrentCamp() {
 						function.Action("CreateEffect(Artifact, Spiralflame)", false);
 						this_thread::sleep_for(chrono::milliseconds(2500));
 
-						function.SetupDialog("Arlan", "MathiasR", false);
+						function.SetupDialog("Arlan", "Mathias", false);
 						function.SetupDialogText("Oh no this isn't good... we're all doomed", "Drink", "**Drink Potion of Invincibility**");
 					}
 
@@ -3939,17 +3963,17 @@ void Story::runCurrentCamp() {
 						this_thread::sleep_for(chrono::milliseconds(2000));
 						function.Action("HideNarration()", true);
 
-						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetCameraFocus(Mathias)", true);
 						function.Action("SetCameraMode(focus)", true);
 						this_thread::sleep_for(chrono::milliseconds(1000));
 						function.Action("CreateEffect(Artifact, Explosion)", false);
 						function.Action("PlaySound(Fireball, Artifact, false)", true);
 						this_thread::sleep_for(chrono::milliseconds(1000));
 
-						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetCameraFocus(Mathias)", true);
 						function.Action("SetCameraMode(track)", true);
-						function.Action("CreateEffect(MathiasR, Death)", true);
-						function.Action("Die(MathiasR)", true);
+						function.Action("CreateEffect(Mathias, Death)", true);
+						function.Action("Die(Mathias)", true);
 						function.Action("SetCameraFocus(Arlan)", true);
 						function.Action("SetCameraMode(track)", true);
 						function.Action("CreateEffect(Arlan, Death)", true);
