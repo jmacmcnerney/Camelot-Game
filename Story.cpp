@@ -147,6 +147,7 @@ int numCoins = 0;
 Story::Story() {
 	runSetup();
 	//function.Action("SetPosition(Arlan, CurrentCastleBedroom.Chest)", true);
+	function.Action("SetTitle(Relics Of The Kingdom)", true);
 	run();
 }
 
@@ -1437,7 +1438,7 @@ void Story::runAlchemyShop() {
 					function.SetupDialogText("Come back when you want your fortune read.", "end", "Leave");
 				}
 				else if (modified_I == "Accept") {
-					function.SetupDialogText("**She takes your hand and begins to read your palm** You carry the burden of responsibility and hold a promising future.", "end", "Vauge and interesting. Ill be leaving now");
+					function.SetupDialogText("**She takes your hand and begins to read your palm** You carry the burden of responsibility and hold a promising future.", "end", "Vague and interesting. I will be leaving now");
 					visitedFortuneteller = true;
 				}
 				//dialogue concerning artifact
@@ -4397,6 +4398,7 @@ void Story::runCurrentCamp() {
 			else if (i == "input Selected endGame") {
 				function.Action("HideDialog()", true);
 				function.Action("DisableInput()", true);
+				function.Action("SetPosition(Potion Of Cleansing)", true);
 				function.Action("WalkTo(Mathias, GreenCamp.Exit)", false);
 				function.Action("WalkTo(Archie, GreenCamp.Exit)", true);
 				function.Action("SetPosition(Mathias)", true);
