@@ -185,6 +185,7 @@ bool functions::checkCommonKeywords(string input, string modifiedInput, string p
 		else if (modifiedInput == "teleportToArlanCottage") { Action("HideDialog()", true); Action("SetPosition(Arlan, ArlanCottage)", true); currentLocation = "ArlanCottage"; }
 		else if (modifiedInput == "teleportToCurrentTown") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentTown)", true); currentLocation = "CurrentTown"; }
 		else if (modifiedInput == "teleportToAlchemyShop") { Action("HideDialog()", true); Action("SetPosition(Arlan, AlchemyShop)", true); currentLocation = "AlchemyShop"; }
+		else if (modifiedInput == "teleportToBlacksmithFoundry") { Action("HideDialog()", true); Action("SetPosition(Arlan, BlacksmithFoundry)", true); currentLocation = "BlacksmithFoundry"; }
 		else if (modifiedInput == "teleportToCurrentForestPath") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentForestPath)", true); currentLocation = "CurrentForestPath"; }
 		else if (modifiedInput == "teleportToCurrentRuins") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentRuins)", true); currentLocation = "CurrentRuins"; }
 		else if (modifiedInput == "teleportToPastCottage") { Action("HideDialog()", true); Action("SetPosition(Arlan, PastCottage)", true); currentLocation = "PastCottage"; }
@@ -584,25 +585,11 @@ void functions::ItemHandler(string itemname, string action, string position, str
 }
 
 void functions::MusicHandler(string musicName, string location, bool& musicPlaying) {
-	/*if (action == "Play") {
-		if (musicPlaying) {
-			Action("StopSound()", true);
-			musicPlaying = false;
-		}
-		Action("PlaySound(" + musicName + ", " + location + ", true)", true);
-		musicPlaying = true;
-	}
-	else if (action == "Stop") {
-		if (!musicPlaying) {
-			return;
-		}
-		Action("StopSound(" + musicName + ", " + location + ")", true);
-		musicPlaying = false;
-	}*/
 	if (musicPlaying) {
 		Action("StopSound()", true);
 		musicPlaying = false;
 	}
-	Action("PlaySound(" + musicName + ", " + location + ", true)", true);
+	//Action("PlaySound(" + musicName + ", " + location + ", true)", true);
+	Action("PlaySound(" + musicName + ", true)", true);
 	musicPlaying = true;
 }
