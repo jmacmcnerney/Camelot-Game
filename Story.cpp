@@ -20,6 +20,7 @@ vector<string> playerInv;
 string currentLocation = "ArlanCottage";
 
 bool cheatsEnabled = true;
+bool musicPlaying = false;
 
 //Intro Quest Booleans
 //Cottage
@@ -897,16 +898,6 @@ bool Story::setupStorage(string name) {
 		CurrentStorage.icons.push_back(Icon("PlaceStorageItemLeft", "Hand", "CurrentStorage.Shelf", "Place Item Left", "false"));
 		CurrentStorage.icons.push_back(Icon("PlaceStorageItemRight", "Hand", "CurrentStorage.Shelf", "Place Item Right", "false"));
 		CurrentStorage.icons.push_back(Icon("Leave Storage", "Hand", "CurrentStorage.Door", "Leave", "true"));
-		//Placement icons
-		/*CurrentLibrary.icons.push_back(Icon("Place Library Apple Left", "Hand", "Library Apple", "Place The Apple Left", "false"));
-		CurrentLibrary.icons.push_back(Icon("Place Library Apple Center", "Hand", "Library Apple", "Place The Apple Center", "true"));
-		CurrentLibrary.icons.push_back(Icon("Place Library Apple Right", "Hand", "Library Apple", "Place The Apple Right", "false"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Left", "Hand", "Library GoldCup", "Place The GoldCup Left", "false"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Center", "Hand", "Library GoldCup", "Place The GoldCup Center", "false"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Right", "Hand", "Library GoldCup", "Place The GoldCup Right", "true"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Left", "Hand", "Library GreenKey", "Place The GreenKey Left", "true"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Center", "Hand", "Library GreenKey", "Place The GreenKey Center", "false"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Right", "Hand", "Library GreenKey", "Place The GreenKey Right", "false"));*/
 
 		//CurrentLibrary.icons.push_back(Icon("Library Chair", "Hand", "CurrentLibrary.Chair", "Rest", "true"));
 		function.SetupIcons(CurrentStorage.icons);
@@ -934,6 +925,7 @@ bool Story::setupStorage(string name) {
 
 // location execution functions.
 void Story::runCurrentCottage() {
+	function.MusicHandler("Explorer", currentLocation, musicPlaying);
 	while (currentLocation == "ArlanCottage") {
 		string i;
 		getline(cin, i);
@@ -1044,6 +1036,7 @@ void Story::runCurrentCottage() {
 }
 
 void Story::runCurrentTown() {
+	function.MusicHandler("Town_Day", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentTown") {
 		string i;
 		getline(cin, i);
@@ -1318,6 +1311,7 @@ void Story::runCurrentTown() {
 }
 
 void Story::runBlacksmithFoundry() {
+	function.MusicHandler("Tavern", currentLocation, musicPlaying);
 	while (currentLocation == "BlacksmithFoundry") {
 		string i;
 		getline(cin, i);
@@ -1407,6 +1401,7 @@ void Story::runBlacksmithFoundry() {
 }
 
 void Story::runAlchemyShop() {
+	function.MusicHandler("Tavern", currentLocation, musicPlaying);
 	while (currentLocation == "AlchemyShop") {
 		string i;
 		getline(cin, i);
@@ -1516,6 +1511,7 @@ void Story::runAlchemyShop() {
 }
 
 void Story::runCurrentForestPath() {
+	function.MusicHandler("Forest_Day", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentForestPath") {
 		string i;
 		getline(cin, i);
@@ -1571,6 +1567,7 @@ void Story::runCurrentForestPath() {
 }
 
 void Story::runCurrentRuins() {
+	function.MusicHandler("Spooky", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentRuins") {
 		string i;
 		getline(cin, i);
@@ -1696,6 +1693,7 @@ void Story::runCurrentRuins() {
 
 //Chractercheck is sword_taken
 void Story::runPastCottage(bool CharacterCheck) {
+	function.MusicHandler("Explorer", currentLocation, musicPlaying);
 	function.Action("SetPosition(LeaderFlashPotion)", true);
 	currentLocation = "PastCottage";
 	bool LetterCheck = false;
@@ -1767,6 +1765,7 @@ void Story::runPastCottage(bool CharacterCheck) {
 	}
 }
 void Story::runPastForestPath(bool CharacterCheck) {
+	function.MusicHandler("Forest_Day", currentLocation, musicPlaying);
 	bool inputWasCommon;
 	string CharacterName = "";
 
@@ -1812,7 +1811,7 @@ void Story::runPastForestPath(bool CharacterCheck) {
 }
 
 void Story::runPastCity(bool CharacterCheck) {
-
+	function.MusicHandler("Town_Day", currentLocation, musicPlaying);
 	string CharacterName = "";
 	bool inputWasCommon;
 
@@ -1858,6 +1857,7 @@ void Story::runPastCity(bool CharacterCheck) {
 }
 
 void Story::runPastRuins(bool CharacterCheck) {
+	function.MusicHandler("Danger1", currentLocation, musicPlaying);
 	string CharacterName = "";
 	string Enemy = "";
 	bool inputWasCommon;
@@ -1950,6 +1950,7 @@ void Story::runPastRuins(bool CharacterCheck) {
 }
 
 void Story::runForestPath2() {
+	function.MusicHandler("Forest_Day", currentLocation, musicPlaying);
 	while (currentLocation == "ForestPath2") {
 		string i;
 		getline(cin, i);
@@ -1995,6 +1996,7 @@ void Story::runForestPath2() {
 }
 
 void Story::runCurrentCastleCrossroads() {
+	function.MusicHandler("River", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentCastleCrossroads") {
 		string i;
 		getline(cin, i);
@@ -2045,6 +2047,7 @@ void Story::runCurrentCastleCrossroads() {
 }
 
 void Story::runCurrentGreatHall() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	if (MathiasFlashback) {
 		while (currentLocation == "CurrentGreatHall") {
 			string i;
@@ -2209,6 +2212,7 @@ void Story::runCurrentGreatHall() {
 }
 
 void Story::runCurrentPort() {
+	function.MusicHandler("Port", currentLocation, musicPlaying);
 	if (MathiasFlashback) {
 		while (currentLocation == "CurrentPort") {
 			string i;
@@ -2530,7 +2534,8 @@ void Story::runCurrentLibrary() {
 	bool inventoryErrorCheck = true;
 	function.Action("SetLeft(Arlan)", true);
 	function.Action("SetRight(null)", true);
-	function.Action("PlaySound(Serenity, CurrentLibrary, true)", true);
+	//function.Action("PlaySound(Serenity, CurrentLibrary, true)", true);
+	function.MusicHandler("Serenity", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentLibrary") {
 		string i;
 		getline(cin, i);
@@ -2555,7 +2560,7 @@ void Story::runCurrentLibrary() {
 
 		//RightHallway
 		if (i == "input Leave Library CurrentLibrary.Door") {
-			function.Action("StopSound(Serenity, CurrentLibrary)", true);
+			//function.Action("StopSound(Serenity, CurrentLibrary)", true);
 			if (!libraryPuzzleSolved) {
 				function.Action("SetNarration(The puzzle resets...)", true);
 				vector<string> tempInv;
@@ -2678,7 +2683,8 @@ void Story::runCurrentLibrary() {
 }
 
 void Story::runCurrentStorage() {
-	function.Action("PlaySound(Tavern, CurrentStorage, true)", true);
+	//function.Action("PlaySound(Tavern, CurrentStorage, true)", true);
+	function.MusicHandler("Tavern", currentLocation, musicPlaying);
 	if (MathiasFlashback) {
 		string position = "";
 		string onLeft = "", onCenter = "", onRight = "";
@@ -2703,7 +2709,7 @@ void Story::runCurrentStorage() {
 			//CurrentGreatHall
 			if (i == "input Leave Storage CurrentStorage.Door") {
 				if (!storagePuzzleSolved && (onLeft == "") && (onRight == "")) {
-					function.Action("StopSound(Tavern, CurrentStorage)", true);
+					//function.Action("StopSound(Tavern, CurrentStorage)", true);
 					function.Action("SetNarration(The puzzle resets...)", true);
 					vector<string> tempInv;
 					for (string item : playerInv) {
@@ -2733,7 +2739,7 @@ void Story::runCurrentStorage() {
 					function.Action("ShowNarration()", true);
 				}
 				else {
-					function.Action("StopSound(Tavern, CurrentStorage)", true);
+					//function.Action("StopSound(Tavern, CurrentStorage)", true);
 					function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
 					currentLocation = "CurrentGreatHall";
 				}
@@ -2909,6 +2915,7 @@ void Story::runCurrentStorage() {
 }
 
 void Story::runCurrentPrison() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentPrison") {
 		string i;
 		getline(cin, i);
@@ -3081,6 +3088,7 @@ void Story::runCurrentPrison() {
 }
 
 void Story::runLeftHallway() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	while (currentLocation == "LeftHallway") {
 		string i;
 		getline(cin, i);
@@ -3195,6 +3203,7 @@ void Story::runLeftHallway() {
 }
 
 void Story::runRightHallway() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	while (currentLocation == "RightHallway") {
 		string i;
 		getline(cin, i);
@@ -3277,6 +3286,7 @@ void Story::runRightHallway() {
 }
 
 void Story::runCurrentDiningRoom() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	if (MathiasFlashback) {
 		if (!visitedDiningRoom) {
 			function.Action("DisableInput()", true);
@@ -3617,6 +3627,7 @@ void Story::runCurrentDiningRoom() {
 }
 
 void Story::runCurrentCourtyard() {
+	function.MusicHandler("Town_Day", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentCourtyard") {
 		string i;
 		getline(cin, i);
@@ -3694,8 +3705,8 @@ void Story::runCurrentCourtyard() {
 }
 
 void Story::runCurrentCastleBedroom() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	string currentPosition = "";
-
 	while (currentLocation == "CurrentCastleBedroom") {
 		string i;
 		getline(cin, i);
@@ -3927,6 +3938,7 @@ void Story::runCurrentCastleBedroom() {
 	}
 }
 void Story::runCurrentCamp() {
+	function.MusicHandler("Danger3", currentLocation, musicPlaying);
 	if (currentLocation == "BlueCamp") {
 		while (currentLocation == "BlueCamp") {
 			string i;
@@ -4077,7 +4089,7 @@ void Story::runCurrentCamp() {
 					ActionSequence = false;
 
 					function.Action("DisableInput()", true);
-					function.Action("PlaySound(Danger1, RedCamp, true)", true);
+					//function.Action("PlaySound(Danger1, RedCamp, true)", true);
 					function.Action("WalkTo(Arlan, ArchieR, true)", true);
 
 					function.SetupDialog("Arlan", "ArchieR", true);
@@ -4362,6 +4374,7 @@ void Story::runCurrentCamp() {
 				this_thread::sleep_for(chrono::milliseconds(1000));
 				function.Action("Face(Archie, Arlan)", true);
 				function.Action("SetRight(Archie)", true);
+				function.MusicHandler("Serenity", currentLocation, musicPlaying);
 				function.SetupDialogText("Thank you hero... you have saved me from the corruption that consumed me.", "apologizeToMathias", "Of course.");
 				function.Action("ShowDialog()", true);
 			}
@@ -4413,6 +4426,7 @@ void Story::runCurrentCamp() {
 }
 
 void Story::runFinalRuins() {
+	function.MusicHandler("Danger3", currentLocation, musicPlaying);
 	function.Action("SetPosition(Archie, FinalRuins.Altar)", true);
 	//function.Action("Sit(Archie, FinalRuins.Throne)", true);
 	function.Action("Enter(Mathias, FinalRuins.Exit, false)", true);

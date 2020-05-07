@@ -388,7 +388,7 @@ void functions::RemoveItem(string itemname, vector<string> &inventory) {
 	}
 }
 
-void functions::LibraryItem(string action, string itemname, string position, bool &positionOccupied, bool &hasItem, bool &correctPosition, vector<string> &inventory) {
+/*void functions::LibraryItem(string action, string itemname, string position, bool &positionOccupied, bool &hasItem, bool &correctPosition, vector<string> &inventory) {
 	Action("HideDialog()", true);
 	//Action("ShowNarration()", true);
 	if (action == "place") {
@@ -506,7 +506,7 @@ void functions::PuzzleItem(string action, string itemname, string position, bool
 		}
 	}
 	Action("ShowNarration()", true);
-}
+}*/
 
 void functions::ItemCheats(string itemname, bool &hasItem) {
 	if (!hasItem) {
@@ -581,4 +581,28 @@ void functions::ItemHandler(string itemname, string action, string position, str
 		if (onRight == itemname) { onRight = ""; correctRight = false; }
 		if (onCenter == itemname) { onCenter = ""; correctCenter = false; }
 	}
+}
+
+void functions::MusicHandler(string musicName, string location, bool& musicPlaying) {
+	/*if (action == "Play") {
+		if (musicPlaying) {
+			Action("StopSound()", true);
+			musicPlaying = false;
+		}
+		Action("PlaySound(" + musicName + ", " + location + ", true)", true);
+		musicPlaying = true;
+	}
+	else if (action == "Stop") {
+		if (!musicPlaying) {
+			return;
+		}
+		Action("StopSound(" + musicName + ", " + location + ")", true);
+		musicPlaying = false;
+	}*/
+	if (musicPlaying) {
+		Action("StopSound()", true);
+		musicPlaying = false;
+	}
+	Action("PlaySound(" + musicName + ", " + location + ", true)", true);
+	musicPlaying = true;
 }

@@ -35,6 +35,7 @@ extern vector<string> playerInv;
 extern string currentLocation;
 
 extern bool cheatsEnabled;
+extern bool musicPlaying;
 
 //Intro Quest Booleans
 //Cottage
