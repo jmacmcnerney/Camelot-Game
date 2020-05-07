@@ -4465,9 +4465,9 @@ void Story::runFinalRuins() {
 		else if (i == "input Selected attackArchie") {
 			function.Action("HideDialog()", true);
 			function.Action("ClearDialog()", false);
-			function.Action("WalkTo(Archie, Arlan)", true);
 			function.Action("Pocket(Arlan, PotionOfPower)", true);
 			function.Action("Draw(Arlan, MathiasSword)", true);
+			function.Action("WalkTo(Archie, Arlan)", false);
 			function.Action("Attack(Arlan, Archie, true)", true);
 			function.Action("Die(Archie)", true);
 			function.Action("Sheathe(Arlan, MathiasSword)", true);
