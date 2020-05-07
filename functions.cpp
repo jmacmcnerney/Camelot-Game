@@ -185,6 +185,7 @@ bool functions::checkCommonKeywords(string input, string modifiedInput, string p
 		else if (modifiedInput == "teleportToArlanCottage") { Action("HideDialog()", true); Action("SetPosition(Arlan, ArlanCottage)", true); currentLocation = "ArlanCottage"; }
 		else if (modifiedInput == "teleportToCurrentTown") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentTown)", true); currentLocation = "CurrentTown"; }
 		else if (modifiedInput == "teleportToAlchemyShop") { Action("HideDialog()", true); Action("SetPosition(Arlan, AlchemyShop)", true); currentLocation = "AlchemyShop"; }
+		else if (modifiedInput == "teleportToBlacksmithFoundry") { Action("HideDialog()", true); Action("SetPosition(Arlan, BlacksmithFoundry)", true); currentLocation = "BlacksmithFoundry"; }
 		else if (modifiedInput == "teleportToCurrentForestPath") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentForestPath)", true); currentLocation = "CurrentForestPath"; }
 		else if (modifiedInput == "teleportToCurrentRuins") { Action("HideDialog()", true); Action("SetPosition(Arlan, CurrentRuins)", true); currentLocation = "CurrentRuins"; }
 		else if (modifiedInput == "teleportToPastCottage") { Action("HideDialog()", true); Action("SetPosition(Arlan, PastCottage)", true); currentLocation = "PastCottage"; }
@@ -388,7 +389,7 @@ void functions::RemoveItem(string itemname, vector<string> &inventory) {
 	}
 }
 
-void functions::LibraryItem(string action, string itemname, string position, bool &positionOccupied, bool &hasItem, bool &correctPosition, vector<string> &inventory) {
+/*void functions::LibraryItem(string action, string itemname, string position, bool &positionOccupied, bool &hasItem, bool &correctPosition, vector<string> &inventory) {
 	Action("HideDialog()", true);
 	//Action("ShowNarration()", true);
 	if (action == "place") {
@@ -506,7 +507,7 @@ void functions::PuzzleItem(string action, string itemname, string position, bool
 		}
 	}
 	Action("ShowNarration()", true);
-}
+}*/
 
 void functions::ItemCheats(string itemname, bool &hasItem) {
 	if (!hasItem) {
@@ -581,4 +582,14 @@ void functions::ItemHandler(string itemname, string action, string position, str
 		if (onRight == itemname) { onRight = ""; correctRight = false; }
 		if (onCenter == itemname) { onCenter = ""; correctCenter = false; }
 	}
+}
+
+void functions::MusicHandler(string musicName, string location, bool& musicPlaying) {
+	if (musicPlaying) {
+		Action("StopSound()", true);
+		musicPlaying = false;
+	}
+	//Action("PlaySound(" + musicName + ", " + location + ", true)", true);
+	Action("PlaySound(" + musicName + ", true)", true);
+	musicPlaying = true;
 }

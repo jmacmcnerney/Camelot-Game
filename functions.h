@@ -63,18 +63,21 @@ public:
 	//Removing An Item
 	void RemoveItem(string itemname, vector<string> &inventory);
 
-	//Library Item Handler
+	/*//Library Item Handler
 	void LibraryItem(string action, string itemname, string position, bool &positionOccupied, bool &hasItem, bool &correctPosition, vector<string> &inventory);
 	
 	//Puzzle Item Handler
 	void StorageItem(string action, string itemname, string position, bool& positionOccupied, bool& hasItem, bool& correctPosition, vector<string>& inventory);
 
 	//Puzzle Item Handler
-	void PuzzleItem(string action, string itemname, string position, bool& positionOccupied, bool& hasItem, bool& correctPosition, vector<string>& inventory);
+	void PuzzleItem(string action, string itemname, string position, bool& positionOccupied, bool& hasItem, bool& correctPosition, vector<string>& inventory);*/
 
 	//Cheat Item Menu
 	void ItemCheats(string itemname, bool &hasItem);
 
 	//Item Handler
 	void ItemHandler(string itemname, string action, string position, string location, vector<string>& inventory, bool& inventoryErrorCheck, string& onLeft, string& onRight, string& onCenter, bool& correctLeft, bool& correctRight, bool& correctCenter);
+
+	//Music Handler
+	void MusicHandler(string musicName, string location, bool &musicPlaying);
 };

@@ -14,12 +14,12 @@
 using namespace std;
 
 vector<string> playerInv;
-//ofstream myfile;
 
 //location boolean
 string currentLocation = "ArlanCottage";
 
 bool cheatsEnabled = true;
+bool musicPlaying = false;
 
 //Intro Quest Booleans
 //Cottage
@@ -40,7 +40,6 @@ bool item_placed = false;
 
 //Flashback Booleans
 bool ArchieEnemy = false;
-//FOR TESTING PURPOSES
 bool MathiasFlashback = false;
 bool ArchieFlashback = false;
 
@@ -145,7 +144,7 @@ int numCoins = 0;
 
 Story::Story() {
 	runSetup();
-	//function.Action("SetPosition(Arlan, CurrentCastleBedroom.Chest)", true);
+	function.Action("SetTitle(Relics Of The Kingdom)", true);
 	run();
 }
 
@@ -167,10 +166,6 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	setupCurrentForestPath("CurrentForestPath");
 	setupForestPath2("ForestPath2");
 	setupCurrentRuins("CurrentRuins");
-
-	//delete this
-	//setupPastRuins("PastRuins", ArchieEnemy);
-
 	setupPastCottage("PastCottage");
 	setupPastForestPath("PastForestPath");
 	setupPastCity("PastCity");
@@ -189,6 +184,7 @@ bool Story::runSetup() { // runs initial setup for chapter 2. returns true if se
 	//setupLeftHallway("LeftHallway");
 	//setupDiningRoom("CurrentDiningRoom");	// need to disable this again. hopefully i don't forget -zac
 	//setupStorage("CurrentStorage");
+
 	function.Action("ShowMenu()", true);
 
 	return true;
@@ -274,7 +270,6 @@ void Story::run() { // begins chapter 2's execution
 //Flashback execution function
 void Story::flashback1() {
 	//flashback transistion
-	//function.Action("WalkTo(Arlan, CurrentRuins.Altar)", true);
 	function.WalkToPlace("Arlan", "CurrentRuins.Altar");
 	function.Action("SetCameraMode(Focus)", true);
 	function.Action("SetNarration(The air around you feels wierd. Something pulls you to a slumber.)", true);
@@ -296,7 +291,6 @@ void Story::flashback1() {
 	function.Action("Die(Arlan)", true);
 	function.Action("FadeOut()", true);
 	currentLocation = "PastCottage";
-	//runPastCottage(ArchieEnemy);
 }
 
 // location setup functions. return true if setup was successful.
@@ -314,6 +308,10 @@ bool Story::setupCurrentCottage(string name) {
 	currentCottage.icons.push_back(Icon("Talk_To_Dad", "Talk", "Dad", "Talk to Dad", "true"));
 	currentCottage.icons.push_back(Icon("Open_Door", "Open", "ArlanCottage.Door", "Exit the Cottage", "true"));
 	function.SetupIcons(currentCottage.icons);
+
+	//Furniture
+	function.Action("HideFurniture(ArlanCottage.Chest)", true);
+
 	return true;
 }
 
@@ -363,6 +361,9 @@ bool Story::setupBlacksmithFoundry(string name) {
 	BlacksmithFoundry.icons.push_back(Icon("Exit Blacksmith Foundry", "Hand", "BlacksmithFoundry.Door", "Exit Blacksmith Foundry", "true"));
 	function.SetupIcons(BlacksmithFoundry.icons);
 
+	//Furniture
+	function.Action("HideFurniture(BlacksmithFoundry.Chest)", true);
+
 	return true;
 }
 
@@ -379,6 +380,9 @@ bool Story::setupAlchemyShop(string name) {
 	Alchemy.icons.push_back(Icon("Talk_To_FortuneTeller", "Talk", "Fortuneteller", "Talk to Fortune Teller", "true"));
 	Alchemy.icons.push_back(Icon("Exit_Shop", "Open", "AlchemyShop.Door", "Exit Alchemy Shop", "true"));
 	function.SetupIcons(Alchemy.icons);
+
+	//Furniture
+	function.Action("HideFurniture(AlchemyShop.Chest)", true);
 
 	return true;
 }
@@ -412,6 +416,9 @@ bool Story::setupCurrentRuins(string name) {
 	currentRuins.icons.push_back(Icon("Examine_Altar", "Magnifyingglass", "CurrentRuins.Altar", "Examine the Altar", "true"));
 	function.SetupIcons(currentRuins.icons);
 
+	//Furniture
+	function.Action("HideFurniture(CurrentRuins.Chest)", true);
+
 
 	return true;
 }
@@ -428,6 +435,9 @@ bool Story::setupPastCottage(string name) {
 	pastCottage.icons.push_back(Icon("Open", "Exit", "PastCottage.Door", "Leave the Room", "true"));
 	pastCottage.icons.push_back(Icon("Read", "Research", "Letter", "Read the Letter", "true"));
 	function.SetupIcons(pastCottage.icons);
+
+	//Furniture
+	function.Action("HideFurniture(PastCottage.Chest)", true);
 
 
 	return true;
@@ -486,6 +496,9 @@ bool Story::setupPastRuins(string name, bool Enemy) {
 	function.Action("SetPosition(MysteriousSkull, " + name + ".Altar)", true);
 	function.Action("Face(" + EnemyName + ", MysteriousSkull)", true);
 	function.Action("Kneel(" + EnemyName + ")", true);
+
+	//Furniture
+	function.Action("HideFurniture(PastRuins.Chest)", true);
 
 	return true;
 }
@@ -655,7 +668,6 @@ bool Story::setupLibrary(string name) {
 	function.Action("SetPosition(Library Apple, CurrentLibrary.AlchemistTable.Center)", true);
 
 	//icons
-	//CurrentLibrary.icons.push_back(Icon("Library Alchemist Table", "Hand", "CurrentLibrary.AlchemistTable", "Interact With Alchemist Table", "true"));
 	CurrentLibrary.icons.push_back(Icon("Library Table", "Hand", "CurrentLibrary.Table", "Interact With Table", "true"));
 	CurrentLibrary.icons.push_back(Icon("Library Spellbook", "Hand", "CurrentLibrary.SpellBook", "Read Spellbook", "true"));
 	CurrentLibrary.icons.push_back(Icon("PlaceLibraryItemCenter", "Hand", "CurrentLibrary.AlchemistTable", "Place An Item Center", "false"));
@@ -666,7 +678,6 @@ bool Story::setupLibrary(string name) {
 	CurrentLibrary.icons.push_back(Icon("PickUp", "Hand", "Library GreenKey", "Pick Up", "true"));
 	CurrentLibrary.icons.push_back(Icon("Leave Library", "Hand", "CurrentLibrary.Door", "Leave", "true"));
 
-	//CurrentLibrary.icons.push_back(Icon("Library Chair", "Hand", "CurrentLibrary.Chair", "Rest", "true"));
 	function.SetupIcons(CurrentLibrary.icons);
 
 	//furniture
@@ -685,7 +696,7 @@ bool Story::setupCamp(string name) {
 
 		//icons
 		function.Action("SetPosition(Archie, GreenCamp.Horse)", true);
-		function.Action("Draw(Archie, LeaderFlashPotion)", true);
+		//function.Action("Draw(Archie, LeaderFlashPotion)", true);
 		function.Action("EnableEffect(Archie, Force)", true);
 	}
 	if (name == "BlueCamp") {
@@ -711,7 +722,8 @@ bool Story::setupCamp(string name) {
 	}
 	if (name == "RedCamp") {
 		//character setup
-		function.SetupCharacter("ArchieR", "D", "Warlock", "Mage_Full", "Red", name + ".Stall");
+		function.Action("SetPosition(Archie, RedCamp.Stall)", true);
+		//function.SetupCharacter("Archie", "D", "Warlock", "Mage_Full", "Red", name + ".Stall");
 		//function.SetupCharacter("MathiasR", "F", "HeavyArmour", "Short_Full", "Brown", name + ".Log");
 		//items
 		function.Action("CreateItem(Mathias_Sword, Sword)", true);
@@ -728,6 +740,7 @@ bool Story::setupCamp(string name) {
 		function.Action("HideFurniture(PurpleCamp.Firepit)", true);
 		function.Action("HideFurniture(PurpleCamp.Stall)", true);
 		function.Action("HideFurniture(PurpleCamp.LeftLog)", true);
+		function.Action("HideFurniture(PurpleCamp.Chest)", true);
 		function.Action("CreateItem(SpareSword, Sword)", true);
 		function.Action("CreateItem(SpareSword2, Sword)", true);
 
@@ -869,19 +882,14 @@ bool Story::setupStorage(string name) {
 		function.Action("CreateItem(Potion Of Cleansing, GreenPotion)", true);
 		function.Action("CreateItem(Storage Bottle, Bottle)", true);
 		CurrentStorage.chestInv.push_back("Storage Bottle");
-		//function.Action("SetPosition(Storage Bottle, CurrentStorage.Chest)", true);
 		function.Action("CreateItem(Storage InkAndQuill, InkAndQuill)", true);
 		CurrentStorage.chestInv.push_back("Storage InkAndQuill");
-		//function.Action("SetPosition(Storage InkAndQuill, CurrentStorage.Chest)", true);
 		function.Action("CreateItem(Storage Bread, Bread)", true);
 		CurrentStorage.chestInv.push_back("Storage Bread");
-		//function.Action("SetPosition(Storage Bread, CurrentStorage.Chest)", true);
 		function.Action("CreateItem(Storage Bag, Bag)", true);
 		CurrentStorage.chestInv.push_back("Storage Bag");
-		//function.Action("SetPosition(Storage Bag, CurrentStorage.Chest)", true);
 		function.Action("CreateItem(Storage Helmet, Helmet)", true);
 		CurrentStorage.chestInv.push_back("Storage Helmet");
-		//function.Action("SetPosition(Storage Helmet, CurrentStorage.Chest)", true);
 		function.Action("CreateItem(Storage OpenScroll, OpenScroll)", true);
 		function.Action("SetPosition(Storage OpenScroll, CurrentStorage.Barrel)", true);
 
@@ -897,18 +905,7 @@ bool Story::setupStorage(string name) {
 		CurrentStorage.icons.push_back(Icon("PlaceStorageItemLeft", "Hand", "CurrentStorage.Shelf", "Place Item Left", "false"));
 		CurrentStorage.icons.push_back(Icon("PlaceStorageItemRight", "Hand", "CurrentStorage.Shelf", "Place Item Right", "false"));
 		CurrentStorage.icons.push_back(Icon("Leave Storage", "Hand", "CurrentStorage.Door", "Leave", "true"));
-		//Placement icons
-		/*CurrentLibrary.icons.push_back(Icon("Place Library Apple Left", "Hand", "Library Apple", "Place The Apple Left", "false"));
-		CurrentLibrary.icons.push_back(Icon("Place Library Apple Center", "Hand", "Library Apple", "Place The Apple Center", "true"));
-		CurrentLibrary.icons.push_back(Icon("Place Library Apple Right", "Hand", "Library Apple", "Place The Apple Right", "false"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Left", "Hand", "Library GoldCup", "Place The GoldCup Left", "false"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Center", "Hand", "Library GoldCup", "Place The GoldCup Center", "false"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GoldCup Right", "Hand", "Library GoldCup", "Place The GoldCup Right", "true"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Left", "Hand", "Library GreenKey", "Place The GreenKey Left", "true"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Center", "Hand", "Library GreenKey", "Place The GreenKey Center", "false"));
-		CurrentLibrary.icons.push_back(Icon("Place Library GreenKey Right", "Hand", "Library GreenKey", "Place The GreenKey Right", "false"));*/
 
-		//CurrentLibrary.icons.push_back(Icon("Library Chair", "Hand", "CurrentLibrary.Chair", "Rest", "true"));
 		function.SetupIcons(CurrentStorage.icons);
 	}
 	else if (ArchieFlashback) {
@@ -934,6 +931,7 @@ bool Story::setupStorage(string name) {
 
 // location execution functions.
 void Story::runCurrentCottage() {
+	function.MusicHandler("Explorer", currentLocation, musicPlaying);
 	while (currentLocation == "ArlanCottage") {
 		string i;
 		getline(cin, i);
@@ -968,67 +966,9 @@ void Story::runCurrentCottage() {
 			}
 
 			else if (modified_I == "Open_Door") {
-				int test = 0;
 				if (hasStorybook) {
-					//testing
-					if (test == 0) {
-						function.Transition("Arlan", "ArlanCottage.Door", "CurrentTown.BlueHouseDoor");
-						currentLocation = "CurrentTown";
-					}
-					else if (test == 1) {
-						function.Transition("Arlan", "ArlanCottage.Door", "CurrentLibrary.Door");
-						currentLocation = "CurrentLibrary";
-					}
-					else if (test == 2) {
-						function.Transition("Arlan", "ArlanCottage.Door", "CurrentStorage.Door");
-						currentLocation = "CurrentStorage";
-					}
-					else if (test == 3) {
-						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCourtyard.Exit");
-						currentLocation = "CurrentCourtyard";
-					}
-					else if (test == 4) {
-						function.Transition("Arlan", "ArlanCottage.Door", "CurrentDiningRoom.Door");
-						currentLocation = "CurrentDiningRoom";
-					}
-					else if (test == 5) {
-						function.Transition("Arlan", "ArlanCottage.Door", "CurrentTown.BlueHouseDoor");
-						currentLocation = "CurrentTown";
-
-						//spawn coins in world 
-						function.Action("CreateItem(Coin1, Coin)", true);
-						function.Action("EnableIcon(TakeCoin1, Hand, CurrentTown.Fountain, Inspect the Fountain, true)", true);
-
-						function.Action("CreateItem(Coin2, Coin)", true);
-						canWorkForBlacksmith = true;
-
-						function.Action("CreateItem(Coin3, Coin)", true);
-						function.Action("EnableIcon(TakeCoin3, Hand, ForestPath2.Well, Inspect the Well, true)", true);
-
-						function.Action("CreateItem(Coin4, Coin)", true);
-						function.Action("EnableIcon(TakeCoin4, Hand, CurrentPort.Barrel, Inspect the Barrel, true)", true);
-
-						function.Action("CreateItem(Coin5, Coin)", true);
-						function.Action("EnableIcon(TakeCoin5, Hand, Coin5, Take the Coin, true", true);
-						function.Action("SetPosition(Coin5, CurrentGreatHall.Table)", true);
-
-						visitedTownElder = true;
-						completedErrand = true;
-
-						playerInv.push_back("Coin2");
-						playerInv.push_back("Coin5");
-						numCoins = 2;
-					}
-
-					else if (test == 6) {
-						function.Transition("Arlan", "ArlanCottage.Door", "CurrentCamp.Exit");
-						currentLocation = "CurrentCamp";
-					}
-
-					else if (test == 7) {
-						function.Transition("Arlan", "ArlanCottage.Door", "FinalRuins.Exit");
-						currentLocation = "FinalRuins";
-					}
+					function.Transition("Arlan", "ArlanCottage.Door", "CurrentTown.BlueHouseDoor");
+					currentLocation = "CurrentTown";
 				}
 				else {
 					function.WalkToPlace("Arlan", "ArlanCottage.Door");
@@ -1044,6 +984,7 @@ void Story::runCurrentCottage() {
 }
 
 void Story::runCurrentTown() {
+	function.MusicHandler("Town_Day", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentTown") {
 		string i;
 		getline(cin, i);
@@ -1301,23 +1242,11 @@ void Story::runCurrentTown() {
 			numCoins++;
 			function.Action("DisableIcon(TakeCoin1, CurrentTown.Fountain)", true);
 		}
-
-		else if (i == "input Key Inventory") {
-			function.Action("ClearList()", true);
-			for (string item : playerInv) {
-				function.Action("AddToList(" + item + ")", true);
-			}
-			function.Action("ShowList(Arlan)", true);
-		}
-
-		else if (i == "input Close List") {
-			function.Action("HideList()", true);
-			function.Action("EnableInput()", true);
-		}
 	}
 }
 
 void Story::runBlacksmithFoundry() {
+	function.MusicHandler("Tavern", currentLocation, musicPlaying);
 	while (currentLocation == "BlacksmithFoundry") {
 		string i;
 		getline(cin, i);
@@ -1390,23 +1319,11 @@ void Story::runBlacksmithFoundry() {
 			function.Transition("Arlan", "BlacksmithFoundry.Door", "CurrentTown.RedHouseDoor");
 			currentLocation = "CurrentTown";
 		}
-
-		else if (i == "input Key Inventory") {
-			function.Action("ClearList()", true);
-			for (string item : playerInv) {
-				function.Action("AddToList(" + item + ")", true);
-			}
-			function.Action("ShowList(Arlan)", true);
-		}
-
-		else if (i == "input Close List") {
-			function.Action("HideList()", true);
-			function.Action("EnableInput()", true);
-		}
 	}
 }
 
 void Story::runAlchemyShop() {
+	function.MusicHandler("Tavern", currentLocation, musicPlaying);
 	while (currentLocation == "AlchemyShop") {
 		string i;
 		getline(cin, i);
@@ -1442,7 +1359,7 @@ void Story::runAlchemyShop() {
 					function.SetupDialogText("Come back when you want your fortune read.", "end", "Leave");
 				}
 				else if (modified_I == "Accept") {
-					function.SetupDialogText("**She takes your hand and begins to read your palm** You carry the burden of responsibility and hold a promising future.", "end", "Vauge and interesting. Ill be leaving now");
+					function.SetupDialogText("**She takes your hand and begins to read your palm** You carry the burden of responsibility and hold a promising future.", "end", "Vague and interesting. I will be leaving now");
 					visitedFortuneteller = true;
 				}
 				//dialogue concerning artifact
@@ -1516,6 +1433,7 @@ void Story::runAlchemyShop() {
 }
 
 void Story::runCurrentForestPath() {
+	function.MusicHandler("Forest_Day", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentForestPath") {
 		string i;
 		getline(cin, i);
@@ -1542,23 +1460,6 @@ void Story::runCurrentForestPath() {
 			currentLocation = "CurrentRuins";
 		}
 
-		else if (i == "input Selected end") {
-			function.Action("HideDialog()", true);
-		}
-
-		else if (i == "input Key Inventory") {
-			function.Action("ClearList()", true);
-			for (string item : playerInv) {
-				function.Action("AddToList(" + item + ")", true);
-			}
-			function.Action("ShowList(Arlan)", true);
-		}
-
-		else if (i == "input Close List") {
-			function.Action("HideList()", true);
-			function.Action("EnableInput()", true);
-		}
-
 		else if (i == "input Look Inside Dirt Pile CurrentForestPath.DirtPile") {
 			function.WalkToPlace("Arlan", "CurrentForestPath.DirtPile");
 			function.Action("SetNarration(There is a sword inside! You take it. It appears ancient and dirty. You wonder if this is the relic the elder mentioned.)", true);
@@ -1571,6 +1472,7 @@ void Story::runCurrentForestPath() {
 }
 
 void Story::runCurrentRuins() {
+	function.MusicHandler("Spooky", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentRuins") {
 		string i;
 		getline(cin, i);
@@ -1674,28 +1576,12 @@ void Story::runCurrentRuins() {
 				function.Action("DisableEffect(CurrentRuins.Altar)", true);
 			}
 		}
-
-		else if (i == "input Selected end") {
-			function.Action("HideDialog()", true);
-		}
-
-		else if (i == "input Key Inventory") {
-			function.Action("ClearList()", true);
-			for (string item : playerInv) {
-				function.Action("AddToList(" + item + ")", true);
-			}
-			function.Action("ShowList(Arlan)", true);
-		}
-
-		else if (i == "input Close List") {
-			function.Action("HideList()", true);
-			function.Action("EnableInput()", true);
-		}
 	}
 }
 
 //Chractercheck is sword_taken
 void Story::runPastCottage(bool CharacterCheck) {
+	function.MusicHandler("Explorer", currentLocation, musicPlaying);
 	function.Action("SetPosition(LeaderFlashPotion)", true);
 	currentLocation = "PastCottage";
 	bool LetterCheck = false;
@@ -1731,7 +1617,6 @@ void Story::runPastCottage(bool CharacterCheck) {
 
 
 		if (modified_I == "Read") {
-			//function.Action("WalkTo(" + CharacterName + ", Letter)", true);
 			function.WalkToPlace(CharacterName, "Letter");
 			function.Action("SetNarration(" + CharacterName + " we need to discuss what to do about that artifact we found. Meet me by the ruins so we can discuss)", true);
 			function.Action("ShowNarration()", true);
@@ -1767,6 +1652,7 @@ void Story::runPastCottage(bool CharacterCheck) {
 	}
 }
 void Story::runPastForestPath(bool CharacterCheck) {
+	function.MusicHandler("Forest_Day", currentLocation, musicPlaying);
 	bool inputWasCommon;
 	string CharacterName = "";
 
@@ -1812,7 +1698,7 @@ void Story::runPastForestPath(bool CharacterCheck) {
 }
 
 void Story::runPastCity(bool CharacterCheck) {
-
+	function.MusicHandler("Town_Day", currentLocation, musicPlaying);
 	string CharacterName = "";
 	bool inputWasCommon;
 
@@ -1858,6 +1744,7 @@ void Story::runPastCity(bool CharacterCheck) {
 }
 
 void Story::runPastRuins(bool CharacterCheck) {
+	function.MusicHandler("Danger1", currentLocation, musicPlaying);
 	string CharacterName = "";
 	string Enemy = "";
 	bool inputWasCommon;
@@ -1913,7 +1800,6 @@ void Story::runPastRuins(bool CharacterCheck) {
 					function.Action("ClearDialog()", true);
 					function.Action("HideDialog()", true);
 					function.Action("DisableInput()", true);
-					//function.Action("WalkTo(" + Enemy + ", PastRuins.Altar)", true);
 					function.WalkToPlace(Enemy, "PastRuins.Altar");
 					function.Action("Face(" + Enemy + ", " + CharacterName + ")", true);
 					function.Action("Cast(" + Enemy + ", " + CharacterName + ")", true); //This works for now, but will need to change Mathias to a sword
@@ -1921,10 +1807,8 @@ void Story::runPastRuins(bool CharacterCheck) {
 					function.Action("Face(" + Enemy + ", MysteriousSkull)", true);
 					function.Action("SetPosition(MysteriousSkull)", true);
 					function.Action("Unpocket(" + Enemy + ", MysteriousSkull)", true);
-					//function.Action("WalkTo(" + Enemy + ", PastRuins.Exit)", true);
 					function.WalkToPlace(Enemy, "PastRuins.Exit");
 					function.Action("SetPosition(" + Enemy + ")", true);
-					//function.Action("WalkTo(" + CharacterName + ", PastRuins.Altar)", true);
 					function.WalkToPlace(CharacterName, "PastRuins.Altar");
 					function.Action("FadeOut()", true);
 					setupLeftHallway("LeftHallway");
@@ -1938,7 +1822,6 @@ void Story::runPastRuins(bool CharacterCheck) {
 					function.Action("SetCameraFocus(Arlan)", true);
 					function.Action("SetExpression(Arlan, Neutral)", true);
 					function.Action("FadeIn()", false);
-					//function.Action("WalkTo(Arlan, CurrentRuins.Altar)", false);
 					function.WalkToPlace("Arlan", "CurrentRuins.Altar");
 					function.Action("SetNarration(What an odd vision...)", true);
 					function.Action("ShowNarration()", true);
@@ -1950,6 +1833,7 @@ void Story::runPastRuins(bool CharacterCheck) {
 }
 
 void Story::runForestPath2() {
+	function.MusicHandler("Forest_Day", currentLocation, musicPlaying);
 	while (currentLocation == "ForestPath2") {
 		string i;
 		getline(cin, i);
@@ -1995,6 +1879,7 @@ void Story::runForestPath2() {
 }
 
 void Story::runCurrentCastleCrossroads() {
+	function.MusicHandler("River", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentCastleCrossroads") {
 		string i;
 		getline(cin, i);
@@ -2045,6 +1930,7 @@ void Story::runCurrentCastleCrossroads() {
 }
 
 void Story::runCurrentGreatHall() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	if (MathiasFlashback) {
 		while (currentLocation == "CurrentGreatHall") {
 			string i;
@@ -2209,6 +2095,7 @@ void Story::runCurrentGreatHall() {
 }
 
 void Story::runCurrentPort() {
+	function.MusicHandler("Port", currentLocation, musicPlaying);
 	if (MathiasFlashback) {
 		while (currentLocation == "CurrentPort") {
 			string i;
@@ -2530,7 +2417,7 @@ void Story::runCurrentLibrary() {
 	bool inventoryErrorCheck = true;
 	function.Action("SetLeft(Arlan)", true);
 	function.Action("SetRight(null)", true);
-	function.Action("PlaySound(Serenity, CurrentLibrary, true)", true);
+	function.MusicHandler("Serenity", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentLibrary") {
 		string i;
 		getline(cin, i);
@@ -2555,7 +2442,6 @@ void Story::runCurrentLibrary() {
 
 		//RightHallway
 		if (i == "input Leave Library CurrentLibrary.Door") {
-			function.Action("StopSound(Serenity, CurrentLibrary)", true);
 			if (!libraryPuzzleSolved) {
 				function.Action("SetNarration(The puzzle resets...)", true);
 				vector<string> tempInv;
@@ -2565,16 +2451,12 @@ void Story::runCurrentLibrary() {
 							function.Action("DisableIcon(PlaceItem, " + item + ")", true);
 						}
 						function.Action("EnableIcon(PickUp, Hand, " + item + ", Pick Up, true)", true);
-						//function.RemoveItem(item, playerInv);
 					}
 					else {
 						tempInv.push_back(item);
 					}
 				}
 				playerInv = tempInv;
-				//function.RemoveItem("Library Apple", playerInv);
-				//function.RemoveItem("Library GoldCup", playerInv);
-				//function.RemoveItem("Library GreenKey", playerInv);
 				function.Action("SetPosition(Library GoldCup)", true);
 				function.Action("SetPosition(Library GreenKey)", true);
 				function.Action("SetPosition(Library Apple)", true);
@@ -2592,7 +2474,6 @@ void Story::runCurrentLibrary() {
 		}
 
 		else if (i == "input Library Table CurrentLibrary.Table") {
-			//function.Action("SetRight(null)", true);
 			function.WalkToPlace("Arlan", "CurrentLibrary.Table");
 			if (libraryPuzzleSolved && hasGreenBook) {
 				function.Action("SetNarration(You already won.)", true);
@@ -2626,14 +2507,12 @@ void Story::runCurrentLibrary() {
 		}
 
 		else if (i == "input Library Spellbook CurrentLibrary.SpellBook") {
-			//function.Action("SetRight(null)", true);
 			function.WalkToPlace("Arlan", "CurrentLibrary.SpellBook");
 			function.SetupDialogText("Restore the order to reveal an Incantation.", "end", "Hmm...");
 			function.Action("ShowDialog()", true);
 		}
 
 		else if ((modified_I == "PlaceLibraryItemLeft") || (modified_I == "PlaceLibraryItemCenter") || (modified_I == "PlaceLibraryItemRight")) {
-			//function.Action("SetRight(null)", true);
 			position = modified_I.substr(16);
 			function.WalkToPlace("Arlan", "CurrentLibrary.AlchemistTable");
 			if (libraryPuzzleSolved) {
@@ -2657,28 +2536,11 @@ void Story::runCurrentLibrary() {
 			if (onRight == "Library " + modified_I) { position = "Right"; }
 			function.ItemHandler("Library " + modified_I, "PickUp", position, "CurrentLibrary", playerInv, inventoryErrorCheck, onLeft, onRight, onCenter, correctLeft, correctRight, correctCenter);
 		}
-
-		else if (i == "input Selected end") {
-			function.Action("HideDialog()", true);
-		}
-
-		/*else if (i == "input Key Inventory") {
-			function.Action("ClearList()", true);
-			for (string item : playerInv) {
-				function.Action("AddToList(" + item + ")", true);
-			}
-			function.Action("ShowList(Arlan)", true);
-		}*/
-
-		else if (i == "input Close List") {
-			function.Action("HideList()", true);
-			function.Action("EnableInput()", true);
-		}
 	}
 }
 
 void Story::runCurrentStorage() {
-	function.Action("PlaySound(Tavern, CurrentStorage, true)", true);
+	function.MusicHandler("Tavern", currentLocation, musicPlaying);
 	if (MathiasFlashback) {
 		string position = "";
 		string onLeft = "", onCenter = "", onRight = "";
@@ -2703,7 +2565,6 @@ void Story::runCurrentStorage() {
 			//CurrentGreatHall
 			if (i == "input Leave Storage CurrentStorage.Door") {
 				if (!storagePuzzleSolved && (onLeft == "") && (onRight == "")) {
-					function.Action("StopSound(Tavern, CurrentStorage)", true);
 					function.Action("SetNarration(The puzzle resets...)", true);
 					vector<string> tempInv;
 					for (string item : playerInv) {
@@ -2733,7 +2594,6 @@ void Story::runCurrentStorage() {
 					function.Action("ShowNarration()", true);
 				}
 				else {
-					function.Action("StopSound(Tavern, CurrentStorage)", true);
 					function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
 					currentLocation = "CurrentGreatHall";
 				}
@@ -2822,28 +2682,10 @@ void Story::runCurrentStorage() {
 			}
 
 			else if (i == "input Read Storage OpenScroll Storage OpenScroll") {
-				//function.WalkToPlace("Arlan", "CurrentStorage.Barrel");
 				function.Action("SetRight(null)", true);
 				function.SetupDialogText("In this storage some items reside in a chest.\\nSome are useless a red herring at its best.\\nSet a meal on the shelf for this particular test.\\nRemember that thirst is quenched from the right of the perspective of the guest.", "end", "**Walk Away**");
 				function.Action("ShowDialog()", true);
 			}
-
-			/*else if (i == "input Selected end") {
-				function.Action("HideDialog()", true);
-			}
-
-			else if (i == "input Key Inventory") {
-				function.Action("ClearList()", true);
-				for (string item : playerInv) {
-					function.Action("AddToList(" + item + ")", true);
-				}
-				function.Action("ShowList(Arlan)", true);
-			}
-
-			else if (i == "input Close List") {
-				function.Action("HideList()", true);
-				function.Action("EnableInput()", true);
-			}*/
 
 			if (isChestOpened && modified_I == "Close") {
 				function.Action("DisableInput()", true);
@@ -2890,14 +2732,8 @@ void Story::runCurrentStorage() {
 					currentLocation = "CurrentGreatHall";
 				}
 			}
-			//CurrentGreatHall
-			/*if (i == "input arrived Arlan position CurrentStorage.Door") {
-				function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
-				currentLocation = "CurrentGreatHall";
-			}
 
 			//closing chest animation when exiting chestInv
-			else */
 			if (isChestOpened && modified_I == "Close") {
 				function.Action("DisableInput()", true);
 				function.Action("CloseFurniture(Arlan, CurrentStorage.Chest)", true);
@@ -2909,6 +2745,7 @@ void Story::runCurrentStorage() {
 }
 
 void Story::runCurrentPrison() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentPrison") {
 		string i;
 		getline(cin, i);
@@ -2943,8 +2780,7 @@ void Story::runCurrentPrison() {
 						function.SetupDialogText("We're almost there! This is the last one", "RiddleThree", "I'm ready");
 
 						function.RemoveItem("PrisonerSword", playerInv);
-						CurrentCourtyard.icons.push_back(Icon("Search Target", "hand", "CurrentCourtyard.Target", "Search Target", "true"));
-						function.SetupIcons(CurrentCourtyard.icons);
+						function.Action("EnableIcon(Search Target, hand, CurrentCourtyard.Target, Search Target, true)", true);
 
 						function.Action("Draw(Prisoner, GuardSword)", true);
 
@@ -3081,6 +2917,7 @@ void Story::runCurrentPrison() {
 }
 
 void Story::runLeftHallway() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	while (currentLocation == "LeftHallway") {
 		string i;
 		getline(cin, i);
@@ -3195,6 +3032,7 @@ void Story::runLeftHallway() {
 }
 
 void Story::runRightHallway() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	while (currentLocation == "RightHallway") {
 		string i;
 		getline(cin, i);
@@ -3221,6 +3059,10 @@ void Story::runRightHallway() {
 				else if (hasRedBook || hasRedPotion) {
 					function.Action("SetNarration(Your red artifact repels you from this room)", true);
 				}
+				function.Action("ShowNarration()", true);
+			}
+			else if (firstTalkGuard == true) {
+				function.Action("SetNarration(You feel as if you need to talk to someone before coming in here)", true);
 				function.Action("ShowNarration()", true);
 			}
 			else if (ArchieFlashback && !hasRedPotion && !hasPurplePotion && !hasRedBook) {
@@ -3256,27 +3098,11 @@ void Story::runRightHallway() {
 					function.Action("ShowNarration()", true);
 			}
 		}
-
-		else if (i == "input Selected end") {
-			function.Action("HideDialog()", true);
-		}
-
-		else if (i == "input Key Inventory") {
-			function.Action("ClearList()", true);
-			for (string item : playerInv) {
-				function.Action("AddToList(" + item + ")", true);
-			}
-			function.Action("ShowList(Arlan)", true);
-		}
-
-		else if (i == "input Close List") {
-			function.Action("HideList()", true);
-			function.Action("EnableInput()", true);
-		}
 	}
 }
 
 void Story::runCurrentDiningRoom() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	if (MathiasFlashback) {
 		if (!visitedDiningRoom) {
 			function.Action("DisableInput()", true);
@@ -3617,6 +3443,7 @@ void Story::runCurrentDiningRoom() {
 }
 
 void Story::runCurrentCourtyard() {
+	function.MusicHandler("Town_Day", currentLocation, musicPlaying);
 	while (currentLocation == "CurrentCourtyard") {
 		string i;
 		getline(cin, i);
@@ -3665,23 +3492,6 @@ void Story::runCurrentCourtyard() {
 			}
 		}
 
-		else if (i == "input Selected end") {
-			function.Action("HideDialog()", true);
-		}
-
-		else if (i == "input Key Inventory") {
-			function.Action("ClearList()", true);
-			for (string item : playerInv) {
-				function.Action("AddToList(" + item + ")", true);
-			}
-			function.Action("ShowList(Arlan)", true);
-		}
-
-		else if (i == "input Close List") {
-			function.Action("HideList()", true);
-			function.Action("EnableInput()", true);
-		}
-
 		else if (i == "input Search Target CurrentCourtyard.Target") {
 			function.WalkToPlace("Arlan", "CurrentCourtyard.Target");
 			function.Action("SetNarration(There is a hammer hidden behind the target! You take it.)", true);
@@ -3694,8 +3504,8 @@ void Story::runCurrentCourtyard() {
 }
 
 void Story::runCurrentCastleBedroom() {
+	function.MusicHandler("LivelyMusic", currentLocation, musicPlaying);
 	string currentPosition = "";
-
 	while (currentLocation == "CurrentCastleBedroom") {
 		string i;
 		getline(cin, i);
@@ -3927,6 +3737,7 @@ void Story::runCurrentCastleBedroom() {
 	}
 }
 void Story::runCurrentCamp() {
+	function.MusicHandler("Danger3", currentLocation, musicPlaying);
 	if (currentLocation == "BlueCamp") {
 		while (currentLocation == "BlueCamp") {
 			string i;
@@ -4077,10 +3888,10 @@ void Story::runCurrentCamp() {
 					ActionSequence = false;
 
 					function.Action("DisableInput()", true);
-					function.Action("PlaySound(Danger1, RedCamp, true)", true);
-					function.Action("WalkTo(Arlan, ArchieR, true)", true);
+					//function.Action("PlaySound(Danger1, RedCamp, true)", true);
+					function.Action("WalkTo(Arlan, Archie, true)", true);
 
-					function.SetupDialog("Arlan", "ArchieR", true);
+					function.SetupDialog("Arlan", "Archie", true);
 					function.SetupDialogText("Ah I see you finally found me. Quickly let me explain what we'll have to do-", "Entrance", "*CLANK*");
 
 					// Then have dialog setting up scene more
@@ -4106,21 +3917,21 @@ void Story::runCurrentCamp() {
 					else if (modified_I == "Battle") {
 						function.Action("ClearDialog()", true);
 						function.Action("HideDialog()", true);
-						function.SetupCharacter("MathiasR", "F", "HeavyArmour", "Short_Full", "Brown", "RedCamp.Exit");
-						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetPosition(Mathias, RedCamp.Exit)", true);
+						function.Action("SetCameraFocus(Mathias)", true);
 
 						function.Action("DisableInput()", true);
-						function.Action("Draw(MathiasR, Mathias_Sword)", true);
-						function.Action("WalkTo(MathiasR, ArchieR)", false);
-						function.Action("WalkTo(ArchieR, MathiasR)", true);
-						function.Action("Face(Arlan, MathiasR)", true);
-						function.Action("Attack(MathiasR, ArchieR, true)", true);
-						function.Action("Die(ArchieR)", true);
-						function.Action("Sheathe(MathiasR, Mathias_Sword)", true);
-						function.Action("Draw(MathiasR, Artifact)", true);
+						function.Action("Draw(Mathias, Mathias_Sword)", true);
+						function.Action("WalkTo(Mathias, Archie)", false);
+						function.Action("WalkTo(Archie, Mathias)", true);
+						function.Action("Face(Arlan, Mathias)", true);
+						function.Action("Attack(Mathias, Archie, true)", true);
+						function.Action("Die(Archie)", true);
+						function.Action("Sheathe(Mathias, Mathias_Sword)", true);
+						function.Action("Draw(Mathias, Artifact)", true);
 						function.Action("EnableInput()", true);
 
-						function.SetupDialog("Arlan", "MathiasR", false);
+						function.SetupDialog("Arlan", "Mathias", false);
 						function.SetupDialogText("Finally! Now that I don't have to worry about Archie anymore I can finally harness the full power of this artifact.", "ReadBook", "**I can't let that happen! Read Translated Book**");
 					}
 
@@ -4132,7 +3943,7 @@ void Story::runCurrentCamp() {
 						function.Action("CreateEffect(Artifact, Spiralflame)", false);
 						this_thread::sleep_for(chrono::milliseconds(2500));
 
-						function.SetupDialog("Arlan", "MathiasR", false);
+						function.SetupDialog("Arlan", "Mathias", false);
 						function.SetupDialogText("Oh no this isn't good... we're all doomed", "Drink", "**Drink Potion of Invincibility**");
 					}
 
@@ -4152,17 +3963,17 @@ void Story::runCurrentCamp() {
 						this_thread::sleep_for(chrono::milliseconds(2000));
 						function.Action("HideNarration()", true);
 
-						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetCameraFocus(Mathias)", true);
 						function.Action("SetCameraMode(focus)", true);
 						this_thread::sleep_for(chrono::milliseconds(1000));
 						function.Action("CreateEffect(Artifact, Explosion)", false);
 						function.Action("PlaySound(Fireball, Artifact, false)", true);
 						this_thread::sleep_for(chrono::milliseconds(1000));
 
-						function.Action("SetCameraFocus(MathiasR)", true);
+						function.Action("SetCameraFocus(Mathias)", true);
 						function.Action("SetCameraMode(track)", true);
-						function.Action("CreateEffect(MathiasR, Death)", true);
-						function.Action("Die(MathiasR)", true);
+						function.Action("CreateEffect(Mathias, Death)", true);
+						function.Action("Die(Mathias)", true);
 						function.Action("SetCameraFocus(Arlan)", true);
 						function.Action("SetCameraMode(track)", true);
 						function.Action("CreateEffect(Arlan, Death)", true);
@@ -4362,6 +4173,7 @@ void Story::runCurrentCamp() {
 				this_thread::sleep_for(chrono::milliseconds(1000));
 				function.Action("Face(Archie, Arlan)", true);
 				function.Action("SetRight(Archie)", true);
+				function.MusicHandler("Serenity", currentLocation, musicPlaying);
 				function.SetupDialogText("Thank you hero... you have saved me from the corruption that consumed me.", "apologizeToMathias", "Of course.");
 				function.Action("ShowDialog()", true);
 			}
@@ -4384,6 +4196,8 @@ void Story::runCurrentCamp() {
 			else if (i == "input Selected endGame") {
 				function.Action("HideDialog()", true);
 				function.Action("DisableInput()", true);
+				function.Action("SetPosition(Potion Of Cleansing)", true);
+				function.Action("SetPosition(MysteriousSkull)", true);
 				function.Action("WalkTo(Mathias, GreenCamp.Exit)", false);
 				function.Action("WalkTo(Archie, GreenCamp.Exit)", true);
 				function.Action("SetPosition(Mathias)", true);
@@ -4391,28 +4205,12 @@ void Story::runCurrentCamp() {
 				function.Action("FadeOut()", true);
 				this_thread::sleep_for(chrono::milliseconds(2000));
 			}
-
-			else if (i == "input Selected end") {
-				function.Action("HideDialog()", true);
-			}
-
-			else if (i == "input Key Inventory") {
-				function.Action("ClearList()", true);
-				for (string item : playerInv) {
-					function.Action("AddToList(" + item + ")", true);
-				}
-				function.Action("ShowList(Arlan)", true);
-			}
-
-			else if (i == "input Close List") {
-				function.Action("HideList()", true);
-				function.Action("EnableInput()", true);
-			}
 		}
 	}
 }
 
 void Story::runFinalRuins() {
+	function.MusicHandler("Danger3", currentLocation, musicPlaying);
 	function.Action("SetPosition(Archie, FinalRuins.Altar)", true);
 	//function.Action("Sit(Archie, FinalRuins.Throne)", true);
 	function.Action("Enter(Mathias, FinalRuins.Exit, false)", true);
