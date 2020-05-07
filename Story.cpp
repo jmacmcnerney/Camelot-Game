@@ -2060,7 +2060,7 @@ void Story::runCurrentGreatHall() {
 			}
 
 			//CurrentCastleCrossroads
-			if (i == "input arrived Arlan position CurrentGreatHall.Gate") {
+			if (i == "input Enter Gate CurrentGreatHall.Gate") {
 				function.Transition("Arlan", "CurrentGreatHall.Gate", "CurrentCastleCrossroads.Gate");
 				currentLocation = "CurrentCastleCrossroads";
 			}
@@ -2702,8 +2702,8 @@ void Story::runCurrentStorage() {
 
 			//CurrentGreatHall
 			if (i == "input Leave Storage CurrentStorage.Door") {
-				function.Action("StopSound(Tavern, CurrentStorage)", true);
 				if (!storagePuzzleSolved && (onLeft == "") && (onRight == "")) {
+					function.Action("StopSound(Tavern, CurrentStorage)", true);
 					function.Action("SetNarration(The puzzle resets...)", true);
 					vector<string> tempInv;
 					for (string item : playerInv) {
@@ -2733,6 +2733,7 @@ void Story::runCurrentStorage() {
 					function.Action("ShowNarration()", true);
 				}
 				else {
+					function.Action("StopSound(Tavern, CurrentStorage)", true);
 					function.Transition("Arlan", "CurrentStorage.Door", "CurrentGreatHall.BasementDoor");
 					currentLocation = "CurrentGreatHall";
 				}
@@ -2823,7 +2824,7 @@ void Story::runCurrentStorage() {
 			else if (i == "input Read Storage OpenScroll Storage OpenScroll") {
 				//function.WalkToPlace("Arlan", "CurrentStorage.Barrel");
 				function.Action("SetRight(null)", true);
-				function.SetupDialogText("In this storage some items reside in a chest.\\nSome are useless a red herring at its best.\\nSet a meal on the shelf for this particular test.\\nRemember that thirst is quenched from the right of the perspective of the guest.", "end", "**Walk Away**", "end", "reset");
+				function.SetupDialogText("In this storage some items reside in a chest.\\nSome are useless a red herring at its best.\\nSet a meal on the shelf for this particular test.\\nRemember that thirst is quenched from the right of the perspective of the guest.", "end", "**Walk Away**");
 				function.Action("ShowDialog()", true);
 			}
 
@@ -4201,14 +4202,13 @@ void Story::runCurrentCamp() {
 						function.Action("HideDialog()", true);
 						function.Action("Draw(Arlan, SpareSword)", true);
 						function.WalkToPlace("Arlan", "PurpleCamp.Barrel");
-						this_thread::sleep_for(chrono::milliseconds(2000));
+						this_thread::sleep_for(chrono::milliseconds(1000));
 						function.Action("Face(Arlan, Archie)", true);
 						this_thread::sleep_for(chrono::milliseconds(500));
-						//function.Action("Kneel(Arlan)", true);
 						function.Action("SetPosition(Mathias, PurpleCamp.Horse)", true);
 						function.Action("Draw(Mathias, SpareSword2)", true);
 						function.Action("Face(Archie, Mathias)", true);
-						function.SetupDialog("Mathias", "Archie", "true");
+						function.SetupDialog("Mathias", "Archie", true);
 						function.SetupDialogText("Mathias! This artifact has corrupted you. You need to be stopped.\\n**You feel the book call for you to wait.**", "Wait", "**Wait to strike**", "Confront", "**Confront Mathias**");
 					}
 					else if (modified_I == "Wait") {
@@ -4220,8 +4220,11 @@ void Story::runCurrentCamp() {
 					}
 					else if (modified_I == "Confront") {
 						function.Action("HideDialog()", true);
+						function.Action("DisableInput()", true);
+						function.Action("WalkToSpot(Arlan, 5999, 0, 4)", true);
 						function.Action("Face(Mathias, Arlan)", true);
-						function.SetupDialog("Arlan", "Mathias", true);
+						function.SetupDialog("Arlan", "Mathias", false);
+						function.Action("EnableInput()", true);
 						function.SetupDialogText("Who's this? No matter both of you will die here.", "Strike2", "**Strike down Mathias**");
 					}
 					else if (modified_I == "Strike1") {
@@ -4248,6 +4251,7 @@ void Story::runCurrentCamp() {
 						function.Action("Unpocket(Arlan, Potion of Healing)", true);
 						function.Action("SetCameraMode(Focus)", true);
 						function.Action("Drink(Arlan)", true);
+						function.Action("Pocket(Arlan, Potion of Healing)", true);
 						this_thread::sleep_for(chrono::milliseconds(500));
 						function.Action("SetCameraMode(Follow)", true);
 						function.Action("FadeOut()", true);
