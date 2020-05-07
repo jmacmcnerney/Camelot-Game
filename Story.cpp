@@ -308,6 +308,10 @@ bool Story::setupCurrentCottage(string name) {
 	currentCottage.icons.push_back(Icon("Talk_To_Dad", "Talk", "Dad", "Talk to Dad", "true"));
 	currentCottage.icons.push_back(Icon("Open_Door", "Open", "ArlanCottage.Door", "Exit the Cottage", "true"));
 	function.SetupIcons(currentCottage.icons);
+
+	//Furniture
+	function.Action("HideFurniture(ArlanCottage.Chest)", true);
+
 	return true;
 }
 
@@ -357,6 +361,9 @@ bool Story::setupBlacksmithFoundry(string name) {
 	BlacksmithFoundry.icons.push_back(Icon("Exit Blacksmith Foundry", "Hand", "BlacksmithFoundry.Door", "Exit Blacksmith Foundry", "true"));
 	function.SetupIcons(BlacksmithFoundry.icons);
 
+	//Furniture
+	function.Action("HideFurniture(BlacksmithFoundry.Chest)", true);
+
 	return true;
 }
 
@@ -373,6 +380,9 @@ bool Story::setupAlchemyShop(string name) {
 	Alchemy.icons.push_back(Icon("Talk_To_FortuneTeller", "Talk", "Fortuneteller", "Talk to Fortune Teller", "true"));
 	Alchemy.icons.push_back(Icon("Exit_Shop", "Open", "AlchemyShop.Door", "Exit Alchemy Shop", "true"));
 	function.SetupIcons(Alchemy.icons);
+
+	//Furniture
+	function.Action("HideFurniture(AlchemyShop.Chest)", true);
 
 	return true;
 }
@@ -406,6 +416,9 @@ bool Story::setupCurrentRuins(string name) {
 	currentRuins.icons.push_back(Icon("Examine_Altar", "Magnifyingglass", "CurrentRuins.Altar", "Examine the Altar", "true"));
 	function.SetupIcons(currentRuins.icons);
 
+	//Furniture
+	function.Action("HideFurniture(CurrentRuins.Chest)", true);
+
 
 	return true;
 }
@@ -422,6 +435,9 @@ bool Story::setupPastCottage(string name) {
 	pastCottage.icons.push_back(Icon("Open", "Exit", "PastCottage.Door", "Leave the Room", "true"));
 	pastCottage.icons.push_back(Icon("Read", "Research", "Letter", "Read the Letter", "true"));
 	function.SetupIcons(pastCottage.icons);
+
+	//Furniture
+	function.Action("HideFurniture(PastCottage.Chest)", true);
 
 
 	return true;
@@ -480,6 +496,9 @@ bool Story::setupPastRuins(string name, bool Enemy) {
 	function.Action("SetPosition(MysteriousSkull, " + name + ".Altar)", true);
 	function.Action("Face(" + EnemyName + ", MysteriousSkull)", true);
 	function.Action("Kneel(" + EnemyName + ")", true);
+
+	//Furniture
+	function.Action("HideFurniture(PastRuins.Chest)", true);
 
 	return true;
 }
@@ -720,6 +739,7 @@ bool Story::setupCamp(string name) {
 		function.Action("HideFurniture(PurpleCamp.Firepit)", true);
 		function.Action("HideFurniture(PurpleCamp.Stall)", true);
 		function.Action("HideFurniture(PurpleCamp.LeftLog)", true);
+		function.Action("HideFurniture(PurpleCamp.Chest)", true);
 		function.Action("CreateItem(SpareSword, Sword)", true);
 		function.Action("CreateItem(SpareSword2, Sword)", true);
 
